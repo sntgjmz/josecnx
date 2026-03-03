@@ -233,7 +233,6 @@ function SpielsCategoryBoard({
   const [copiedRowId, setCopiedRowId] = useState('')
   const [isComposerOpen, setIsComposerOpen] = useState(false)
   const [isComposerMinimized, setIsComposerMinimized] = useState(false)
-  const [isComposerToolsOpen, setIsComposerToolsOpen] = useState(false)
   const [quickAddTab, setQuickAddTab] = useState('service-change')
   const [quickAddSearch, setQuickAddSearch] = useState('')
   const [quickAddCompact, setQuickAddCompact] = useState(false)
@@ -258,6 +257,7 @@ function SpielsCategoryBoard({
   const [previewRow, setPreviewRow] = useState(null)
   const previewTextRef = useRef(null)
   const lastAutoCopyToastAtRef = useRef(0)
+  const lastDeletionWarnAtRef = useRef(0)
   const [composerLines, setComposerLines] = useState(() => {
     try {
       const saved = localStorage.getItem(COMPOSER_STORAGE_KEY)
@@ -270,11 +270,16 @@ function SpielsCategoryBoard({
       return []
     }
   })
+  const [addedSpiels, setAddedSpiels] = useState([])
+  const [isAddedSpielsMenuOpen, setIsAddedSpielsMenuOpen] = useState(false)
+  const [isGrammarDetailsOpen, setIsGrammarDetailsOpen] = useState(false)
+  const [composerDeletionWarning, setComposerDeletionWarning] = useState('')
+  const [composerEditDelta, setComposerEditDelta] = useState({ added: [], removed: [] })
   const [variableValues, setVariableValues] = useState(() => {
     try {
       const saved = localStorage.getItem(COMPOSER_STORAGE_KEY)
       if (!saved) {
-        return { case_id: '', tracking_number: '', locaddress: '', date: '' }
+        return { case_id: '', tracking_number: '', locaddress: '', date: '', callback: '' }
       }
       const parsed = JSON.parse(saved)
       const savedVars = parsed?.variables || {}
@@ -288,9 +293,10 @@ function SpielsCategoryBoard({
         tracking_number: typeof savedVars.tracking_number === 'string' ? savedVars.tracking_number : '',
         locaddress: typeof savedVars.locaddress === 'string' ? savedVars.locaddress : '',
         date: typeof savedVars.date === 'string' ? savedVars.date : '',
+        callback: typeof savedVars.callback === 'string' ? savedVars.callback : '',
       }
     } catch {
-      return { case_id: '', tracking_number: '', locaddress: '', date: '' }
+      return { case_id: '', tracking_number: '', locaddress: '', date: '', callback: '' }
     }
   })
   const [categoryRows, setCategoryRows] = useState(() => {
@@ -446,7 +452,11 @@ function SpielsCategoryBoard({
       if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === 'r') {
         event.preventDefault()
         setComposerLines([])
-        setVariableValues({ case_id: '', tracking_number: '', locaddress: '', date: '' })
+        setVariableValues({ case_id: '', tracking_number: '', locaddress: '', date: '', callback: '' })
+        setAddedSpiels([])
+        setIsAddedSpielsMenuOpen(false)
+        setComposerDeletionWarning('')
+        setComposerEditDelta({ added: [], removed: [] })
         setCopyStatus('Composer reset.')
       }
     }
@@ -479,7 +489,6 @@ function SpielsCategoryBoard({
     const handleOpenComposer = () => {
       setIsComposerOpen(true)
       setIsComposerMinimized(false)
-      setIsComposerToolsOpen(false)
       setQuickAddTab('service-change')
       setQuickAddSearch('')
       setQuickAddPage(0)
@@ -499,10 +508,22 @@ function SpielsCategoryBoard({
   }, [quickAddSearch, quickAddTab])
 
   useEffect(() => {
-    const handleClearComposer = () => setComposerLines([])
+    const handleClearComposer = () => {
+      setComposerLines([])
+      setAddedSpiels([])
+      setIsAddedSpielsMenuOpen(false)
+      setComposerDeletionWarning('')
+      setComposerEditDelta({ added: [], removed: [] })
+    }
     window.addEventListener('pcc-clear-composer', handleClearComposer)
     return () => window.removeEventListener('pcc-clear-composer', handleClearComposer)
   }, [])
+
+  useEffect(() => {
+    if (!isComposerOpen || addedSpiels.length === 0) {
+      setIsAddedSpielsMenuOpen(false)
+    }
+  }, [addedSpiels.length, isComposerOpen])
 
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('pcc-composer-count', { detail: { count: composerLines.length } }))
@@ -550,6 +571,9 @@ function SpielsCategoryBoard({
     if (variableValues.date && variableValues.date.trim()) {
       rendered = rendered.replace(/\bDATE\b/g, variableValues.date.trim())
     }
+    if (variableValues.callback && variableValues.callback.trim()) {
+      rendered = rendered.replace(/\bCALLBACK\b/g, variableValues.callback.trim())
+    }
 
     return rendered
   }
@@ -567,15 +591,88 @@ function SpielsCategoryBoard({
   }, [composerLines, variableValues])
 
   const getComposerText = () => composerLines.join('\n\n')
-  const getRenderedComposerText = () => renderVariables(getComposerText())
+  const composerTemplateText = getComposerText()
+  const getRenderedComposerText = () => renderVariables(composerTemplateText)
   const renderedComposerText = getRenderedComposerText()
   const doubleSpaceMatches = renderedComposerText.match(/ {2,}/g) || []
   const hasDoubleSpaces = doubleSpaceMatches.length > 0
   const doubleSpaceRunCount = doubleSpaceMatches.length
+  const grammarIssues = useMemo(() => {
+    const text = renderedComposerText || ''
+    if (!text.trim()) {
+      return []
+    }
+
+    const issues = []
+    const punctuationSpacingCount = (text.match(/\s+[,.;:!?]/g) || []).length
+    const repeatedWordCount = (text.match(/\b([a-z]+)\s+\1\b/gi) || []).length
+    const lowercaseICount = (text.match(/(^|[^\w])i(?=[^\w]|$)/g) || []).length
+    const paragraphs = text
+      .split(/\n\s*\n/g)
+      .map((item) => item.trim())
+      .filter(Boolean)
+    const missingEndPunctuationCount = paragraphs.filter((item) => !/[.!?]["')\]]?$/.test(item)).length
+
+    if (doubleSpaceRunCount > 0) {
+      issues.push({
+        key: 'double-spaces',
+        label: `${doubleSpaceRunCount} double-space issue${doubleSpaceRunCount > 1 ? 's' : ''}`,
+        fixable: true,
+      })
+    }
+    if (punctuationSpacingCount > 0) {
+      issues.push({
+        key: 'punctuation-spacing',
+        label: `${punctuationSpacingCount} spacing-before-punctuation issue${punctuationSpacingCount > 1 ? 's' : ''}`,
+        fixable: true,
+      })
+    }
+    if (repeatedWordCount > 0) {
+      issues.push({
+        key: 'repeated-words',
+        label: `${repeatedWordCount} repeated-word issue${repeatedWordCount > 1 ? 's' : ''}`,
+        fixable: true,
+      })
+    }
+    if (lowercaseICount > 0) {
+      issues.push({
+        key: 'lowercase-i',
+        label: `${lowercaseICount} lowercase "i" issue${lowercaseICount > 1 ? 's' : ''}`,
+        fixable: true,
+      })
+    }
+    if (missingEndPunctuationCount > 0) {
+      issues.push({
+        key: 'missing-end-punctuation',
+        label: `${missingEndPunctuationCount} paragraph${missingEndPunctuationCount > 1 ? 's' : ''} missing end punctuation`,
+        fixable: false,
+      })
+    }
+
+    return issues
+  }, [doubleSpaceRunCount, renderedComposerText])
+  const hasGrammarIssues = grammarIssues.length > 0
+  const hasFixableGrammarIssues = grammarIssues.some((issue) => issue.fixable)
+  useEffect(() => {
+    if (!hasGrammarIssues) {
+      setIsGrammarDetailsOpen(false)
+    }
+  }, [hasGrammarIssues])
   const isCaseIdValid = /^C-\d{9}$/.test(variableValues.case_id)
   const isTrackingValid = /^\d{12,34}$/.test(variableValues.tracking_number.trim())
-  const detailsReady = isCaseIdValid && isTrackingValid
-  const missingDetails = [!isCaseIdValid ? 'Case ID' : '', !isTrackingValid ? 'Tracking' : ''].filter(Boolean)
+  const requiresSupportTicket = /\bCCCCC\b|\{case_id\}|\{customer_name\}/i.test(composerTemplateText)
+  const requiresTrackingNumber = /\bXXXXX\b|\{tracking_number\}/i.test(composerTemplateText)
+  const requiresLocationAddress = /\bLOCADDRESS\b|\{locaddress\}/i.test(composerTemplateText)
+  const requiresDateTime = /\bDATE\b|\{date\}/i.test(composerTemplateText)
+  const requiresCallback = /\bCALLBACK\b|\{callback\}/i.test(composerTemplateText)
+  const missingDetails = [
+    requiresSupportTicket && !isCaseIdValid ? 'Support Ticket' : '',
+    requiresTrackingNumber && !isTrackingValid ? 'Tracking Number' : '',
+    requiresLocationAddress && !variableValues.locaddress.trim() ? 'Location Address' : '',
+    requiresDateTime && !variableValues.date.trim() ? 'Date & Time' : '',
+    requiresCallback && !variableValues.callback.trim() ? 'Callback' : '',
+  ].filter(Boolean)
+  const detailsReady = missingDetails.length === 0
   const composerStatusText = detailsReady
     ? hasDoubleSpaces
       ? `Ready with ${doubleSpaceRunCount} spacing warning${doubleSpaceRunCount > 1 ? 's' : ''}`
@@ -666,7 +763,123 @@ function SpielsCategoryBoard({
 
   const fixDoubleSpacesInComposer = () => {
     setComposerLines((current) => current.map((line) => line.replace(/ {2,}/g, ' ')))
+    setComposerDeletionWarning('')
+    setComposerEditDelta({ added: [], removed: [] })
     setToast({ message: 'Double spaces cleaned', type: 'success' })
+  }
+
+  const fixSafeGrammarInComposer = () => {
+    setComposerLines((current) =>
+      current.map((line) =>
+        line
+          .replace(/ {2,}/g, ' ')
+          .replace(/\s+([,.;:!?])/g, '$1')
+          .replace(/\b([a-z]+)\s+\1\b/gi, '$1')
+          .replace(/(^|[^\w])i(?=[^\w]|$)/g, (match, prefix) => `${prefix}I`),
+      ),
+    )
+    setComposerDeletionWarning('')
+    setComposerEditDelta({ added: [], removed: [] })
+    setToast({ message: 'Applied safe grammar fixes', type: 'success' })
+  }
+
+  const parseComposerText = (value) =>
+    value
+      .split(/\n\s*\n/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+
+  const getComposerWordDelta = (beforeText, afterText) => {
+    const tokenize = (value) => {
+      const matches = String(value).match(/[A-Za-z0-9'-]+/g)
+      return matches ? matches : []
+    }
+
+    const beforeTokens = tokenize(beforeText)
+    const afterTokens = tokenize(afterText)
+    const beforeMap = new Map()
+    const afterMap = new Map()
+    const beforeDisplay = new Map()
+    const afterDisplay = new Map()
+
+    beforeTokens.forEach((token) => {
+      const key = token.toLowerCase()
+      beforeMap.set(key, (beforeMap.get(key) || 0) + 1)
+      if (!beforeDisplay.has(key)) {
+        beforeDisplay.set(key, token)
+      }
+    })
+    afterTokens.forEach((token) => {
+      const key = token.toLowerCase()
+      afterMap.set(key, (afterMap.get(key) || 0) + 1)
+      if (!afterDisplay.has(key)) {
+        afterDisplay.set(key, token)
+      }
+    })
+
+    const added = []
+    const removed = []
+    const keys = new Set([...beforeMap.keys(), ...afterMap.keys()])
+    keys.forEach((key) => {
+      const beforeCount = beforeMap.get(key) || 0
+      const afterCount = afterMap.get(key) || 0
+      if (afterCount > beforeCount) {
+        const count = afterCount - beforeCount
+        for (let i = 0; i < count; i += 1) {
+          added.push(afterDisplay.get(key) || key)
+        }
+      } else if (beforeCount > afterCount) {
+        const count = beforeCount - afterCount
+        for (let i = 0; i < count; i += 1) {
+          removed.push(beforeDisplay.get(key) || key)
+        }
+      }
+    })
+
+    return {
+      added: added.slice(0, 6),
+      removed: removed.slice(0, 6),
+    }
+  }
+
+  const handleComposerTextChange = (event) => {
+    const nextRawText = event.target.value || ''
+    const nextLines = nextRawText ? parseComposerText(nextRawText) : []
+    const previousText = getComposerText()
+    const removedContent = nextRawText.length < previousText.length
+    const addedContent = nextRawText.length > previousText.length
+    const manuallyEdited = nextRawText !== previousText
+
+    setComposerLines(nextLines)
+
+    if (manuallyEdited && previousText.trim()) {
+      setComposerEditDelta(getComposerWordDelta(previousText, nextRawText))
+      setComposerDeletionWarning(
+        removedContent
+          ? 'Warning: You removed text from the original spiel draft.'
+          : addedContent
+            ? 'Notice: You added manual text to the original spiel draft.'
+            : 'Notice: You edited text in the original spiel draft.',
+      )
+      const now = Date.now()
+      if (now - lastDeletionWarnAtRef.current > 1600) {
+        setToast({
+          message: removedContent
+            ? 'You removed text from composer'
+            : addedContent
+              ? 'You added manual text to composer'
+              : 'You edited text in composer',
+          type: 'warning',
+        })
+        lastDeletionWarnAtRef.current = now
+      }
+      return
+    }
+
+    if (!manuallyEdited) {
+      setComposerDeletionWarning('')
+      setComposerEditDelta({ added: [], removed: [] })
+    }
   }
 
   const addServiceChangeQuickLine = (category, lineIndex) => {
@@ -675,7 +888,20 @@ function SpielsCategoryBoard({
       setToast({ message: 'No line available in this category', type: 'warning' })
       return
     }
-    addLineAsParagraph(lineText)
+    const lineLabel = lineIndex === 1 ? 'Case Notes' : 'Email'
+    addLineAsParagraph(lineText, `${category.label} - ${lineLabel}`)
+  }
+
+  const addServiceChangeQuickDelayEmailLine = (category) => {
+    const emailLine = category?.lines?.[0]
+    if (!emailLine) {
+      setToast({ message: 'No email line available in this category', type: 'warning' })
+      return
+    }
+    const cleanedEmailLine = String(emailLine).trim()
+    const combinedLine = `I apologize for the delay in my response. ${cleanedEmailLine}`
+    addLineAsParagraph(combinedLine, `${category.label} - Delay+Email`)
+    setToast({ message: 'Added delay + email line', type: 'success' })
   }
 
   const visibleCategories = useMemo(() => {
@@ -715,7 +941,18 @@ function SpielsCategoryBoard({
     )
   }
 
-  const addLineAsAppend = (lineText) => {
+  const registerAddedSpiel = (label) => {
+    if (!label || !label.trim()) {
+      return
+    }
+    const value = label.trim()
+    setAddedSpiels((current) => {
+      const next = [value, ...current.filter((item) => item !== value)]
+      return next.slice(0, 8)
+    })
+  }
+
+  const addLineAsAppend = (lineText, sourceLabel = '') => {
     if (!isComposerOpen || isComposerMinimized) {
       setIsComposerOpen(true)
       setIsComposerMinimized(false)
@@ -729,6 +966,9 @@ function SpielsCategoryBoard({
       nextLines = [...current.slice(0, current.length - 1), `${current[current.length - 1]} ${lineText}`]
       return nextLines
     })
+    setComposerDeletionWarning('')
+    setComposerEditDelta({ added: [], removed: [] })
+    registerAddedSpiel(sourceLabel || 'Manual append')
     if (autoCopyOnAdd && nextLines.length > 0) {
       copyText(renderVariables(nextLines.join('\n\n')))
         .then(() => setToast({ message: 'Added (append) + copied', type: 'success' }))
@@ -738,7 +978,7 @@ function SpielsCategoryBoard({
     setToast({ message: 'Added to composer (append)', type: 'success' })
   }
 
-  const addLineAsParagraph = (lineText) => {
+  const addLineAsParagraph = (lineText, sourceLabel = '') => {
     if (!isComposerOpen || isComposerMinimized) {
       setIsComposerOpen(true)
       setIsComposerMinimized(false)
@@ -752,6 +992,9 @@ function SpielsCategoryBoard({
       nextLines = [...current, lineText]
       return nextLines
     })
+    setComposerDeletionWarning('')
+    setComposerEditDelta({ added: [], removed: [] })
+    registerAddedSpiel(sourceLabel || 'Manual paragraph')
     if (autoCopyOnAdd && nextLines.length > 0) {
       copyText(renderVariables(nextLines.join('\n\n')))
         .then(() => setToast({ message: 'Added (new paragraph) + copied', type: 'success' }))
@@ -779,7 +1022,7 @@ function SpielsCategoryBoard({
           placeholder="Search by category or line..."
           className="w-full rounded-md border border-[#b990f5]/25 bg-[#1d1f3d] px-2.5 py-1.5 text-sm outline-none ring-[#b990f5]/60 focus:ring-2"
         />
-        <div className="mt-3 overflow-x-auto pb-1">
+        <div className="pcc-scroll-x mt-3 overflow-x-auto pb-1">
           <div className="flex min-w-max items-center gap-2">
             {categoryRows.map((category) => {
               const isActive = selectedCategoryIds.includes(category.id)
@@ -835,13 +1078,13 @@ function SpielsCategoryBoard({
                       Copy
                     </button>
                     <button
-                      onClick={() => addLineAsAppend(fav.text)}
+                      onClick={() => addLineAsAppend(fav.text, `${fav.categoryLabel} - Append`)}
                       className="rounded border border-[#b990f5]/30 bg-[#231f3f] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#e9dcfb] hover:bg-[#2f2a53]"
                     >
                       Append
                     </button>
                     <button
-                      onClick={() => addLineAsParagraph(fav.text)}
+                      onClick={() => addLineAsParagraph(fav.text, `${fav.categoryLabel} - New Paragraph`)}
                       className="rounded border border-[#b990f5]/30 bg-[#2f2450] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#f1e7fe] hover:bg-[#3a2d63]"
                     >
                       New Paragraph
@@ -942,7 +1185,7 @@ function SpielsCategoryBoard({
                               <button
                                 onClick={(event) => {
                                   event.stopPropagation()
-                                  addLineAsAppend(row.text)
+                                  addLineAsAppend(row.text, `${category.label} - Append`)
                                 }}
                                 className="inline-flex h-5 items-center justify-center rounded border border-[#b990f5]/30 bg-[#231f3f] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em] text-[#e9dcfb] hover:bg-[#2f2a53]"
                                 title="Append to the current paragraph"
@@ -953,7 +1196,7 @@ function SpielsCategoryBoard({
                             <button
                               onClick={(event) => {
                                 event.stopPropagation()
-                                addLineAsParagraph(row.text)
+                                addLineAsParagraph(row.text, `${category.label} - New Paragraph`)
                               }}
                               className="inline-flex h-5 items-center justify-center rounded border border-[#b990f5]/30 bg-[#2f2450] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em] text-[#f1e7fe] hover:bg-[#3a2d63]"
                               title="Add as a new paragraph"
@@ -1003,7 +1246,7 @@ function SpielsCategoryBoard({
 
       {isComposerOpen && !isComposerMinimized ? (
         <div className="fixed bottom-0 right-0 top-0 z-50 w-full max-w-[920px] border-l border-[#b990f5]/25 bg-[#171830] p-4 shadow-2xl">
-          <div className="flex h-full flex-col">
+          <div className="flex h-full min-h-0 flex-col">
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm font-bold uppercase tracking-[0.14em] text-[#f2eafb]">Email Composer</p>
               <div className="flex items-center gap-2">
@@ -1022,37 +1265,154 @@ function SpielsCategoryBoard({
                 </button>
               </div>
             </div>
-            <div className="mt-3 flex-1 overflow-y-auto pr-1">
+            <div className="mt-3 flex-1 overflow-hidden pr-1">
             <div className="grid items-stretch gap-4 lg:grid-cols-2">
               <section className="flex h-full flex-col rounded-lg border border-[#b990f5]/20 bg-[#12142a] p-3">
-                <p className="h-5 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#caa5ff]">Compose Message</p>
-                <p className="mt-2 h-10 text-[11px] text-[#caa5ff]">
-                  Type or paste your final draft here.
-                </p>
+                <div className="relative flex items-center gap-2">
+                  <p className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#caa5ff]">Compose Message</p>
+                  <div className="min-w-0 flex-1 overflow-hidden">
+                    <div className="flex items-center gap-1.5">
+                      {addedSpiels.length > 0 ? (
+                        <>
+                          <span className="max-w-[280px] truncate rounded-full border border-[#b990f5]/35 bg-[#261f45] px-2 py-0.5 text-[10px] font-semibold text-[#f0e7ff]">
+                            {addedSpiels[0]}
+                          </span>
+                          {addedSpiels.length > 1 ? (
+                            <button
+                              onClick={() => setIsAddedSpielsMenuOpen((value) => !value)}
+                              className="rounded-full border border-[#b990f5]/25 bg-[#1d1f3d] px-1.5 py-0.5 text-[10px] font-semibold text-[#d8c5f6] hover:bg-[#2a2d50]"
+                            >
+                              +{addedSpiels.length - 1}
+                            </button>
+                          ) : null}
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+                  {addedSpiels.length > 0 ? (
+                    <button
+                      onClick={() => {
+                        setComposerLines([])
+                        setAddedSpiels([])
+                        setIsAddedSpielsMenuOpen(false)
+                        setComposerDeletionWarning('')
+                        setComposerEditDelta({ added: [], removed: [] })
+                        setCopyStatus('Composer cleared.')
+                      }}
+                      className="shrink-0 rounded border border-[#b990f5]/25 bg-[#1d1f3d] px-1.5 py-0.5 text-[10px] font-semibold text-[#e9dcfb] hover:bg-[#2a2d50]"
+                    >
+                      Clear
+                    </button>
+                  ) : null}
+                </div>
+                {isAddedSpielsMenuOpen && addedSpiels.length > 1 ? (
+                  <div className="absolute right-0 top-7 z-20 w-[360px] max-w-full rounded-lg border border-[#b990f5]/25 bg-[#13152d] p-2 shadow-xl">
+                    <div className="max-h-32 overflow-y-auto space-y-1 pr-1">
+                      {addedSpiels.slice(1).map((item) => (
+                        <div
+                          key={`added-menu-${item}`}
+                          className="truncate rounded-md border border-[#b990f5]/20 bg-[#1a1c38] px-2 py-1 text-[11px] font-semibold text-[#e9dcfb]"
+                          title={item}
+                        >
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
                 <textarea
                   value={getComposerText()}
-                  onChange={(event) =>
-                    setComposerLines(
-                      event.target.value
-                        ? event.target.value
-                            .split(/\n\s*\n/)
-                            .map((item) => item.trim())
-                            .filter(Boolean)
-                        : [],
-                    )
-                  }
+                  onChange={handleComposerTextChange}
                   className="mt-2 h-48 w-full resize-none rounded border border-[#b990f5]/20 bg-[#111328]/80 p-2 text-sm leading-relaxed text-[#f2eafb] outline-none ring-[#b990f5]/60 focus:ring-2"
                   placeholder="Click Append / New Paragraph on spiel lines to build an email..."
                 />
+                {composerDeletionWarning ? (
+                  <div className="mt-2 space-y-1">
+                    <div className="inline-flex max-w-full items-center gap-1 rounded border border-amber-400/35 bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-amber-200">
+                      <span>!</span>
+                      <span className="truncate">{composerDeletionWarning}</span>
+                    </div>
+                    {composerEditDelta.added.length > 0 || composerEditDelta.removed.length > 0 ? (
+                      <div className="flex flex-wrap items-center gap-1">
+                        {composerEditDelta.added.map((word, index) => (
+                          <span
+                            key={`edit-added-${word}-${index}`}
+                            className="rounded border border-emerald-400/35 bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-200"
+                            title={`Added: ${word}`}
+                          >
+                            + {word}
+                          </span>
+                        ))}
+                        {composerEditDelta.removed.map((word, index) => (
+                          <span
+                            key={`edit-removed-${word}-${index}`}
+                            className="rounded border border-rose-400/35 bg-rose-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-rose-200"
+                            title={`Removed: ${word}`}
+                          >
+                            - {word}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </section>
 
               <section className="flex h-full flex-col rounded-lg border border-[#b990f5]/20 bg-[#12142a] p-3">
                 <p className="h-5 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#caa5ff]">Live View</p>
-                <p className="mt-2 h-10 text-[11px] text-[#caa5ff]">
-                  Use {`{case_id}`}, {`{tracking_number}`}, {`{locaddress}`}, or {`{date}`} in your text.
-                </p>
                 <div className="mt-2 h-48 overflow-auto rounded border border-[#b990f5]/20 bg-[#111328]/80 p-2 whitespace-pre-wrap text-sm leading-relaxed text-[#f2eafb]">
                   {renderedComposerText || <span className="text-slate-400">No composed text yet.</span>}
+                </div>
+                <div className="mt-2 rounded border border-[#b990f5]/20 bg-[#141633] px-2 py-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <span
+                        className={`inline-flex rounded border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] ${
+                          hasGrammarIssues
+                            ? 'border-amber-400/35 bg-amber-500/15 text-amber-200'
+                            : 'border-emerald-400/35 bg-emerald-500/15 text-emerald-200'
+                        }`}
+                      >
+                        {hasGrammarIssues ? `${grammarIssues.length} grammar check${grammarIssues.length > 1 ? 's' : ''}` : 'Grammar clean'}
+                      </span>
+                      {hasGrammarIssues ? (
+                        <p className="mt-1 truncate text-[10px] text-[#d7c1f3]" title={grammarIssues[0].label}>
+                          {grammarIssues[0].label}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {hasGrammarIssues ? (
+                        <button
+                          onClick={() => setIsGrammarDetailsOpen((value) => !value)}
+                          className="rounded-md border border-[#b990f5]/25 bg-[#1d1f3d] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#e9dcfb] hover:bg-[#2a2d50]"
+                        >
+                          {isGrammarDetailsOpen ? 'Hide' : 'Details'}
+                        </button>
+                      ) : null}
+                      {hasFixableGrammarIssues ? (
+                        <button
+                          onClick={fixSafeGrammarInComposer}
+                          className="rounded-md border border-emerald-400/35 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-emerald-200 hover:bg-emerald-500/25"
+                        >
+                          Fix Safe
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                  {hasGrammarIssues && isGrammarDetailsOpen ? (
+                    <div className="mt-1.5 max-h-20 space-y-1 overflow-y-auto pr-1">
+                      {grammarIssues.map((issue) => (
+                        <div
+                          key={`grammar-${issue.key}`}
+                          className="rounded border border-[#b990f5]/20 bg-[#1b1d3a] px-2 py-1 text-[10px] text-[#e9dcfb]"
+                        >
+                          <span>{issue.label}</span>
+                          {!issue.fixable ? <span className="ml-1 text-[#bda6df]">(manual)</span> : null}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               </section>
             </div>
@@ -1092,7 +1452,10 @@ function SpielsCategoryBoard({
                   <button
                     onClick={() => {
                       setComposerLines([])
-                      setVariableValues({ case_id: '', tracking_number: '', locaddress: '', date: '' })
+                      setVariableValues({ case_id: '', tracking_number: '', locaddress: '', date: '', callback: '' })
+                      setAddedSpiels([])
+                      setComposerDeletionWarning('')
+                      setComposerEditDelta({ added: [], removed: [] })
                       setCopyStatus('Composer reset.')
                     }}
                     className="min-w-[104px] rounded-md border border-red-400/45 bg-red-600/35 px-4 py-1 text-xs font-bold text-red-100 hover:bg-red-600/50"
@@ -1103,21 +1466,15 @@ function SpielsCategoryBoard({
               </div>
             </div>
 
-            <section className="mt-4 rounded-lg border border-[#b990f5]/20 bg-[#12142a] p-3">
-              <button
-                onClick={() => setIsComposerToolsOpen((value) => !value)}
-                className="flex w-full items-center justify-between rounded-md border border-[#b990f5]/25 bg-[#17193a] px-3 py-2 text-left"
-              >
+            <section className="mt-3 min-h-0 rounded-lg border border-[#b990f5]/20 bg-[#12142a] p-2.5">
+              <div className="rounded-md border border-[#b990f5]/25 bg-[#17193a] px-3 py-2">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#caa5ff]">
                   Tools (Details, Quick Add)
                 </span>
-                <span className="text-[#caa5ff]/80">{isComposerToolsOpen ? 'Hide' : 'Show'}</span>
-              </button>
-
-              {isComposerToolsOpen ? (
-              <div className="mt-3">
-              <section className="rounded-lg border border-[#b990f5]/15 bg-[#12142a] p-3">
-                <div className="space-y-3">
+              </div>
+              <div className="mt-2 pr-1">
+              <section className="rounded-lg border border-[#b990f5]/15 bg-[#12142a] p-2.5">
+                <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#caa5ff]">Details</p>
                     <span
@@ -1130,9 +1487,9 @@ function SpielsCategoryBoard({
                       {detailsReady ? 'Ready' : 'Incomplete'}
                     </span>
                   </div>
-                  <div className="grid gap-2 sm:grid-cols-2">
+                  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                     <label className="space-y-1">
-                      <span className="text-[11px] font-semibold text-[#d7c1f3]">Case ID</span>
+                      <span className="text-[11px] font-semibold text-[#d7c1f3]">Support Ticket</span>
                       <input
                         value={variableValues.case_id}
                         onChange={(event) =>
@@ -1163,7 +1520,7 @@ function SpielsCategoryBoard({
                       />
                     </label>
                     <label className="space-y-1">
-                      <span className="text-[11px] font-semibold text-[#d7c1f3]">LOCADDRESS</span>
+                      <span className="text-[11px] font-semibold text-[#d7c1f3]">Location Address</span>
                       <input
                         value={variableValues.locaddress}
                         onChange={(event) =>
@@ -1174,13 +1531,24 @@ function SpielsCategoryBoard({
                       />
                     </label>
                     <label className="space-y-1">
-                      <span className="text-[11px] font-semibold text-[#d7c1f3]">DATE</span>
+                      <span className="text-[11px] font-semibold text-[#d7c1f3]">Date &amp; Time</span>
                       <input
                         value={variableValues.date}
                         onChange={(event) =>
                           setVariableValues((current) => ({ ...current, date: event.target.value }))
                         }
-                        placeholder="Enter date"
+                        placeholder="Enter date & time"
+                        className="w-full rounded border border-[#b990f5]/25 bg-[#1d1f3d] px-2 py-1.5 text-xs text-[#f2eafb] outline-none focus:ring-2 focus:ring-[#b990f5]/50"
+                      />
+                    </label>
+                    <label className="space-y-1">
+                      <span className="text-[11px] font-semibold text-[#d7c1f3]">Callback</span>
+                      <input
+                        value={variableValues.callback}
+                        onChange={(event) =>
+                          setVariableValues((current) => ({ ...current, callback: event.target.value }))
+                        }
+                        placeholder="Enter callback details"
                         className="w-full rounded border border-[#b990f5]/25 bg-[#1d1f3d] px-2 py-1.5 text-xs text-[#f2eafb] outline-none focus:ring-2 focus:ring-[#b990f5]/50"
                       />
                     </label>
@@ -1211,7 +1579,7 @@ function SpielsCategoryBoard({
                         </button>
                       </div>
                     </div>
-                    <div className="mt-2 flex items-center gap-2">
+                    <div className="mt-1.5 flex items-center gap-1.5">
                       <button
                         onClick={() => setQuickAddTab('opening')}
                         className={`rounded border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] ${
@@ -1247,9 +1615,9 @@ function SpielsCategoryBoard({
                       value={quickAddSearch}
                       onChange={(event) => setQuickAddSearch(event.target.value)}
                       placeholder="Global search: category or line..."
-                      className="mt-2 w-full rounded border border-[#b990f5]/25 bg-[#1d1f3d] px-2 py-1.5 text-xs text-[#f2eafb] outline-none ring-[#b990f5]/60 focus:ring-2"
+                      className="mt-1.5 w-full rounded border border-[#b990f5]/25 bg-[#1d1f3d] px-2 py-1.5 text-xs text-[#f2eafb] outline-none ring-[#b990f5]/60 focus:ring-2"
                     />
-                    <div className="mt-2 flex items-center justify-end gap-1">
+                    <div className="mt-1.5 flex items-center justify-end gap-1">
                       <button
                         onClick={() => setQuickAddCompact(false)}
                         className={`rounded border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] ${
@@ -1271,7 +1639,7 @@ function SpielsCategoryBoard({
                         Compact (5)
                       </button>
                     </div>
-                    <div className="mt-2 space-y-1">
+                    <div className="mt-1.5 space-y-1">
                       {quickAddPageItems.map((category) => (
                         <div
                           key={`quick-${category.id}`}
@@ -1296,39 +1664,26 @@ function SpielsCategoryBoard({
                             ) : null}
                           </div>
                           <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => addServiceChangeQuickLine(category, 0)}
+                              className="rounded border border-sky-300/35 bg-sky-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-sky-200 hover:bg-sky-500/25"
+                            >
+                              Email
+                            </button>
                             {quickAddTab === 'service-change' ? (
-                              <>
-                                <button
-                                  onClick={() => addServiceChangeQuickLine(category, 0)}
-                                  className="rounded border border-sky-300/35 bg-sky-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-sky-200 hover:bg-sky-500/25"
-                                >
-                                  Email
-                                </button>
-                                <button
-                                  onClick={() => addServiceChangeQuickLine(category, 1)}
-                                  className="rounded border border-amber-300/35 bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-amber-200 hover:bg-amber-500/25"
-                                >
-                                  Case Notes
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <button
-                                  onClick={() => addServiceChangeQuickLine(category, 0)}
-                                  className="rounded border border-[#b990f5]/30 bg-[#231f3f] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#e9dcfb] hover:bg-[#2f2a53]"
-                                >
-                                  Line 1
-                                </button>
-                                {Array.isArray(category.lines) && category.lines.length > 1 ? (
-                                  <button
-                                    onClick={() => addServiceChangeQuickLine(category, 1)}
-                                    className="rounded border border-[#b990f5]/30 bg-[#2f2450] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#f1e7fe] hover:bg-[#3a2d63]"
-                                  >
-                                    Line 2
-                                  </button>
-                                ) : null}
-                              </>
-                            )}
+                              <button
+                                onClick={() => addServiceChangeQuickDelayEmailLine(category)}
+                                className="rounded border border-violet-300/35 bg-violet-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-violet-200 hover:bg-violet-500/25"
+                              >
+                                Delay + Email
+                              </button>
+                            ) : null}
+                            <button
+                              onClick={() => addServiceChangeQuickLine(category, 1)}
+                              className="rounded border border-amber-300/35 bg-amber-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-amber-200 hover:bg-amber-500/25"
+                            >
+                              Case Notes
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -1337,7 +1692,6 @@ function SpielsCategoryBoard({
                 </div>
               </section>
               </div>
-              ) : null}
             </section>
             </div>
           </div>

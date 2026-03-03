@@ -19,6 +19,58 @@ body {
   color: #f4ecff;
 }
 
+/* Global violet scrollbar theme */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #7d44e8 #111328;
+}
+
+*::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #111328 0%, #171a34 100%);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9b72f6 0%, #6f2ad4 100%);
+  border: 2px solid #111328;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #b794ff 0%, #7e39ea 100%);
+}
+
+*::-webkit-scrollbar-corner {
+  background: #111328;
+}
+
+/* Horizontal chips scrollbar (category row) */
+.pcc-scroll-x {
+  scrollbar-width: thin;
+  scrollbar-color: #a781ff #191c3b;
+}
+
+.pcc-scroll-x::-webkit-scrollbar {
+  height: 10px;
+}
+
+.pcc-scroll-x::-webkit-scrollbar-track {
+  background: #191c3b;
+  border: 1px solid #3a2f69;
+  border-radius: 999px;
+}
+
+.pcc-scroll-x::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #aa85ff 0%, #7a43e7 100%);
+  border: 1px solid #221b42;
+  border-radius: 999px;
+}
+
 .font-display {
   font-family: "Arial Black", "Franklin Gothic Medium", "Avenir Next Condensed", sans-serif;
 }
