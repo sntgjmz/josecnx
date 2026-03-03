@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Avenir Next", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  background: #090910;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(123, 63, 228, 0.22), transparent 44%),
+    radial-gradient(circle at 88% 88%, rgba(93, 33, 182, 0.18), transparent 48%),
+    #090910;
+  color: #f4ecff;
+}
+
+.font-display {
+  font-family: "Arial Black", "Franklin Gothic Medium", "Avenir Next Condensed", sans-serif;
+}
+
+.float-slow {
+  animation: drift 14s ease-in-out infinite;
+}
+
+.float-fast {
+  animation: drift 9s ease-in-out infinite reverse;
+}
+
+.intro-orb-slow {
+  animation: introOrbSlow 18s ease-in-out infinite;
+}
+
+.intro-orb-fast {
+  animation: introOrbFast 11s ease-in-out infinite;
+}
+
+.intro-line {
+  animation: introLine 10s linear infinite;
+}
+
+.intro-fade-up {
+  animation: introFadeUp 0.9s ease-out both;
+}
+
+.intro-fade-up-delay-1 {
+  animation-delay: 0.18s;
+}
+
+.intro-fade-up-delay-2 {
+  animation-delay: 0.36s;
+}
+
+.intro-fade-up-delay-3 {
+  animation-delay: 0.54s;
+}
+
+.intro-logo-pulse {
+  animation: introLogoPulse 2.8s ease-in-out infinite;
+}
+
+.intro-logo-ring {
+  animation: introLogoRing 2.8s ease-out infinite;
+}
+
+.intro-cinematic-wipe {
+  animation: introCinematicWipe 1.15s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-18px) translateX(10px);
+  }
+}
+
+@keyframes introOrbSlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(20px, -24px, 0) scale(1.08);
+  }
+}
+
+@keyframes introOrbFast {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-16px, 18px, 0) scale(0.94);
+  }
+}
+
+@keyframes introLine {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes introFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes introLogoPulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: saturate(1);
+  }
+  50% {
+    transform: scale(1.06) rotate(-2deg);
+    filter: saturate(1.2);
+  }
+}
+
+@keyframes introLogoRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  80% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+@keyframes introCinematicWipe {
+  0% {
+    transform: translateX(-115%);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(115%);
+    opacity: 0;
+  }
+}
