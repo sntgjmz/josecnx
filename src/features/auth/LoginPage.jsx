@@ -54,7 +54,14 @@ function LoginPage({ onLogin, error, isAuthenticating = false }) {
               Premium View
             </button>
           </div>
-          <p className="mt-2 text-sm text-slate-300">Access Premier Customer Care.</p>
+          <p className="mt-2 text-sm text-slate-300">The revised workspace is currently being prepared.</p>
+
+          <div className="mt-5 rounded-xl border border-amber-300/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">
+            <p className="font-semibold">Revision in progress</p>
+            <p className="mt-1 text-xs leading-relaxed text-amber-100/85">
+              Please use the original spiel for customer responses while the new version is under construction.
+            </p>
+          </div>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <div>
@@ -136,22 +143,20 @@ function LoginPage({ onLogin, error, isAuthenticating = false }) {
             <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#7a3fd4] to-[#4b1d91] text-lg font-extrabold shadow-[0_0_32px_rgba(111,42,212,0.45)]">
               PCC
             </div>
-            <p className="mt-6 text-xs uppercase tracking-[0.32em] text-[#d9c2f7]/90">Secure Workspace</p>
-            <h1 className="font-display mt-3 text-4xl leading-tight text-white">Premier Customer Care</h1>
+            <p className="mt-6 text-xs uppercase tracking-[0.32em] text-[#d9c2f7]/90">Workspace update</p>
+            <h1 className="font-display mt-3 text-4xl leading-tight text-white">A better spiel workspace is on the way.</h1>
             <p className="mt-4 max-w-sm text-sm text-[#ddd0ef]">
-              Built for fast, consistent customer responses with your curated spiel library and copy workflow.
+              We are revising the portal to make your response workflow faster and more reliable.
             </p>
 
-            <div className="mt-8 space-y-3 text-sm">
-              <div className="rounded-xl border border-[#b990f5]/20 bg-[#15172e]/80 px-4 py-3">
-                Fast copy actions for every line
+            <div className="mt-8 rounded-2xl border border-amber-300/30 bg-amber-400/10 p-4 text-sm text-amber-50">
+              <div className="flex items-center gap-2 font-semibold text-amber-100">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full border border-amber-200/50 text-xs">!</span>
+                Under construction
               </div>
-              <div className="rounded-xl border border-[#b990f5]/20 bg-[#15172e]/80 px-4 py-3">
-                Composer preview in top navigation
-              </div>
-              <div className="rounded-xl border border-[#b990f5]/20 bg-[#15172e]/80 px-4 py-3">
-                Category filters for quick scanning
-              </div>
+              <p className="mt-2 leading-relaxed text-amber-100/85">
+                Until this revision is complete, please use the original spiel for all customer communications.
+              </p>
             </div>
           </div>
 
@@ -165,10 +170,17 @@ function LoginPage({ onLogin, error, isAuthenticating = false }) {
                 Minimal View
               </button>
             </div>
-            <h2 className="font-display mt-3 text-3xl text-white sm:text-4xl">Welcome Back</h2>
-            <p className="mt-3 text-sm text-slate-300">Enter your credentials to continue.</p>
+            <h2 className="font-display mt-3 text-3xl text-white sm:text-4xl">Portal revision in progress</h2>
+            <p className="mt-3 text-sm text-slate-300">Sign in to access the workspace during the update.</p>
 
-            <form onSubmit={handleSubmit} className="mt-7 space-y-4">
+            <div className="mt-5 rounded-xl border border-amber-300/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">
+              <p className="font-semibold">For now, use the original spiel.</p>
+              <p className="mt-1 text-xs leading-relaxed text-amber-100/85">
+                The revised experience is still under construction. Please continue using the original spiel for customer responses.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <div>
                 <label htmlFor="username" className="text-sm text-slate-200">
                   Username
