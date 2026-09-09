@@ -49,6 +49,220 @@ body {
   background: #111328;
 }
 
+.soundroom-range {
+  appearance: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #62e6a9 0%, #62e6a9 var(--range-progress, 0%), #5b5b5b var(--range-progress, 0%), #5b5b5b 100%);
+}
+
+.soundroom-range::-webkit-slider-thumb {
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  opacity: 0;
+}
+
+.soundroom-range:hover::-webkit-slider-thumb,
+.soundroom-range:focus::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.soundroom-range::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.soundroom-bar {
+  animation: soundroomPulse 1.15s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+/* PCC Soundroom: a single emerald, teal, and violet night palette. */
+.pcc-soundroom {
+  background:
+    radial-gradient(circle at 80% 4%, rgba(82, 91, 224, 0.24), transparent 28rem),
+    radial-gradient(circle at 10% 30%, rgba(47, 184, 123, 0.16), transparent 31rem),
+    #07110c;
+}
+
+.pcc-soundroom .bg-\[\#050505\] {
+  background: linear-gradient(180deg, #081a12 0%, #06100b 100%) !important;
+}
+
+.pcc-soundroom .bg-\[\#181818\] {
+  background: linear-gradient(145deg, rgba(24, 58, 43, 0.94), rgba(13, 30, 22, 0.97)) !important;
+  border-color: rgba(155, 244, 198, 0.12) !important;
+}
+
+.pcc-soundroom .bg-\[\#1f1f1f\],
+.pcc-soundroom .bg-\[\#282828\] {
+  background: linear-gradient(145deg, #1b402f, #10261b) !important;
+}
+
+.pcc-soundroom .bg-\[\#121212\] {
+  background-color: #0c1d15 !important;
+}
+
+.pcc-soundroom .bg-\[\#080909\] {
+  background-color: #07110c !important;
+}
+
+.pcc-soundroom .hover\:bg-\[\#282828\]:hover,
+.pcc-soundroom .hover\:bg-white\/10:hover {
+  background-color: rgba(98, 230, 169, 0.13) !important;
+}
+
+.pcc-soundroom .text-\[\#b3b3b3\],
+.pcc-soundroom .text-\[\#a7a7a7\] {
+  color: #a9cdb8 !important;
+}
+
+.pcc-soundroom .border-white\/10,
+.pcc-soundroom .border-white\/15 {
+  border-color: rgba(166, 246, 203, 0.14) !important;
+}
+
+.pcc-soundroom input:not([type='range']) {
+  background-color: #edfdf3 !important;
+}
+
+.pcc-soundroom .soundroom-range {
+  background: linear-gradient(90deg, #62e6a9 0%, #62e6a9 var(--range-progress, 0%), #416555 var(--range-progress, 0%), #416555 100%);
+}
+
+/* PCC Workspace: related to Soundroom, but calmer and more practical for long work sessions. */
+.pcc-workspace {
+  background:
+    radial-gradient(circle at 85% 3%, rgba(47, 184, 123, 0.16), transparent 28rem),
+    radial-gradient(circle at 8% 95%, rgba(55, 117, 87, 0.15), transparent 34rem),
+    #07110c;
+}
+
+.pcc-workspace .bg-\[\#0f1022\] {
+  background: linear-gradient(180deg, #0b1b13 0%, #07110c 100%) !important;
+}
+
+.pcc-workspace .bg-\[\#111328\] {
+  background: rgba(12, 29, 21, 0.92) !important;
+}
+
+.pcc-workspace .bg-\[\#13152a\],
+.pcc-workspace .bg-\[\#15172e\] {
+  background: linear-gradient(145deg, #142b20, #0d1e15) !important;
+}
+
+.pcc-workspace .bg-\[\#1b1d39\],
+.pcc-workspace .bg-\[\#1f2142\] {
+  background: linear-gradient(145deg, #193124, #11251a) !important;
+}
+
+.pcc-workspace .bg-\[\#232547\] {
+  background: #214332 !important;
+}
+
+.pcc-workspace .hover\:bg-\[\#26294a\]:hover,
+.pcc-workspace .bg-\[\#26294a\] {
+  background: #29543c !important;
+}
+
+.pcc-workspace .bg-\[\#6f2ad4\] {
+  background: linear-gradient(135deg, #27865c, #1d6c4a) !important;
+}
+
+.pcc-workspace .from-\[\#6f2ad4\] {
+  --tw-gradient-from: #27865c var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(39 134 92 / 0) var(--tw-gradient-to-position) !important;
+}
+
+.pcc-workspace .to-\[\#4b1d91\] {
+  --tw-gradient-to: #1d6c4a var(--tw-gradient-to-position) !important;
+}
+
+.pcc-workspace .border-\[\#b990f5\]\/20,
+.pcc-workspace .border-\[\#b990f5\]\/25,
+.pcc-workspace .border-\[\#b990f5\]\/30,
+.pcc-workspace .border-\[\#b990f5\]\/35,
+.pcc-workspace .border-\[\#b990f5\]\/45 {
+  border-color: rgba(146, 237, 183, 0.2) !important;
+}
+
+.pcc-workspace .text-\[\#caa5ff\]\/90,
+.pcc-workspace .text-\[\#caa5ff\],
+.pcc-workspace .text-\[\#cdb2f4\],
+.pcc-workspace .text-\[\#e7d8f8\],
+.pcc-workspace .text-\[\#f2eafb\] {
+  color: #ccebd9 !important;
+}
+
+.pcc-workspace .text-\[\#ede1fb\] {
+  color: #e4f7eb !important;
+}
+
+/* The spiel boards contain their own utility colors, so bring those surfaces into the same system. */
+.pcc-workspace [class*="bg-[#121325]"],
+.pcc-workspace [class*="bg-[#111328]"],
+.pcc-workspace [class*="bg-[#12142a]"],
+.pcc-workspace [class*="bg-[#13152d]"],
+.pcc-workspace [class*="bg-[#141633]"],
+.pcc-workspace [class*="bg-[#161832]"],
+.pcc-workspace [class*="bg-[#171830]"],
+.pcc-workspace [class*="bg-[#17193a]"],
+.pcc-workspace [class*="bg-[#1a1c38]"],
+.pcc-workspace [class*="bg-[#1b1d3a]"] {
+  background: linear-gradient(145deg, #112b1d, #0c1d14) !important;
+}
+
+.pcc-workspace [class*="bg-[#1d1f3d]"],
+.pcc-workspace [class*="bg-[#231f3f]"],
+.pcc-workspace [class*="bg-[#2f2450]"],
+.pcc-workspace [class*="bg-[#261f45]"] {
+  background: #153222 !important;
+}
+
+.pcc-workspace [class*="bg-[#2a2d50]"],
+.pcc-workspace [class*="bg-[#2f2a53]"],
+.pcc-workspace [class*="bg-[#3a2d63]"] {
+  background: #225238 !important;
+}
+
+.pcc-workspace [class*="bg-[#6f2ad4]"] {
+  background: #27865c !important;
+}
+
+.pcc-workspace [class*="border-[#b990f5]"] {
+  border-color: rgba(146, 237, 183, 0.22) !important;
+}
+
+.pcc-workspace [class*="text-[#caa5ff]"],
+.pcc-workspace [class*="text-[#d4c2ea]"],
+.pcc-workspace [class*="text-[#d7c1f3]"],
+.pcc-workspace [class*="text-[#d8c5f6]"],
+.pcc-workspace [class*="text-[#d9c6f5]"],
+.pcc-workspace [class*="text-[#e6d7fa]"],
+.pcc-workspace [class*="text-[#e7d8f8]"],
+.pcc-workspace [class*="text-[#e9dcfb]"],
+.pcc-workspace [class*="text-[#f0e7ff]"],
+.pcc-workspace [class*="text-[#f1e7fe]"],
+.pcc-workspace [class*="text-[#f2eafb]"] {
+  color: #d9f2e3 !important;
+}
+
+@keyframes soundroomPulse {
+  from {
+    opacity: 0.55;
+    transform: scaleY(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
 /* Horizontal chips scrollbar (category row) */
 .pcc-scroll-x {
   scrollbar-width: thin;

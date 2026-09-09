@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import DashboardPage from './features/dashboard/DashboardPage.jsx'
 import LoginPage from './features/auth/LoginPage.jsx'
 import IntroPage from './features/auth/IntroPage.jsx'
+import MusicPage from './features/music/MusicPage.jsx'
 import { MOCK_USERS } from './data/mockAuth.js'
 
 const AUTH_USER_STORAGE_KEY = 'pcc_auth_user'
@@ -14,6 +15,7 @@ async function sha256Hex(value) {
 }
 
 function App() {
+  const [isMusicPageOpen, setIsMusicPageOpen] = useState(() => window.location.hash === '#music' || window.location.hash === '#/music')
   const [authUser, setAuthUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem(AUTH_USER_STORAGE_KEY)
@@ -43,6 +45,22 @@ function App() {
       // ignore localStorage write errors
     }
   }, [authUser])
+
+  useEffect(() => {
+    const syncMusicRoute = () => setIsMusicPageOpen(window.location.hash === '#music' || window.location.hash === '#/music')
+    window.addEventListener('hashchange', syncMusicRoute)
+    return () => window.removeEventListener('hashchange', syncMusicRoute)
+  }, [])
+
+  const openMusicPage = () => {
+    window.location.hash = 'music'
+    setIsMusicPageOpen(true)
+  }
+
+  const closeMusicPage = () => {
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    setIsMusicPageOpen(false)
+  }
 
   const handleLogin = async (username, password) => {
     if (isAuthenticating) {
@@ -76,13 +94,23 @@ function App() {
   }
 
   if (!authUser) {
+    if (isMusicPageOpen) {
+      return <MusicPage onExit={closeMusicPage} />
+    }
     if (showIntro) {
       return <IntroPage onContinue={handleContinueFromIntro} />
     }
-    return <LoginPage onLogin={handleLogin} error={loginError} isAuthenticating={isAuthenticating} />
+    return <LoginPage onLogin={handleLogin} error={loginError} isAuthenticating={isAuthenticating} onOpenMusic={openMusicPage} />
   }
 
-  return <DashboardPage user={authUser} onLogout={handleLogout} />
+  return (
+    <>
+      <div className={isMusicPageOpen ? 'hidden' : ''}>
+        <DashboardPage user={authUser} onLogout={handleLogout} onOpenMusic={openMusicPage} />
+      </div>
+      <MusicPage onExit={closeMusicPage} isVisible={isMusicPageOpen} />
+    </>
+  )
 }
 
 export default App

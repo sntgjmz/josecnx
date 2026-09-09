@@ -1,161 +1,121 @@
-import { useEffect, useRef, useState } from 'react'
+function SoundwaveMark() {
+  return (
+    <div className="flex h-11 items-center justify-center gap-1" aria-hidden="true">
+      {[18, 31, 43, 27, 49, 35, 22].map((height, index) => (
+        <span
+          key={height}
+          className="soundroom-bar w-1.5 rounded-full bg-[#62e6a9]"
+          style={{ height: `${height}px`, animationDelay: `${index * 0.11}s` }}
+        />
+      ))}
+    </div>
+  )
+}
 
-const musicTracks = [
-  { src: '/maki-k-m.mp3', title: 'Maki K. M.' },
-  { src: '/multo.mp3', title: 'Multo' },
-]
+import { useState } from 'react'
 
-function LoginPage() {
-  const audioRef = useRef(null)
-  const shouldResumeRef = useRef(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [volume, setVolume] = useState(0.7)
+function LoginPage({ onLogin, error, isAuthenticating, onOpenMusic }) {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-  useEffect(() => {
-    const audio = audioRef.current
-
-    if (!audio) return
-
-    audio.load()
-    setCurrentTime(0)
-    setDuration(0)
-    if (shouldResumeRef.current) audio.play().catch(() => setIsPlaying(false))
-  }, [currentTrack])
-
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    if (isPlaying) audio.play().catch(() => setIsPlaying(false))
-    else audio.pause()
-  }, [isPlaying])
-
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = volume
-  }, [volume])
-
-  const toggleMusic = () => {
-    setIsPlaying((playing) => {
-      shouldResumeRef.current = !playing
-      return !playing
-    })
-  }
-
-  const playNextTrack = () => {
-    setCurrentTrack((track) => (track + 1) % musicTracks.length)
-  }
-
-  const playPreviousTrack = () => {
-    setCurrentTrack((track) => (track - 1 + musicTracks.length) % musicTracks.length)
-  }
-
-  const seekTo = (event) => {
-    const time = Number(event.target.value)
-    if (audioRef.current) audioRef.current.currentTime = time
-    setCurrentTime(time)
-  }
-
-  const formatTime = (seconds) => {
-    if (!Number.isFinite(seconds)) return '0:00'
-    return `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    await onLogin(username.trim(), password)
   }
 
   return (
-    <main className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden px-4 py-8 text-slate-100 sm:px-6">
-      <audio
-        ref={audioRef}
-        src={musicTracks[currentTrack].src}
-        preload="metadata"
-        onEnded={playNextTrack}
-        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
-        onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-      />
-      <div className="pointer-events-none absolute -left-28 -top-28 h-96 w-96 rounded-full bg-[#7a3fd4]/25 blur-3xl float-slow" />
-      <div className="pointer-events-none absolute -bottom-32 -right-24 h-[26rem] w-[26rem] rounded-full bg-[#5d21b6]/20 blur-3xl float-fast" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(191,151,255,0.12),transparent_45%)]" />
+    <main className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-[#070908] px-4 py-8 text-slate-100 sm:px-6">
+      <div className="pointer-events-none absolute -left-36 top-[-8rem] h-[30rem] w-[30rem] rounded-full bg-[#35d88a]/20 blur-3xl float-slow" />
+      <div className="pointer-events-none absolute -bottom-40 -right-24 h-[32rem] w-[32rem] rounded-full bg-[#7854e9]/25 blur-3xl float-fast" />
+      <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]" />
 
-      <section className="relative w-full max-w-xl overflow-hidden rounded-3xl border border-[#b990f5]/25 bg-[#0f1022]/90 p-7 text-center shadow-2xl backdrop-blur-xl sm:p-10">
-        <button
-          type="button"
-          onClick={toggleMusic}
-          className="hidden"
-          aria-label={isPlaying ? 'Pause background music' : 'Play background music'}
-        >
-          <span aria-hidden="true">{isPlaying ? '❚❚' : '♫'}</span>
-          {isPlaying ? 'Pause music' : 'Play music'}
-        </button>
-
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#7a3fd4] to-[#4b1d91] text-lg font-extrabold shadow-[0_0_32px_rgba(111,42,212,0.45)]">
-          PCC
-        </div>
-
-        <p className="mt-7 text-xs font-semibold uppercase tracking-[0.32em] text-[#caa5ff]/90">Premier Customer Care</p>
-        <h1 className="font-display mt-3 text-3xl leading-tight text-white sm:text-4xl">Revision in progress</h1>
-        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#ddd0ef] sm:text-base">
-          We are currently revising the spiel workspace to improve the experience and make it more reliable.
-        </p>
-
-        <section className="mt-7 overflow-hidden rounded-2xl border border-white/10 bg-[#17172b]/90 text-left shadow-[0_18px_40px_rgba(0,0,0,0.25)]" aria-label="Music player">
-          <div className="flex items-center gap-4 p-4 sm:p-5">
-            <div className={`h-16 w-16 shrink-0 rounded-xl bg-gradient-to-br ${currentTrack === 0 ? 'from-fuchsia-500 to-violet-700' : 'from-sky-500 to-indigo-700'} shadow-lg`} aria-hidden="true" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-base font-bold text-white">{musicTracks[currentTrack].title}</p>
-              <p className="mt-0.5 text-sm text-slate-400">PCC playlist</p>
-              <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#62e6a9]">PCC listening room</p>
+      <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#101312]/85 shadow-[0_32px_100px_rgba(0,0,0,0.55)] backdrop-blur-xl lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="relative flex min-h-[500px] flex-col justify-between overflow-hidden bg-[linear-gradient(145deg,#1d5541_0%,#133329_42%,#101312_100%)] p-7 sm:p-10">
+          <div className="pointer-events-none absolute -right-20 top-14 h-72 w-72 rounded-full border-[35px] border-[#62e6a9]/15" />
+          <div className="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full border-[45px] border-white/5" />
+          <div className="relative flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] shadow-[0_0_30px_rgba(98,230,169,0.38)]">
+              <SoundwaveMark />
+            </span>
+            <div>
+              <p className="font-display text-lg leading-none tracking-tight text-white">PCC Soundroom</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#a6f6cb]">Premier Customer Care</p>
             </div>
-            <button type="button" onClick={toggleMusic} className="flex h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-[#62e6a9] px-3 text-xs font-black text-[#101c19] transition hover:scale-105 hover:bg-[#86f4bd] focus:outline-none focus:ring-2 focus:ring-[#86f4bd] focus:ring-offset-2 focus:ring-offset-[#17172b]" aria-label={isPlaying ? 'Pause music' : 'Play music'}>
-              {isPlaying ? 'PAUSE' : 'PLAY'}
+          </div>
+
+          <div className="relative mt-14 max-w-md">
+            <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#9cf3c2]">Your personal listening space</p>
+            <h1 className="mt-4 text-4xl font-black leading-[0.98] tracking-tight text-white sm:text-6xl">
+              Press play.<br />
+              Stay in flow.
+            </h1>
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-[#d2e9dd] sm:text-base">
+              A focused music space for your workday—your songs, your playlists, and controls that keep everything moving.
+            </p>
+            <button
+              type="button"
+              onClick={onOpenMusic}
+              className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#62e6a9] px-6 py-3.5 text-sm font-black text-[#07130e] shadow-[0_10px_30px_rgba(98,230,169,0.3)] transition hover:scale-[1.03] hover:bg-[#96f9c4] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#133329]"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#07130e] text-[9px] text-[#62e6a9]">▶</span>
+              Open PCC Soundroom
             </button>
           </div>
 
-          <div className="px-4 pb-4 sm:px-5 sm:pb-5">
-            <input className="h-1 w-full cursor-pointer accent-[#62e6a9]" type="range" min="0" max={duration || 0} step="0.1" value={Math.min(currentTime, duration || 0)} onChange={seekTo} aria-label="Song progress" />
-            <div className="mt-1 flex justify-between text-[11px] tabular-nums text-slate-500"><span>{formatTime(currentTime)}</span><span>{formatTime(duration)}</span></div>
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
-              <button type="button" onClick={playPreviousTrack} className="text-xs font-bold text-slate-300 transition hover:text-white">PREV</button>
-              <button type="button" onClick={toggleMusic} className="rounded-full border border-white/15 px-4 py-1.5 text-xs font-bold text-white transition hover:border-[#62e6a9] hover:text-[#62e6a9]">{isPlaying ? 'PAUSE' : 'PLAY'}</button>
-              <button type="button" onClick={playNextTrack} className="text-xs font-bold text-slate-300 transition hover:text-white">NEXT</button>
-              <label className="flex items-center gap-2 text-xs text-slate-400">VOL
-                <input className="h-1 w-16 cursor-pointer accent-[#62e6a9]" type="range" min="0" max="1" step="0.05" value={volume} onChange={(event) => setVolume(Number(event.target.value))} aria-label="Music volume" />
+          <div className="relative mt-10 flex items-center gap-4 text-xs font-semibold text-[#b9d9c8]">
+            <SoundwaveMark />
+            <span>Local playlists · Queue controls · Liked songs</span>
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-center p-7 sm:p-10">
+          <div className="mx-auto w-full max-w-sm">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#62e6a9]">PCC Workspace</p>
+            <h2 className="mt-3 text-2xl font-black tracking-tight text-white sm:text-3xl">Sign in to your spiel.</h2>
+            <p className="mt-3 text-sm leading-relaxed text-[#aebbb4]">Access the PCC email response workspace and composer tools.</p>
+
+            <form onSubmit={handleSubmit} className="mt-7 space-y-4" noValidate>
+              <label className="block">
+                <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#cfe6d8]">Username</span>
+                <input
+                  type="text"
+                  autoComplete="username"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  required
+                  disabled={isAuthenticating}
+                  className="mt-2 w-full rounded-xl border border-white/15 bg-black/25 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#739080] focus:border-[#62e6a9] focus:ring-2 focus:ring-[#62e6a9]/20 disabled:cursor-not-allowed disabled:opacity-60"
+                  placeholder="Enter your username"
+                />
               </label>
+              <label className="block">
+                <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#cfe6d8]">Password</span>
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                  disabled={isAuthenticating}
+                  className="mt-2 w-full rounded-xl border border-white/15 bg-black/25 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#739080] focus:border-[#62e6a9] focus:ring-2 focus:ring-[#62e6a9]/20 disabled:cursor-not-allowed disabled:opacity-60"
+                  placeholder="Enter your password"
+                />
+              </label>
+              {error ? <p role="alert" className="rounded-lg border border-red-300/25 bg-red-400/10 px-3 py-2.5 text-sm text-red-100">{error}</p> : null}
+              <button
+                type="submit"
+                disabled={isAuthenticating || !username.trim() || !password}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 text-sm font-black text-[#0b1711] transition hover:scale-[1.01] hover:bg-[#dfffea] focus:outline-none focus:ring-2 focus:ring-[#62e6a9] disabled:cursor-not-allowed disabled:opacity-55"
+              >
+                {isAuthenticating ? <><span className="h-4 w-4 animate-spin rounded-full border-2 border-[#1b5b3b] border-t-transparent" /> Signing in…</> : 'Enter PCC Workspace'}
+              </button>
+            </form>
+
+            <div className="mt-7 border-t border-white/10 pt-5">
+              <p className="text-xs leading-relaxed text-[#9fbcaa]">Need access? Contact the PCC workspace administrator to receive your login credentials.</p>
             </div>
           </div>
-
-          <div className="border-t border-white/10 px-4 py-3 sm:px-5">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">Up next</p>
-            <div className="flex gap-2">
-              {musicTracks.map((track, index) => (
-                <button key={track.src} type="button" onClick={() => setCurrentTrack(index)} className={`min-w-0 flex-1 rounded-lg px-3 py-2 text-left text-xs transition ${index === currentTrack ? 'bg-white/10 text-[#86f4bd]' : 'bg-[#10101d] text-slate-400 hover:bg-white/5 hover:text-white'}`}>
-                  <span className="block truncate font-semibold">{track.title}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <div className="mt-8 rounded-2xl border border-amber-300/30 bg-amber-400/10 p-5 text-left text-amber-50">
-          <div className="flex items-center gap-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-amber-200/50 bg-amber-200/10 text-base font-bold">
-              !
-            </span>
-            <p className="font-semibold text-amber-100">Login is temporarily unavailable</p>
-          </div>
-          <p className="mt-3 text-sm leading-relaxed text-amber-100/85">
-            You will not be able to sign in at this time, even with the correct username and password.
-          </p>
         </div>
-
-        <div className="mt-5 rounded-xl border border-[#b990f5]/20 bg-[#15172e]/80 px-5 py-4 text-left">
-          <p className="text-sm font-semibold text-white">What to use for now</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
-            Please continue using the original spiel for all customer responses until the updated workspace is ready.
-          </p>
-        </div>
-
-        <p className="mt-7 text-xs text-[#cdb2f4]">Thank you for your patience while we complete this revision.</p>
       </section>
     </main>
   )
