@@ -1,7 +1,9 @@
+import { artistLibraryTracks } from './artistLibrary.js'
+
 // Add your music here. Put each audio file in `public/music/` (or use an
 // existing public path) and add an object following the two examples below.
 // `src` must start with `/`, for example: `/music/my-song.mp3`.
-export const musicLibrary = [
+const personalMusicLibrary = [
   {
     id: 'maki-k-m',
     title: 'kahel na langit x Kailan? (The Cozy Cove Fest)',
@@ -153,5 +155,7 @@ export const musicLibrary = [
     mood: 'Nostalgic',
   },
 ]
+
+export const musicLibrary = [...personalMusicLibrary, ...artistLibraryTracks]
 
 export const featuredCollections = []
