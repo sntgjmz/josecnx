@@ -12,6 +12,12 @@ const PLAYLIST_ARTWORKS = [
 ]
 const ARTIST_PROFILE_IMAGES = {
   'Taylor Swift': '/covers/profilepicture-taylor-swift.jpg',
+  'Joji': '/covers/profilepicture-joji.jpg',
+  'SZA': '/covers/profilepicture-sza.jpg',
+  'LANY': '/covers/profilepicture-lany.jpg',
+  'Jason Mraz': '/covers/profilepicture-jasonmraz.jpg',
+  'Bruno Mars': '/covers/profilepicture-brunomars.jpg',
+  'Gotye': '/covers/profilepicture-gotye.png',
 }
 
 function Icon({ name, className = 'h-5 w-5' }) {
