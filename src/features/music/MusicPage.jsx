@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { featuredCollections, musicLibrary } from './musicLibrary.js'
+import { soundroomUpdates } from './soundroomUpdates.js'
 
 const LIKED_TRACKS_KEY = 'pcc_soundroom_liked_tracks'
 const RECENT_TRACKS_KEY = 'pcc_soundroom_recent_tracks'
@@ -39,6 +40,7 @@ function Icon({ name, className = 'h-5 w-5' }) {
   if (name === 'volume') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M4 10v4h4l5 4V6L8 10H4ZM17 9a4 4 0 0 1 0 6M19.5 6.5a7.5 7.5 0 0 1 0 11" /></svg>
   if (name === 'queue') return <svg {...common}><path strokeLinecap="round" d="M4 6h10M4 12h10M4 18h7M18 15v6m-3-3h6" /></svg>
   if (name === 'fullscreen') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5" /></svg>
+  if (name === 'updates') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
   if (name === 'close') return <svg {...common}><path strokeLinecap="round" d="m6 6 12 12M18 6 6 18" /></svg>
   if (name === 'more') return <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" /></svg>
   if (name === 'music') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M9 18V5l11-2v13M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3Zm11-2a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z" /></svg>
@@ -445,8 +447,10 @@ function MusicPage({ onExit, isVisible = true }) {
           ? selectedArtist || 'Artist'
           : activeView === 'album'
             ? selectedAlbum?.name || 'Album'
-            : activeView === 'artists'
+        : activeView === 'artists'
               ? 'Artists'
+              : activeView === 'updates'
+                ? 'What’s new'
         : 'Your Library'
 
   return (
@@ -475,6 +479,7 @@ function MusicPage({ onExit, isVisible = true }) {
             <button type="button" onClick={openSearch} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'search' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="search" /> Search</button>
             <button type="button" onClick={() => setActiveView('library')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'library' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="library" /> Your Library</button>
             <button type="button" onClick={() => setActiveView('artists')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${['artists', 'artist', 'album'].includes(activeView) ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="music" /> Artists</button>
+            <button type="button" onClick={() => setActiveView('updates')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'updates' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="updates" /> What’s new <span className="ml-auto rounded-full bg-[#f5cbcb] px-1.5 py-0.5 text-[10px] text-[#2b2537]">{soundroomUpdates.length}</span></button>
           </nav>
           <div className="mt-5 border-t border-white/10 pt-4">
             <button type="button" onClick={() => setIsPlaylistModalOpen(true)} className="flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><span className="flex h-6 w-6 items-center justify-center rounded-sm bg-gradient-to-br from-violet-500 to-indigo-900"><Icon name="plus" className="h-4 w-4 text-white" /></span> Create playlist</button>
@@ -493,7 +498,7 @@ function MusicPage({ onExit, isVisible = true }) {
             <div className={`min-w-0 flex-1 ${activeView === 'search' ? '' : 'hidden sm:block'}`}>
               <label className="flex max-w-md items-center gap-3 rounded-full bg-white px-4 py-2 text-black shadow-sm"><Icon name="search" className="h-5 w-5 shrink-0" /><input id="soundroom-search" value={searchTerm} onFocus={() => setActiveView('search')} onChange={(event) => setSearchTerm(event.target.value)} className="w-full bg-transparent text-sm outline-none placeholder:text-[#5d5d5d]" placeholder="What do you want to play?" /></label>
             </div>
-            <div className="flex items-center gap-2"><button type="button" onClick={() => setIsNowPlayingOpen(true)} className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/20 px-3 py-2 text-xs font-bold text-white transition hover:bg-black/35"><Icon name="fullscreen" className="h-3.5 w-3.5" /> Full screen</button><button type="button" onClick={onExit} className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-black transition hover:scale-[1.03]">Exit music</button></div>
+            <div className="flex items-center gap-2"><button type="button" onClick={() => setActiveView('updates')} className="relative flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white transition hover:bg-black/35" aria-label="Open Soundroom updates"><Icon name="updates" className="h-4 w-4" /><span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#f5cbcb] px-1 text-[9px] font-black text-[#2b2537]">{soundroomUpdates.length}</span></button><button type="button" onClick={() => setIsNowPlayingOpen(true)} className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/20 px-3 py-2 text-xs font-bold text-white transition hover:bg-black/35"><Icon name="fullscreen" className="h-3.5 w-3.5" /> Full screen</button><button type="button" onClick={onExit} className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-black transition hover:scale-[1.03]">Exit music</button></div>
           </header>
 
           <div className="mx-auto max-w-[1600px] px-4 pb-8 pt-5 sm:px-8 sm:pt-8">
@@ -514,6 +519,7 @@ function MusicPage({ onExit, isVisible = true }) {
                     <div className="flex min-w-[190px] flex-col items-center rounded-2xl border border-white/10 bg-black/15 px-6 py-5 backdrop-blur-sm"><SoundwaveMark /><p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9af7c6]">In your flow</p><p className="mt-1 text-xs text-[#cde8d8]">{musicLibrary.length} song{musicLibrary.length === 1 ? '' : 's'} in your library</p></div>
                   </div>
                 </section>
+                <UpdatePreview updates={soundroomUpdates} onOpenUpdates={() => setActiveView('updates')} />
                 {customPlaylists.length ? <section className="mt-8 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                   {customPlaylists.map((collection) => (
                     <button type="button" key={collection.id} onClick={() => playCollection(collection)} className="group flex min-w-0 items-center overflow-hidden rounded-md bg-white/10 text-left transition hover:bg-white/20">
@@ -568,6 +574,8 @@ function MusicPage({ onExit, isVisible = true }) {
                 <ArtistSection artists={artistCatalog} onOpenArtist={openArtist} />
               </section>
             ) : null}
+
+            {activeView === 'updates' ? <UpdatesPage updates={soundroomUpdates} onBack={() => setActiveView('home')} /> : null}
 
             {activeView === 'artist' && selectedArtist ? (
               <>
@@ -625,6 +633,16 @@ function MusicPage({ onExit, isVisible = true }) {
 
 function TrackSection({ title, subtitle, tracks, currentTrackId, isPlaying, onPlay, onLike, likedTrackIds }) {
   return <section className="mt-10"><div className="mb-4 flex items-end justify-between"><div><h2 className="text-xl font-black tracking-tight sm:text-2xl">{title}</h2>{subtitle ? <p className="mt-1 text-sm text-[#b3b3b3]">{subtitle}</p> : null}</div></div><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{tracks.map((track) => <TrackCard key={track.id} track={track} currentTrackId={currentTrackId} isPlaying={isPlaying} onPlay={onPlay} onLike={onLike} liked={likedTrackIds.includes(track.id)} />)}</div></section>
+}
+
+function UpdatePreview({ updates, onOpenUpdates }) {
+  const latestUpdate = updates[0]
+  if (!latestUpdate) return null
+  return <section className="mt-8 rounded-2xl border border-[#ffe2e2]/20 bg-[linear-gradient(135deg,rgba(197,179,211,0.26),rgba(43,37,55,0.8))] p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div className="flex min-w-0 gap-4"><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#f5cbcb] text-[#2b2537]"><Icon name="updates" /></span><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#f5cbcb]">Latest update · {latestUpdate.date}</p><h2 className="mt-1 text-lg font-black text-white">{latestUpdate.title}</h2><p className="mt-1 text-sm text-[#ffe2e2]">{latestUpdate.description}</p></div></div><button type="button" onClick={onOpenUpdates} className="rounded-full border border-[#ffe2e2]/35 px-4 py-2 text-xs font-extrabold text-[#fbefef] transition hover:bg-white/10">View all updates</button></div></section>
+}
+
+function UpdatesPage({ updates, onBack }) {
+  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#ffe2e2] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Back to Soundroom</button><div className="max-w-3xl"><p className="text-sm text-[#ffe2e2]">A record of new music, artists, artwork, and improvements added to PCC Soundroom.</p><div className="mt-7 space-y-4">{updates.map((update) => <article key={update.id} className="rounded-2xl border border-[#ffe2e2]/20 bg-[#372e42]/85 p-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#f5cbcb]">{update.type}</p><h2 className="mt-2 text-lg font-black text-white">{update.title}</h2></div><span className="rounded-full border border-[#ffe2e2]/25 px-3 py-1 text-xs font-semibold text-[#ffe2e2]">{update.date}</span></div><p className="mt-3 text-sm leading-relaxed text-[#ffe2e2]">{update.description}</p><p className="mt-4 text-xs font-bold text-[#c5b3d3]">{update.artist}</p></article>)}</div></div></section>
 }
 
 function TrackCard({ track, currentTrackId, isPlaying, onPlay, onLike, liked }) {
