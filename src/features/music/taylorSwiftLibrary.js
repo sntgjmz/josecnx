@@ -1,5 +1,18 @@
 // Taylor Swift collection generated from public/Taylor Swift/.
 const taylorSwiftArtwork = 'from-sky-400 via-indigo-600 to-violet-950'
+const taylorSwiftAlbumCovers = {
+  "1989(Taylor's Version)": '/covers/taylorswift-1989-album.png',
+  Evermore: '/covers/taylorswift-evermore-album.png',
+  "Fearless(Taylor's Version)": '/covers/taylorwift-fearless-album.png',
+  Folklore: '/covers/taylorswift-folklore-album.png',
+  Lover: '/covers/taylorswift-lover-album.png',
+  'Midnights(3am Edition-Til Dawn Edition)': '/covers/taylorswift-midnights(3am)-album.png',
+  "Red(Taylor's Version)": '/covers/taylorswift-red-album.png',
+  Reputation: '/covers/taylorswift-reputation-album.png',
+  "Speak Now(Taylor's Version)": '/covers/taylorswift-speaknow-album.png',
+  'Taylor Swift': '/covers/taylorswift-taylorswift-album.png',
+  'The Tortured Poets Department-The Anthology': '/covers/taylorswift-thetorturedpoertsdepartment-album.png',
+}
 
 const taylorSwiftTracks = [
   {
@@ -1618,5 +1631,6 @@ export const taylorSwiftLibraryTracks = taylorSwiftTracks.map((track, index) => 
   id: `taylorSwift-${index}-${track.src.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
   ...track,
   artwork: taylorSwiftArtwork,
+  artworkSrc: taylorSwiftAlbumCovers[track.album],
   mood: 'Taylor Swift collection',
 }))

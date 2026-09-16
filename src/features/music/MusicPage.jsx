@@ -10,6 +10,9 @@ const PLAYLIST_ARTWORKS = [
   'from-amber-400 via-orange-600 to-red-950',
   'from-sky-400 via-blue-600 to-indigo-950',
 ]
+const ARTIST_PROFILE_IMAGES = {
+  'Taylor Swift': '/covers/profilepicture-taylor-swift.jpg',
+}
 
 function Icon({ name, className = 'h-5 w-5' }) {
   const common = { className, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, 'aria-hidden': true }
@@ -69,6 +72,7 @@ function formatTime(seconds) {
 function Artwork({ item, className = 'h-full w-full' }) {
   return (
     <div className={`relative overflow-hidden bg-gradient-to-br ${item.artwork} ${className}`}>
+      {item.artworkSrc ? <img src={item.artworkSrc} alt="" className="absolute inset-0 h-full w-full object-cover" /> : null}
       <div className="absolute -right-5 -top-4 h-20 w-20 rounded-full border-[12px] border-white/20" />
       <div className="absolute -bottom-9 left-2 h-24 w-24 rounded-full border-[15px] border-black/20" />
       <Icon name="music" className="absolute bottom-3 left-3 h-7 w-7 text-white/85" />
@@ -122,6 +126,7 @@ function MusicPage({ onExit, isVisible = true }) {
   const [trackToAdd, setTrackToAdd] = useState(null)
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null)
   const [selectedArtist, setSelectedArtist] = useState(null)
+  const [selectedAlbum, setSelectedAlbum] = useState(null)
 
   const currentTrack = useMemo(
     () => musicLibrary.find((track) => track.id === currentTrackId) || musicLibrary[0],
@@ -151,13 +156,28 @@ function MusicPage({ onExit, isVisible = true }) {
       return groups
     }, {})
     return Object.entries(grouped)
-      .map(([name, tracks]) => ({ name, tracks, artwork: tracks[0]?.artwork || 'from-emerald-400 via-teal-600 to-cyan-950' }))
+      .map(([name, tracks]) => ({ name, tracks, artwork: tracks[0]?.artwork || 'from-emerald-400 via-teal-600 to-cyan-950', artworkSrc: ARTIST_PROFILE_IMAGES[name] }))
       .sort((first, second) => first.name.localeCompare(second.name))
   }, [])
   const selectedArtistTracks = useMemo(
     () => musicLibrary.filter((track) => track.artist === selectedArtist),
     [selectedArtist],
   )
+  const selectedArtistEntry = useMemo(
+    () => artistCatalog.find((artist) => artist.name === selectedArtist) || null,
+    [artistCatalog, selectedArtist],
+  )
+  const selectedArtistAlbums = useMemo(() => {
+    const grouped = selectedArtistTracks.reduce((albums, track) => {
+      const albumName = track.album || 'Singles'
+      if (!albums[albumName]) albums[albumName] = []
+      albums[albumName].push(track)
+      return albums
+    }, {})
+    return Object.entries(grouped)
+      .map(([name, tracks]) => ({ name, tracks, artwork: tracks[0]?.artwork || 'from-emerald-400 via-teal-600 to-cyan-950', artworkSrc: tracks[0]?.artworkSrc }))
+      .sort((first, second) => first.name.localeCompare(second.name))
+  }, [selectedArtistTracks])
 
   useEffect(() => {
     try {
@@ -337,7 +357,13 @@ function MusicPage({ onExit, isVisible = true }) {
 
   const openArtist = (artist) => {
     setSelectedArtist(artist)
+    setSelectedAlbum(null)
     setActiveView('artist')
+  }
+
+  const openAlbum = (album) => {
+    setSelectedAlbum(album)
+    setActiveView('album')
   }
 
   const removeFromQueue = (trackId) => {
@@ -401,6 +427,10 @@ function MusicPage({ onExit, isVisible = true }) {
         ? selectedPlaylist?.name || 'Playlist'
         : activeView === 'artist'
           ? selectedArtist || 'Artist'
+          : activeView === 'album'
+            ? selectedAlbum?.name || 'Album'
+            : activeView === 'artists'
+              ? 'Artists'
         : 'Your Library'
 
   return (
@@ -428,6 +458,7 @@ function MusicPage({ onExit, isVisible = true }) {
             <button type="button" onClick={() => setActiveView('home')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'home' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="home" /> Home</button>
             <button type="button" onClick={openSearch} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'search' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="search" /> Search</button>
             <button type="button" onClick={() => setActiveView('library')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'library' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="library" /> Your Library</button>
+            <button type="button" onClick={() => setActiveView('artists')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${['artists', 'artist', 'album'].includes(activeView) ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="music" /> Artists</button>
           </nav>
           <div className="mt-5 border-t border-white/10 pt-4">
             <button type="button" onClick={() => setIsPlaylistModalOpen(true)} className="flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><span className="flex h-6 w-6 items-center justify-center rounded-sm bg-gradient-to-br from-violet-500 to-indigo-900"><Icon name="plus" className="h-4 w-4 text-white" /></span> Create playlist</button>
@@ -517,10 +548,19 @@ function MusicPage({ onExit, isVisible = true }) {
               />
             ) : null}
 
+            {activeView === 'artists' ? (
+              <section>
+                <p className="max-w-xl text-sm text-[#b3b3b3]">Choose an artist to browse their albums and songs.</p>
+                <ArtistSection artists={artistCatalog} onOpenArtist={openArtist} />
+              </section>
+            ) : null}
+
             {activeView === 'artist' && selectedArtist ? (
-              <ArtistDetail
+              <>
+                <ArtistDetail
                 artist={selectedArtist}
                 tracks={selectedArtistTracks}
+                artistArtworkSrc={selectedArtistEntry?.artworkSrc}
                 currentTrackId={currentTrack?.id}
                 isPlaying={isPlaying}
                 likedTrackIds={likedTrackIds}
@@ -528,6 +568,27 @@ function MusicPage({ onExit, isVisible = true }) {
                 onPlay={() => {
                   setQueue(selectedArtistTracks.map((track) => track.id))
                   startTrack(selectedArtistTracks[0]?.id)
+                }}
+                onPlayTrack={startTrack}
+                onLike={toggleLike}
+                onQueue={addToQueue}
+                onAddToPlaylist={openPlaylistPicker}
+                />
+                <AlbumSection albums={selectedArtistAlbums} artist={selectedArtist} onOpenAlbum={openAlbum} />
+              </>
+            ) : null}
+
+            {activeView === 'album' && selectedArtist && selectedAlbum ? (
+              <AlbumDetail
+                artist={selectedArtist}
+                album={selectedAlbum}
+                currentTrackId={currentTrack?.id}
+                isPlaying={isPlaying}
+                likedTrackIds={likedTrackIds}
+                onBack={() => setActiveView('artist')}
+                onPlay={() => {
+                  setQueue(selectedAlbum.tracks.map((track) => track.id))
+                  startTrack(selectedAlbum.tracks[0]?.id)
                 }}
                 onPlayTrack={startTrack}
                 onLike={toggleLike}
@@ -560,6 +621,10 @@ function ArtistSection({ artists, onOpenArtist }) {
   return <section className="mt-10"><div className="mb-4"><h2 className="text-xl font-black tracking-tight sm:text-2xl">Artists</h2><p className="mt-1 text-sm text-[#b3b3b3]">Browse your collection by artist.</p></div><div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">{artists.map((artist) => <button type="button" key={artist.name} onClick={() => onOpenArtist(artist.name)} className="group rounded-md bg-[#181818] p-4 text-left transition hover:bg-[#282828]"><div className="relative aspect-square overflow-hidden rounded-full shadow-lg"><Artwork item={artist} /></div><p className="mt-4 truncate text-sm font-bold text-white">{artist.name}</p><p className="mt-1 text-xs text-[#b3b3b3]">Artist · {artist.tracks.length} songs</p></button>)}</div></section>
 }
 
+function AlbumSection({ albums, artist, onOpenAlbum }) {
+  return <section className="mt-8"><div className="mb-4"><h2 className="text-xl font-black tracking-tight sm:text-2xl">Albums</h2><p className="mt-1 text-sm text-[#b3b3b3]">Open an album to see its songs.</p></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">{albums.map((album) => <button type="button" key={album.name} onClick={() => onOpenAlbum(album)} className="group rounded-md bg-[#181818] p-4 text-left transition hover:bg-[#282828]"><div className="relative aspect-square overflow-hidden rounded-sm shadow-lg"><Artwork item={album} /></div><p className="mt-4 truncate text-sm font-bold text-white">{album.name}</p><p className="mt-1 truncate text-xs text-[#b3b3b3]">{artist} · {album.tracks.length} song{album.tracks.length === 1 ? '' : 's'}</p></button>)}</div></section>
+}
+
 function CollectionSection({ title, collections, isPlaying, currentQueue, onPlay, onOpen, onDelete }) {
   return <section className={title ? 'mt-10' : ''}>{title ? <h2 className="mb-4 text-xl font-black tracking-tight sm:text-2xl">{title}</h2> : null}<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{collections.map((collection) => <article key={collection.id} className="group relative rounded-md bg-[#181818] p-4 transition hover:bg-[#282828]">{onDelete && collection.isCustom ? <button type="button" onClick={() => onDelete(collection.id)} aria-label={`Delete ${collection.name}`} className="absolute right-3 top-3 z-10 rounded-full bg-black/55 p-1.5 text-white opacity-0 transition hover:bg-red-500 group-hover:opacity-100"><Icon name="close" className="h-3.5 w-3.5" /></button> : null}<button type="button" onClick={() => onOpen?.(collection)} className="block w-full text-left"><div className="relative aspect-square overflow-hidden rounded-sm shadow-lg"><Artwork item={collection} /></div><h3 className="mt-4 truncate text-sm font-bold">{collection.name}</h3><p className="mt-1 line-clamp-2 min-h-10 text-sm leading-5 text-[#b3b3b3]">{collection.isCustom ? `${collection.trackIds.length} song${collection.trackIds.length === 1 ? '' : 's'}` : collection.description}</p></button><span className="absolute bottom-14 right-6 translate-y-2 opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100"><PlayButton small playing={isPlaying && currentQueue.join(',') === collection.trackIds.join(',')} onClick={() => onPlay(collection)} label={`Play ${collection.name}`} /></span></article>)}</div></section>
 }
@@ -578,9 +643,13 @@ function PlaylistDetail({ playlist, tracks, isPlaying, currentTrackId, likedTrac
   return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Your Library</button><div className="flex flex-col gap-6 bg-gradient-to-b from-white/15 to-transparent p-5 sm:flex-row sm:items-end sm:p-8"><Artwork item={playlist} className="h-40 w-40 shrink-0 rounded-sm shadow-2xl sm:h-52 sm:w-52" /><div className="min-w-0"><p className="text-xs font-bold uppercase tracking-[0.12em]">{playlist.isCustom ? 'Playlist' : 'PCC playlist'}</p><h2 className="mt-2 truncate text-3xl font-black tracking-tight sm:text-5xl">{playlist.name}</h2><p className="mt-3 text-sm text-[#d3d3d3]">{playlist.description}</p><p className="mt-2 text-sm font-semibold text-[#b3b3b3]">PCC Soundroom · {tracks.length} song{tracks.length === 1 ? '' : 's'}</p></div></div><div className="mt-6 flex items-center gap-4"><PlayButton playing={isPlaying && currentTrackId === tracks[0]?.id} onClick={onPlay} label={`Play ${playlist.name}`} />{onDelete ? <button type="button" onClick={onDelete} className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold text-white transition hover:border-red-400 hover:text-red-300">Delete playlist</button> : null}</div><div className="mt-7"><TrackList tracks={tracks} currentTrackId={currentTrackId} isPlaying={isPlaying} likedTrackIds={likedTrackIds} onPlay={onPlayTrack} onLike={onLike} onQueue={onQueue} onAddToPlaylist={onAddToPlaylist} emptyMessage="This playlist has no songs yet. Add songs from All songs in Your Library." />{onRemove ? <div className="mt-3 space-y-2">{tracks.map((track) => <button type="button" key={track.id} onClick={() => onRemove(track.id)} className="text-xs font-bold text-[#b3b3b3] transition hover:text-red-300">Remove {track.title} from this playlist</button>)}</div> : null}</div></section>
 }
 
-function ArtistDetail({ artist, tracks, currentTrackId, isPlaying, likedTrackIds, onBack, onPlay, onPlayTrack, onLike, onQueue, onAddToPlaylist }) {
+function ArtistDetail({ artist, tracks, artistArtworkSrc, currentTrackId, isPlaying, onBack, onPlay }) {
   const artwork = tracks[0]?.artwork || 'from-emerald-400 via-teal-600 to-cyan-950'
-  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Your Library</button><div className="flex flex-col gap-6 bg-gradient-to-b from-white/15 to-transparent p-5 sm:flex-row sm:items-end sm:p-8"><Artwork item={{ artwork }} className="h-40 w-40 shrink-0 rounded-full shadow-2xl sm:h-52 sm:w-52" /><div><p className="text-xs font-bold uppercase tracking-[0.12em]">Artist</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">{artist}</h2><p className="mt-3 text-sm text-[#d3d3d3]">{tracks.length} song{tracks.length === 1 ? '' : 's'} in your PCC Soundroom library.</p></div></div><div className="mt-6"><PlayButton playing={isPlaying && currentTrackId === tracks[0]?.id} onClick={onPlay} label={`Play ${artist}`} /></div><div className="mt-7"><TrackList tracks={tracks} currentTrackId={currentTrackId} isPlaying={isPlaying} likedTrackIds={likedTrackIds} onPlay={onPlayTrack} onLike={onLike} onQueue={onQueue} onAddToPlaylist={onAddToPlaylist} emptyMessage="No songs for this artist yet." /></div></section>
+  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Artists</button><div className="flex flex-col gap-6 bg-gradient-to-b from-white/15 to-transparent p-5 sm:flex-row sm:items-end sm:p-8"><Artwork item={{ artwork, artworkSrc: artistArtworkSrc }} className="h-40 w-40 shrink-0 rounded-full shadow-2xl sm:h-52 sm:w-52" /><div><p className="text-xs font-bold uppercase tracking-[0.12em]">Artist</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">{artist}</h2><p className="mt-3 text-sm text-[#d3d3d3]">Choose an album to see its songs.</p></div></div><div className="mt-6"><PlayButton playing={isPlaying && currentTrackId === tracks[0]?.id} onClick={onPlay} label={`Play ${artist}`} /></div></section>
+}
+
+function AlbumDetail({ artist, album, currentTrackId, isPlaying, likedTrackIds, onBack, onPlay, onPlayTrack, onLike, onQueue, onAddToPlaylist }) {
+  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> {artist}</button><div className="flex flex-col gap-6 bg-gradient-to-b from-white/15 to-transparent p-5 sm:flex-row sm:items-end sm:p-8"><Artwork item={album} className="h-40 w-40 shrink-0 rounded-sm shadow-2xl sm:h-52 sm:w-52" /><div className="min-w-0"><p className="text-xs font-bold uppercase tracking-[0.12em]">Album</p><h2 className="mt-2 truncate text-3xl font-black tracking-tight sm:text-5xl">{album.name}</h2><p className="mt-3 text-sm text-[#d3d3d3]">{artist} · {album.tracks.length} song{album.tracks.length === 1 ? '' : 's'}</p></div></div><div className="mt-6"><PlayButton playing={isPlaying && currentTrackId === album.tracks[0]?.id} onClick={onPlay} label={`Play ${album.name}`} /></div><div className="mt-7"><TrackList tracks={album.tracks} currentTrackId={currentTrackId} isPlaying={isPlaying} likedTrackIds={likedTrackIds} onPlay={onPlayTrack} onLike={onLike} onQueue={onQueue} onAddToPlaylist={onAddToPlaylist} emptyMessage="No songs in this album yet." /></div></section>
 }
 
 function PlaylistModal({ onClose, onCreate }) {
