@@ -1,4 +1,8 @@
 import { artistLibraryTracks } from './artistLibrary.js'
+import { jojiLibraryTracks } from './jojiLibrary.js'
+import { lanyLibraryTracks } from './lanyLibrary.js'
+import { szaLibraryTracks } from './szaLibrary.js'
+import { taylorSwiftLibraryTracks } from './taylorSwiftLibrary.js'
 
 // Add your music here. Put each audio file in `public/music/` (or use an
 // existing public path) and add an object following the two examples below.
@@ -156,6 +160,13 @@ const personalMusicLibrary = [
   },
 ]
 
-export const musicLibrary = [...personalMusicLibrary, ...artistLibraryTracks]
+export const musicLibrary = [
+  ...personalMusicLibrary,
+  ...artistLibraryTracks,
+  ...jojiLibraryTracks,
+  ...lanyLibraryTracks,
+  ...taylorSwiftLibraryTracks,
+  ...szaLibraryTracks,
+]
 
 export const featuredCollections = []
