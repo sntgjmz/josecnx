@@ -1,125 +1,42 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
-const musicTracks = [
-  { src: '/maki-k-m.mp3', title: 'Kahel na Langit - Maki' },
-  { src: '/multo.mp3', title: 'Multo Extended - Cup of Joe' },
-]
+function LoginPage({ onLogin, error, isAuthenticating, onOpenMusic }) {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-function LoginPage() {
-  const audioRef = useRef(null)
-  const shouldResumeRef = useRef(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [volume, setVolume] = useState(0.7)
-
-  useEffect(() => {
-    const audio = audioRef.current
-
-    if (!audio) return
-
-    audio.load()
-    setCurrentTime(0)
-    setDuration(0)
-    if (shouldResumeRef.current) audio.play().catch(() => setIsPlaying(false))
-  }, [currentTrack])
-
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    if (isPlaying) audio.play().catch(() => setIsPlaying(false))
-    else audio.pause()
-  }, [isPlaying])
-
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = volume
-  }, [volume])
-
-  const toggleMusic = () => {
-    setIsPlaying((playing) => {
-      shouldResumeRef.current = !playing
-      return !playing
-    })
-  }
-
-  const playNextTrack = () => {
-    setCurrentTrack((track) => (track + 1) % musicTracks.length)
-  }
-
-  const playPreviousTrack = () => {
-    setCurrentTrack((track) => (track - 1 + musicTracks.length) % musicTracks.length)
-  }
-
-  const seekTo = (event) => {
-    const time = Number(event.target.value)
-    if (audioRef.current) audioRef.current.currentTime = time
-    setCurrentTime(time)
-  }
-
-  const formatTime = (seconds) => {
-    if (!Number.isFinite(seconds)) return '0:00'
-    return `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    onLogin(username.trim(), password)
   }
 
   return (
     <main className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden px-4 py-8 text-slate-100 sm:px-6">
-      <audio
-        ref={audioRef}
-        src={musicTracks[currentTrack].src}
-        preload="metadata"
-        onEnded={playNextTrack}
-        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
-        onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-      />
-      <div className="pointer-events-none absolute -left-28 -top-28 h-96 w-96 rounded-full bg-[#7a3fd4]/25 blur-3xl float-slow" />
-      <div className="pointer-events-none absolute -bottom-32 -right-24 h-[26rem] w-[26rem] rounded-full bg-[#5d21b6]/20 blur-3xl float-fast" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(191,151,255,0.12),transparent_45%)]" />
+      <div className="pointer-events-none absolute -left-28 -top-28 h-96 w-96 rounded-full bg-[#c5b3d3]/30 blur-3xl float-slow" />
+      <div className="pointer-events-none absolute -bottom-32 -right-24 h-[26rem] w-[26rem] rounded-full bg-[#f5cbcb]/25 blur-3xl float-fast" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,226,226,0.14),transparent_45%)]" />
 
-      <section className="relative w-full max-w-xl overflow-hidden rounded-3xl border border-[#b990f5]/25 bg-[#0f1022]/90 p-7 text-center shadow-2xl backdrop-blur-xl sm:p-10">
-        <button
-          type="button"
-          onClick={toggleMusic}
-          className="absolute right-5 top-5 flex h-10 items-center gap-2 rounded-full border border-[#b990f5]/35 bg-[#171832]/90 px-3 text-xs font-semibold text-[#e2d5f7] transition hover:border-[#caa5ff]/75 hover:bg-[#23204a] focus:outline-none focus:ring-2 focus:ring-[#caa5ff] focus:ring-offset-2 focus:ring-offset-[#0f1022]"
-          aria-label={isPlaying ? 'Pause background music' : 'Play background music'}
-        >
-          <span aria-hidden="true">{isPlaying ? '❚❚' : '♫'}</span>
-          {isPlaying ? 'Pause music' : 'Play music'}
-        </button>
+      <section className="relative w-full max-w-xl overflow-hidden rounded-3xl border border-[#ffe2e2]/25 bg-[#2b2537]/90 p-7 text-center shadow-2xl backdrop-blur-xl sm:p-10">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#f5cbcb] to-[#c5b3d3] text-lg font-extrabold text-[#2b2537] shadow-[0_0_32px_rgba(245,203,203,0.35)]">PCC</div>
+        <p className="mt-7 text-xs font-semibold uppercase tracking-[0.32em] text-[#f5cbcb]">Premier Customer Care</p>
+        <h1 className="font-display mt-3 text-3xl leading-tight text-white sm:text-4xl">Find your focus.</h1>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#ffe2e2] sm:text-base">PCC Soundroom is your personal music space for the workday.</p>
 
-        {isPlaying && <p className="absolute left-5 top-7 text-xs text-[#cdb2f4]">Now playing: {musicTracks[currentTrack].title}</p>}
-
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#7a3fd4] to-[#4b1d91] text-lg font-extrabold shadow-[0_0_32px_rgba(111,42,212,0.45)]">
-          PCC
+        <div className="mt-8 overflow-hidden rounded-2xl border border-[#ffe2e2]/45 bg-[linear-gradient(135deg,rgba(197,179,211,0.5),rgba(63,52,73,0.96))] p-5 text-left shadow-[0_15px_40px_rgba(0,0,0,0.2)]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#f5cbcb]">PCC Soundroom</p>
+          <p className="mt-2 text-base font-semibold text-white">Your soundtrack for focus, calm, and momentum.</p>
+          <p className="mt-1 text-sm text-[#ffe2e2]">Browse artists and albums, keep your music playing, and return to work when you are ready.</p>
+          <button type="button" onClick={onOpenMusic} className="mt-5 w-full rounded-xl bg-[#f5cbcb] px-5 py-3.5 text-sm font-extrabold text-[#2b2537] shadow-[0_8px_24px_rgba(245,203,203,0.25)] transition hover:scale-[1.01] hover:bg-[#ffe2e2]">Open PCC Soundroom</button>
         </div>
 
-        <p className="mt-7 text-xs font-semibold uppercase tracking-[0.32em] text-[#caa5ff]/90">Premier Customer Care</p>
-        <h1 className="font-display mt-3 text-3xl leading-tight text-white sm:text-4xl">Revision in progress</h1>
-        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#ddd0ef] sm:text-base">
-          We are currently revising the spiel workspace to improve the experience and make it more reliable.
-        </p>
-
-        <div className="mt-8 rounded-2xl border border-amber-300/30 bg-amber-400/10 p-5 text-left text-amber-50">
-          <div className="flex items-center gap-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-amber-200/50 bg-amber-200/10 text-base font-bold">
-              !
-            </span>
-            <p className="font-semibold text-amber-100">Login is temporarily unavailable</p>
+        <form onSubmit={handleSubmit} className="mt-6 border-t border-[#ffe2e2]/20 pt-5 text-left">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#c5b3d3]">Workspace sign in</p>
+          <div className="mt-3 space-y-3">
+            <label className="block text-sm font-semibold text-[#ffe2e2]" htmlFor="username">Username<input id="username" value={username} onChange={(event) => setUsername(event.target.value)} autoComplete="username" required className="mt-1.5 w-full rounded-xl border border-[#ffe2e2]/20 bg-[#372e42] px-4 py-2.5 text-white outline-none transition focus:border-[#f5cbcb]" /></label>
+            <label className="block text-sm font-semibold text-[#ffe2e2]" htmlFor="password">Password<input id="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" required className="mt-1.5 w-full rounded-xl border border-[#ffe2e2]/20 bg-[#372e42] px-4 py-2.5 text-white outline-none transition focus:border-[#f5cbcb]" /></label>
           </div>
-          <p className="mt-3 text-sm leading-relaxed text-amber-100/85">
-            You will not be able to sign in at this time, even with the correct username and password.
-          </p>
-        </div>
-
-        <div className="mt-5 rounded-xl border border-[#b990f5]/20 bg-[#15172e]/80 px-5 py-4 text-left">
-          <p className="text-sm font-semibold text-white">What to use for now</p>
-          <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
-            Please continue using the original spiel for all customer responses until the updated workspace is ready.
-          </p>
-        </div>
-
-        <p className="mt-7 text-xs text-[#cdb2f4]">Thank you for your patience while we complete this revision.</p>
+          {error ? <p className="mt-3 rounded-lg border border-red-300/30 bg-red-400/10 px-3 py-2 text-sm text-red-100">{error}</p> : null}
+          <button type="submit" disabled={isAuthenticating} className="mt-4 w-full rounded-xl border border-[#ffe2e2]/35 bg-[#4a3e56] px-5 py-3 text-sm font-bold text-[#fbefef] transition hover:bg-[#5a495f] disabled:cursor-wait disabled:opacity-60">{isAuthenticating ? 'Signing in...' : 'Sign in to workspace'}</button>
+        </form>
       </section>
     </main>
   )

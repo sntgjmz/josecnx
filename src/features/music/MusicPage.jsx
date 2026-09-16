@@ -38,6 +38,7 @@ function Icon({ name, className = 'h-5 w-5' }) {
   if (name === 'repeat') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M17 3l4 4-4 4M3 7h18M7 21l-4-4 4-4M21 17H3" /></svg>
   if (name === 'volume') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M4 10v4h4l5 4V6L8 10H4ZM17 9a4 4 0 0 1 0 6M19.5 6.5a7.5 7.5 0 0 1 0 11" /></svg>
   if (name === 'queue') return <svg {...common}><path strokeLinecap="round" d="M4 6h10M4 12h10M4 18h7M18 15v6m-3-3h6" /></svg>
+  if (name === 'fullscreen') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5" /></svg>
   if (name === 'close') return <svg {...common}><path strokeLinecap="round" d="m6 6 12 12M18 6 6 18" /></svg>
   if (name === 'more') return <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8" /><circle cx="12" cy="12" r="1.8" /><circle cx="19" cy="12" r="1.8" /></svg>
   if (name === 'music') return <svg {...common}><path strokeLinecap="round" strokeLinejoin="round" d="M9 18V5l11-2v13M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3Zm11-2a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z" /></svg>
@@ -127,6 +128,7 @@ function MusicPage({ onExit, isVisible = true }) {
   const [recentTrackIds, setRecentTrackIds] = useState(() => getStoredArray(RECENT_TRACKS_KEY))
   const [customPlaylists, setCustomPlaylists] = useState(getStoredPlaylists)
   const [isQueueOpen, setIsQueueOpen] = useState(false)
+  const [isNowPlayingOpen, setIsNowPlayingOpen] = useState(false)
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
   const [isPlaylistPickerOpen, setIsPlaylistPickerOpen] = useState(false)
   const [trackToAdd, setTrackToAdd] = useState(null)
@@ -212,6 +214,14 @@ function MusicPage({ onExit, isVisible = true }) {
   useEffect(() => {
     isPlayingRef.current = isPlaying
   }, [isPlaying])
+
+  useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setIsNowPlayingOpen(false)
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -476,14 +486,14 @@ function MusicPage({ onExit, isVisible = true }) {
           <button type="button" onClick={onExit} className="mt-3 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold text-[#b3b3b3] transition hover:bg-white/5 hover:text-white"><Icon name="back" className="h-4 w-4" /> Return to PCC</button>
         </aside>
 
-        <section className="min-w-0 flex-1 bg-[linear-gradient(180deg,#173b30_0%,#121a16_18%,#121212_44%,#121212_100%)]">
-          <header className="sticky top-0 z-20 flex min-h-16 items-center gap-3 border-b border-white/5 bg-[#13251d]/85 px-4 py-3 backdrop-blur-lg sm:px-8">
+        <section className="min-w-0 flex-1 bg-[linear-gradient(180deg,#4a3e56_0%,#312a3d_18%,#211d2a_44%,#211d2a_100%)]">
+          <header className="sticky top-0 z-20 flex min-h-16 items-center gap-3 border-b border-white/10 bg-[#2b2537]/90 px-4 py-3 backdrop-blur-lg sm:px-8">
             <div className="hidden items-center gap-2 lg:flex"><button type="button" aria-label="Back" className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white"><Icon name="back" className="h-4 w-4" /></button><button type="button" aria-label="Forward" className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white"><Icon name="forward" className="h-4 w-4" /></button></div>
             <button type="button" onClick={() => setActiveView('home')} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] md:hidden"><Icon name="music" className="h-4 w-4" /></button>
             <div className={`min-w-0 flex-1 ${activeView === 'search' ? '' : 'hidden sm:block'}`}>
               <label className="flex max-w-md items-center gap-3 rounded-full bg-white px-4 py-2 text-black shadow-sm"><Icon name="search" className="h-5 w-5 shrink-0" /><input id="soundroom-search" value={searchTerm} onFocus={() => setActiveView('search')} onChange={(event) => setSearchTerm(event.target.value)} className="w-full bg-transparent text-sm outline-none placeholder:text-[#5d5d5d]" placeholder="What do you want to play?" /></label>
             </div>
-            <button type="button" onClick={onExit} className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-black transition hover:scale-[1.03]">Exit music</button>
+            <div className="flex items-center gap-2"><button type="button" onClick={() => setIsNowPlayingOpen(true)} className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/20 px-3 py-2 text-xs font-bold text-white transition hover:bg-black/35"><Icon name="fullscreen" className="h-3.5 w-3.5" /> Full screen</button><button type="button" onClick={onExit} className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-black transition hover:scale-[1.03]">Exit music</button></div>
           </header>
 
           <div className="mx-auto max-w-[1600px] px-4 pb-8 pt-5 sm:px-8 sm:pt-8">
@@ -491,7 +501,7 @@ function MusicPage({ onExit, isVisible = true }) {
 
             {activeView === 'home' ? (
               <>
-                <section className="relative overflow-hidden rounded-2xl border border-[#9af7c6]/15 bg-[linear-gradient(135deg,#255b46_0%,#15362b_52%,#121b17_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.24)] sm:p-9">
+                <section className="relative overflow-hidden rounded-2xl border border-[#ffe2e2]/20 bg-[linear-gradient(135deg,#6a556d_0%,#4a3e56_52%,#2b2537_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.24)] sm:p-9">
                   <div className="pointer-events-none absolute -right-14 -top-24 h-80 w-80 rounded-full border-[34px] border-[#62e6a9]/10" />
                   <div className="pointer-events-none absolute -bottom-32 left-1/3 h-64 w-64 rounded-full border-[46px] border-white/5" />
                   <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -607,7 +617,8 @@ function MusicPage({ onExit, isVisible = true }) {
       {isQueueOpen ? <QueuePanel queue={queue} currentTrackId={currentTrack?.id} onClose={() => setIsQueueOpen(false)} onPlay={startTrack} onRemove={removeFromQueue} onClear={clearQueue} /> : null}
       {isPlaylistModalOpen ? <PlaylistModal onClose={() => setIsPlaylistModalOpen(false)} onCreate={createPlaylist} /> : null}
       {isPlaylistPickerOpen ? <PlaylistPicker trackId={trackToAdd} playlists={customPlaylists} onClose={() => { setIsPlaylistPickerOpen(false); setTrackToAdd(null) }} onAdd={addTrackToPlaylist} onCreate={() => { setIsPlaylistPickerOpen(false); setIsPlaylistModalOpen(true) }} /> : null}
-      <PlayerBar track={currentTrack} isPlaying={isPlaying} currentTime={currentTime} duration={duration} volume={volume} isShuffleOn={isShuffleOn} repeatMode={repeatMode} liked={likedTrackIds.includes(currentTrack?.id)} onTogglePlay={togglePlay} onPrevious={playPrevious} onNext={playNext} onShuffle={() => setIsShuffleOn((current) => !current)} onRepeat={changeRepeatMode} onLike={() => currentTrack && toggleLike(currentTrack.id)} onSeek={(event) => { const time = Number(event.target.value); if (audioRef.current) audioRef.current.currentTime = time; setCurrentTime(time) }} onVolume={(event) => setVolume(Number(event.target.value))} onQueue={() => setIsQueueOpen(true)} />
+      {isNowPlayingOpen ? <NowPlayingScreen track={currentTrack} isPlaying={isPlaying} currentTime={currentTime} duration={duration} liked={likedTrackIds.includes(currentTrack?.id)} onClose={() => setIsNowPlayingOpen(false)} onTogglePlay={togglePlay} onPrevious={playPrevious} onNext={playNext} onLike={() => currentTrack && toggleLike(currentTrack.id)} onSeek={(event) => { const time = Number(event.target.value); if (audioRef.current) audioRef.current.currentTime = time; setCurrentTime(time) }} /> : null}
+      <PlayerBar track={currentTrack} isPlaying={isPlaying} currentTime={currentTime} duration={duration} volume={volume} isShuffleOn={isShuffleOn} repeatMode={repeatMode} liked={likedTrackIds.includes(currentTrack?.id)} onTogglePlay={togglePlay} onPrevious={playPrevious} onNext={playNext} onShuffle={() => setIsShuffleOn((current) => !current)} onRepeat={changeRepeatMode} onLike={() => currentTrack && toggleLike(currentTrack.id)} onSeek={(event) => { const time = Number(event.target.value); if (audioRef.current) audioRef.current.currentTime = time; setCurrentTime(time) }} onVolume={(event) => setVolume(Number(event.target.value))} onQueue={() => setIsQueueOpen(true)} onFullscreen={() => setIsNowPlayingOpen(true)} />
     </main>
   )
 }
@@ -668,6 +679,13 @@ function PlaylistModal({ onClose, onCreate }) {
 function PlaylistPicker({ trackId, playlists, onClose, onAdd, onCreate }) {
   const track = musicLibrary.find((item) => item.id === trackId)
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true" aria-labelledby="playlist-picker-title"><section className="w-full max-w-md rounded-xl bg-[#282828] p-6 shadow-2xl"><div className="flex items-center justify-between gap-4"><div><h2 id="playlist-picker-title" className="text-xl font-black">Add to playlist</h2><p className="mt-1 truncate text-sm text-[#b3b3b3]">{track?.title || 'Selected song'}</p></div><button type="button" onClick={onClose} aria-label="Close" className="rounded-full p-1.5 text-[#b3b3b3] hover:bg-white/10 hover:text-white"><Icon name="close" /></button></div>{playlists.length ? <div className="mt-5 max-h-64 space-y-2 overflow-y-auto">{playlists.map((playlist) => { const alreadyAdded = playlist.trackIds.includes(trackId); return <button type="button" key={playlist.id} disabled={alreadyAdded} onClick={() => onAdd(playlist.id, trackId)} className="flex w-full items-center justify-between rounded-md px-3 py-3 text-left transition hover:bg-white/10 disabled:cursor-default disabled:opacity-55"><span className="truncate text-sm font-semibold text-white">{playlist.name}</span><span className={alreadyAdded ? 'text-xs font-bold text-[#62e6a9]' : 'text-xs font-bold text-[#b3b3b3]'}>{alreadyAdded ? 'Added' : 'Add'}</span></button>})}</div> : <p className="mt-5 rounded-md border border-dashed border-white/15 px-4 py-6 text-center text-sm text-[#b3b3b3]">Create a playlist first, then you can add this song.</p>}<div className="mt-6 flex justify-end gap-3"><button type="button" onClick={onClose} className="rounded-full px-4 py-2 text-sm font-bold text-white hover:bg-white/10">Cancel</button><button type="button" onClick={onCreate} className="rounded-full bg-white px-4 py-2 text-sm font-extrabold text-black">New playlist</button></div></section></div>
+}
+
+function NowPlayingScreen({ track, isPlaying, currentTime, duration, liked, onClose, onTogglePlay, onPrevious, onNext, onLike, onSeek }) {
+  if (!track) return null
+  const safeDuration = Number.isFinite(duration) ? duration : 0
+  const progressStyle = { '--range-progress': `${safeDuration ? (Math.min(currentTime, safeDuration) / safeDuration) * 100 : 0}%` }
+  return <section className="fixed inset-0 z-[60] overflow-y-auto bg-[radial-gradient(circle_at_50%_20%,rgba(197,179,211,0.38),transparent_38%),linear-gradient(160deg,#372e42_0%,#211d2a_58%,#2b2537_100%)] px-5 py-6 text-white sm:px-10" role="dialog" aria-modal="true" aria-label="Now playing"><div className="mx-auto flex min-h-[calc(100dvh-3rem)] max-w-5xl flex-col"><header className="flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#f5cbcb]">PCC Soundroom</p><p className="mt-1 text-sm text-[#ffe2e2]">Now playing</p></div><button type="button" onClick={onClose} className="flex h-11 w-11 items-center justify-center rounded-full bg-black/25 text-white transition hover:bg-black/40" aria-label="Exit full screen"><Icon name="close" /></button></header><div className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center py-10"><div className="w-full max-w-[min(68vw,520px)] aspect-square overflow-hidden rounded-2xl shadow-[0_28px_80px_rgba(0,0,0,0.42)]"><Artwork item={track} className="h-full w-full" /></div><div className="mt-8 w-full max-w-[min(68vw,520px)]"><div className="flex items-start gap-4"><div className="min-w-0 flex-1"><h1 className="truncate text-2xl font-black sm:text-3xl">{track.title}</h1><p className="mt-1 truncate text-base text-[#ffe2e2]">{track.artist} · {track.album}</p></div><button type="button" onClick={onLike} aria-label={liked ? 'Remove from Liked Songs' : 'Add to Liked Songs'} className={liked ? 'text-[#f5cbcb]' : 'text-[#ffe2e2] hover:text-white'}><Icon name="heart" className="h-6 w-6" /></button></div><div className="mt-7"><input type="range" min="0" max={safeDuration} step="0.1" value={Math.min(currentTime, safeDuration)} onChange={onSeek} aria-label="Song progress" className="soundroom-range h-1.5 w-full cursor-pointer" style={progressStyle} /><div className="mt-2 flex justify-between text-xs tabular-nums text-[#ffe2e2]"><span>{formatTime(currentTime)}</span><span>{formatTime(safeDuration)}</span></div></div><div className="mt-6 flex items-center justify-center gap-7"><button type="button" onClick={onPrevious} aria-label="Previous song" className="text-[#ffe2e2] transition hover:text-white"><Icon name="previous" className="h-7 w-7" /></button><PlayButton playing={isPlaying} onClick={onTogglePlay} label={isPlaying ? 'Pause' : 'Play'} /><button type="button" onClick={onNext} aria-label="Next song" className="text-[#ffe2e2] transition hover:text-white"><Icon name="next" className="h-7 w-7" /></button></div></div></div><p className="pb-2 text-center text-xs text-[#c5b3d3]">Press Esc or use the close button to return to PCC Soundroom.</p></div></section>
 }
 
 function PlayerBar({ track, isPlaying, currentTime, duration, volume, isShuffleOn, repeatMode, liked, onTogglePlay, onPrevious, onNext, onShuffle, onRepeat, onLike, onSeek, onVolume, onQueue }) {

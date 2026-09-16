@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function IntroPage({ onContinue }) {
+function IntroPage({ onContinue, onOpenMusic }) {
   const [showButton, setShowButton] = useState(false)
   const [wipeActive, setWipeActive] = useState(true)
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
@@ -57,22 +57,31 @@ function IntroPage({ onContinue }) {
           Premier Customer Care
         </p>
         <h1 className="intro-fade-up intro-fade-up-delay-2 mt-3 text-3xl font-bold text-white sm:text-5xl">
-          Email Workflow Portal
+          Your PCC workspace, in one place.
         </h1>
         <p className="intro-fade-up intro-fade-up-delay-3 mx-auto mt-4 max-w-xl text-sm text-[#ddd0ef] sm:text-base">
-          Professional response library and fast compose tools for high-speed customer support.
+          Move through customer conversations with confidence, then step into PCC Soundroom whenever you need a soundtrack for your day.
         </p>
 
         <div className="mt-8 h-px w-full bg-gradient-to-r from-transparent via-[#b990f5]/35 to-transparent" />
 
-        <div className="mt-8">
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
           {showButton ? (
-            <button
-              onClick={onContinue}
-              className="rounded-xl border border-[#9c64f3]/45 bg-gradient-to-r from-[#6f2ad4]/75 to-[#7a3fd4]/70 px-8 py-3 text-sm font-semibold tracking-[0.08em] text-[#f5edff] transition hover:from-[#6f2ad4]/90 hover:to-[#7a3fd4]/85"
-            >
-              Continue
-            </button>
+            <>
+              <button
+                onClick={onContinue}
+                className="rounded-xl border border-[#9c64f3]/45 bg-gradient-to-r from-[#6f2ad4]/75 to-[#7a3fd4]/70 px-8 py-3 text-sm font-semibold tracking-[0.08em] text-[#f5edff] transition hover:from-[#6f2ad4]/90 hover:to-[#7a3fd4]/85"
+              >
+                Enter workspace
+              </button>
+              <button
+                type="button"
+                onClick={onOpenMusic}
+                className="rounded-xl border border-[#8fe6b4]/45 bg-[#1b3027]/75 px-6 py-3 text-sm font-semibold text-[#d8f7e5] transition hover:border-[#a8f5c7] hover:bg-[#254535]"
+              >
+                ♫ Open PCC Soundroom
+              </button>
+            </>
           ) : (
             <div className="mx-auto h-11 w-40 animate-pulse rounded-xl border border-[#b990f5]/20 bg-[#1a1c36]" />
           )}

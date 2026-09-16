@@ -2,7 +2,7 @@
 
 :root {
   font-family: "Avenir Next", "Segoe UI Variable Text", "Segoe UI", sans-serif;
-  background: #090910;
+  background: #211d2a;
 }
 
 * {
@@ -13,16 +13,16 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at 18% 8%, rgba(123, 63, 228, 0.22), transparent 44%),
-    radial-gradient(circle at 88% 88%, rgba(93, 33, 182, 0.18), transparent 48%),
-    #090910;
-  color: #f4ecff;
+    radial-gradient(circle at 18% 8%, rgba(197, 179, 211, 0.28), transparent 44%),
+    radial-gradient(circle at 88% 88%, rgba(245, 203, 203, 0.2), transparent 48%),
+    #211d2a;
+  color: #fbefef;
 }
 
-/* Global violet scrollbar theme */
+/* Global PCC Soundroom scrollbar theme */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #7d44e8 #111328;
+  scrollbar-color: #f5cbcb #2b2537;
 }
 
 *::-webkit-scrollbar {
@@ -31,22 +31,22 @@ body {
 }
 
 *::-webkit-scrollbar-track {
-  background: linear-gradient(180deg, #111328 0%, #171a34 100%);
+  background: linear-gradient(180deg, #2b2537 0%, #362d43 100%);
   border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #9b72f6 0%, #6f2ad4 100%);
-  border: 2px solid #111328;
+  background: linear-gradient(180deg, #ffe2e2 0%, #c5b3d3 100%);
+  border: 2px solid #2b2537;
   border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #b794ff 0%, #7e39ea 100%);
+  background: linear-gradient(180deg, #fbefef 0%, #f5cbcb 100%);
 }
 
 *::-webkit-scrollbar-corner {
-  background: #111328;
+  background: #2b2537;
 }
 
 .soundroom-range {
@@ -82,105 +82,105 @@ body {
   transform-origin: center;
 }
 
-/* PCC Soundroom: a single emerald, teal, and violet night palette. */
+/* PCC Soundroom: soft lavender and blush palette. */
 .pcc-soundroom {
   background:
-    radial-gradient(circle at 80% 4%, rgba(82, 91, 224, 0.24), transparent 28rem),
-    radial-gradient(circle at 10% 30%, rgba(47, 184, 123, 0.16), transparent 31rem),
-    #07110c;
+    radial-gradient(circle at 80% 4%, rgba(197, 179, 211, 0.32), transparent 28rem),
+    radial-gradient(circle at 10% 30%, rgba(245, 203, 203, 0.2), transparent 31rem),
+    #211d2a;
 }
 
 .pcc-soundroom .bg-\[\#050505\] {
-  background: linear-gradient(180deg, #081a12 0%, #06100b 100%) !important;
+  background: linear-gradient(180deg, #2b2537 0%, #211d2a 100%) !important;
 }
 
 .pcc-soundroom .bg-\[\#181818\] {
-  background: linear-gradient(145deg, rgba(24, 58, 43, 0.94), rgba(13, 30, 22, 0.97)) !important;
-  border-color: rgba(155, 244, 198, 0.12) !important;
+  background: linear-gradient(145deg, rgba(57, 48, 70, 0.96), rgba(39, 33, 49, 0.98)) !important;
+  border-color: rgba(255, 226, 226, 0.16) !important;
 }
 
 .pcc-soundroom .bg-\[\#1f1f1f\],
 .pcc-soundroom .bg-\[\#282828\] {
-  background: linear-gradient(145deg, #1b402f, #10261b) !important;
+  background: linear-gradient(145deg, #56465f, #362d43) !important;
 }
 
 .pcc-soundroom .bg-\[\#121212\] {
-  background-color: #0c1d15 !important;
+  background-color: #312a3d !important;
 }
 
 .pcc-soundroom .bg-\[\#080909\] {
-  background-color: #07110c !important;
+  background-color: #211d2a !important;
 }
 
 .pcc-soundroom .hover\:bg-\[\#282828\]:hover,
 .pcc-soundroom .hover\:bg-white\/10:hover {
-  background-color: rgba(98, 230, 169, 0.13) !important;
+  background-color: rgba(245, 203, 203, 0.16) !important;
 }
 
 .pcc-soundroom .text-\[\#b3b3b3\],
 .pcc-soundroom .text-\[\#a7a7a7\] {
-  color: #a9cdb8 !important;
+  color: #d9cadf !important;
 }
 
 .pcc-soundroom .border-white\/10,
 .pcc-soundroom .border-white\/15 {
-  border-color: rgba(166, 246, 203, 0.14) !important;
+  border-color: rgba(255, 226, 226, 0.16) !important;
 }
 
 .pcc-soundroom input:not([type='range']) {
-  background-color: #edfdf3 !important;
+  background-color: #fbefef !important;
 }
 
 .pcc-soundroom .soundroom-range {
-  background: linear-gradient(90deg, #62e6a9 0%, #62e6a9 var(--range-progress, 0%), #416555 var(--range-progress, 0%), #416555 100%);
+  background: linear-gradient(90deg, #f5cbcb 0%, #f5cbcb var(--range-progress, 0%), #706078 var(--range-progress, 0%), #706078 100%);
 }
 
-/* PCC Workspace: related to Soundroom, but calmer and more practical for long work sessions. */
+/* PCC Workspace: shares the lavender and blush Soundroom palette. */
 .pcc-workspace {
   background:
-    radial-gradient(circle at 85% 3%, rgba(47, 184, 123, 0.16), transparent 28rem),
-    radial-gradient(circle at 8% 95%, rgba(55, 117, 87, 0.15), transparent 34rem),
-    #07110c;
+    radial-gradient(circle at 85% 3%, rgba(197, 179, 211, 0.25), transparent 28rem),
+    radial-gradient(circle at 8% 95%, rgba(245, 203, 203, 0.16), transparent 34rem),
+    #211d2a;
 }
 
 .pcc-workspace .bg-\[\#0f1022\] {
-  background: linear-gradient(180deg, #0b1b13 0%, #07110c 100%) !important;
+  background: linear-gradient(180deg, #312a3d 0%, #211d2a 100%) !important;
 }
 
 .pcc-workspace .bg-\[\#111328\] {
-  background: rgba(12, 29, 21, 0.92) !important;
+  background: rgba(43, 37, 55, 0.94) !important;
 }
 
 .pcc-workspace .bg-\[\#13152a\],
 .pcc-workspace .bg-\[\#15172e\] {
-  background: linear-gradient(145deg, #142b20, #0d1e15) !important;
+  background: linear-gradient(145deg, #4a3e56, #302938) !important;
 }
 
 .pcc-workspace .bg-\[\#1b1d39\],
 .pcc-workspace .bg-\[\#1f2142\] {
-  background: linear-gradient(145deg, #193124, #11251a) !important;
+  background: linear-gradient(145deg, #57485f, #372e42) !important;
 }
 
 .pcc-workspace .bg-\[\#232547\] {
-  background: #214332 !important;
+  background: #5a495f !important;
 }
 
 .pcc-workspace .hover\:bg-\[\#26294a\]:hover,
 .pcc-workspace .bg-\[\#26294a\] {
-  background: #29543c !important;
+  background: #6a556d !important;
 }
 
 .pcc-workspace .bg-\[\#6f2ad4\] {
-  background: linear-gradient(135deg, #27865c, #1d6c4a) !important;
+  background: linear-gradient(135deg, #c5b3d3, #aa8faa) !important;
 }
 
 .pcc-workspace .from-\[\#6f2ad4\] {
-  --tw-gradient-from: #27865c var(--tw-gradient-from-position) !important;
-  --tw-gradient-to: rgb(39 134 92 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-from: #c5b3d3 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(197 179 211 / 0) var(--tw-gradient-to-position) !important;
 }
 
 .pcc-workspace .to-\[\#4b1d91\] {
-  --tw-gradient-to: #1d6c4a var(--tw-gradient-to-position) !important;
+  --tw-gradient-to: #aa8faa var(--tw-gradient-to-position) !important;
 }
 
 .pcc-workspace .border-\[\#b990f5\]\/20,
@@ -188,7 +188,7 @@ body {
 .pcc-workspace .border-\[\#b990f5\]\/30,
 .pcc-workspace .border-\[\#b990f5\]\/35,
 .pcc-workspace .border-\[\#b990f5\]\/45 {
-  border-color: rgba(146, 237, 183, 0.2) !important;
+  border-color: rgba(255, 226, 226, 0.24) !important;
 }
 
 .pcc-workspace .text-\[\#caa5ff\]\/90,
@@ -196,11 +196,11 @@ body {
 .pcc-workspace .text-\[\#cdb2f4\],
 .pcc-workspace .text-\[\#e7d8f8\],
 .pcc-workspace .text-\[\#f2eafb\] {
-  color: #ccebd9 !important;
+  color: #f5cbcb !important;
 }
 
 .pcc-workspace .text-\[\#ede1fb\] {
-  color: #e4f7eb !important;
+  color: #fbefef !important;
 }
 
 /* The spiel boards contain their own utility colors, so bring those surfaces into the same system. */
@@ -214,28 +214,28 @@ body {
 .pcc-workspace [class*="bg-[#17193a]"],
 .pcc-workspace [class*="bg-[#1a1c38]"],
 .pcc-workspace [class*="bg-[#1b1d3a]"] {
-  background: linear-gradient(145deg, #112b1d, #0c1d14) !important;
+  background: linear-gradient(145deg, #403649, #2b2537) !important;
 }
 
 .pcc-workspace [class*="bg-[#1d1f3d]"],
 .pcc-workspace [class*="bg-[#231f3f]"],
 .pcc-workspace [class*="bg-[#2f2450]"],
 .pcc-workspace [class*="bg-[#261f45]"] {
-  background: #153222 !important;
+  background: #4a3e56 !important;
 }
 
 .pcc-workspace [class*="bg-[#2a2d50]"],
 .pcc-workspace [class*="bg-[#2f2a53]"],
 .pcc-workspace [class*="bg-[#3a2d63]"] {
-  background: #225238 !important;
+  background: #6a556d !important;
 }
 
 .pcc-workspace [class*="bg-[#6f2ad4]"] {
-  background: #27865c !important;
+  background: #c5b3d3 !important;
 }
 
 .pcc-workspace [class*="border-[#b990f5]"] {
-  border-color: rgba(146, 237, 183, 0.22) !important;
+  border-color: rgba(255, 226, 226, 0.24) !important;
 }
 
 .pcc-workspace [class*="text-[#caa5ff]"],
@@ -249,7 +249,51 @@ body {
 .pcc-workspace [class*="text-[#f0e7ff]"],
 .pcc-workspace [class*="text-[#f1e7fe]"],
 .pcc-workspace [class*="text-[#f2eafb]"] {
-  color: #d9f2e3 !important;
+  color: #fbefef !important;
+}
+
+/* Shared accent mapping for components that use Tailwind's fixed color utilities. */
+.pcc-soundroom .bg-\[\#62e6a9\],
+.pcc-workspace .bg-\[\#62e6a9\] {
+  background-color: #f5cbcb !important;
+}
+
+.pcc-soundroom .text-\[\#62e6a9\],
+.pcc-workspace .text-\[\#62e6a9\] {
+  color: #f5cbcb !important;
+}
+
+.pcc-soundroom .text-\[\#07130e\],
+.pcc-workspace .text-\[\#07130e\] {
+  color: #2b2537 !important;
+}
+
+.pcc-soundroom .hover\:bg-\[\#8af7c2\]:hover,
+.pcc-workspace .hover\:bg-\[\#8af7c2\]:hover {
+  background-color: #ffe2e2 !important;
+}
+
+.pcc-workspace [class*="bg-[#112b1d]"],
+.pcc-workspace [class*="bg-[#173227]"],
+.pcc-workspace [class*="bg-[#0b1b13]"],
+.pcc-workspace [class*="bg-[#10241a]"] {
+  background: #403649 !important;
+}
+
+.pcc-workspace [class*="bg-[#294a35]"],
+.pcc-workspace [class*="bg-[#27865c]"],
+.pcc-workspace [class*="bg-[#244b38]"] {
+  background-color: #c5b3d3 !important;
+}
+
+.pcc-workspace [class*="border-[#8fe6b4]"] {
+  border-color: rgba(255, 226, 226, 0.3) !important;
+}
+
+.pcc-workspace [class*="text-[#e7f9ee]"],
+.pcc-workspace [class*="text-[#d8f1e1]"],
+.pcc-workspace [class*="text-[#b9e0c8]"] {
+  color: #fbefef !important;
 }
 
 @keyframes soundroomPulse {

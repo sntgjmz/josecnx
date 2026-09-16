@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import DashboardPage from './features/dashboard/DashboardPage.jsx'
 import LoginPage from './features/auth/LoginPage.jsx'
-import IntroPage from './features/auth/IntroPage.jsx'
 import MusicPage from './features/music/MusicPage.jsx'
 import { MOCK_USERS } from './data/mockAuth.js'
 
@@ -31,7 +30,6 @@ function App() {
     return null
   })
   const [loginError, setLoginError] = useState('')
-  const [showIntro, setShowIntro] = useState(true)
   const [isAuthenticating, setIsAuthenticating] = useState(false)
 
   useEffect(() => {
@@ -85,20 +83,12 @@ function App() {
   const handleLogout = () => {
     setAuthUser(null)
     setLoginError('')
-    setShowIntro(true)
     setIsAuthenticating(false)
-  }
-
-  const handleContinueFromIntro = () => {
-    setShowIntro(false)
   }
 
   if (!authUser) {
     if (isMusicPageOpen) {
       return <MusicPage onExit={closeMusicPage} />
-    }
-    if (showIntro) {
-      return <IntroPage onContinue={handleContinueFromIntro} />
     }
     return <LoginPage onLogin={handleLogin} error={loginError} isAuthenticating={isAuthenticating} onOpenMusic={openMusicPage} />
   }
