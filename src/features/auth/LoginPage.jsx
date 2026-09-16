@@ -1,121 +1,125 @@
-function SoundwaveMark() {
-  return (
-    <div className="flex h-11 items-center justify-center gap-1" aria-hidden="true">
-      {[18, 31, 43, 27, 49, 35, 22].map((height, index) => (
-        <span
-          key={height}
-          className="soundroom-bar w-1.5 rounded-full bg-[#62e6a9]"
-          style={{ height: `${height}px`, animationDelay: `${index * 0.11}s` }}
-        />
-      ))}
-    </div>
-  )
-}
+import { useEffect, useRef, useState } from 'react'
 
-import { useState } from 'react'
+const musicTracks = [
+  { src: '/maki-k-m.mp3', title: 'Kahel na Langit - Maki' },
+  { src: '/multo.mp3', title: 'Multo Extended - Cup of Joe' },
+]
 
-function LoginPage({ onLogin, error, isAuthenticating, onOpenMusic }) {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+function LoginPage() {
+  const audioRef = useRef(null)
+  const shouldResumeRef = useRef(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTrack, setCurrentTrack] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [volume, setVolume] = useState(0.7)
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    await onLogin(username.trim(), password)
+  useEffect(() => {
+    const audio = audioRef.current
+
+    if (!audio) return
+
+    audio.load()
+    setCurrentTime(0)
+    setDuration(0)
+    if (shouldResumeRef.current) audio.play().catch(() => setIsPlaying(false))
+  }, [currentTrack])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    if (isPlaying) audio.play().catch(() => setIsPlaying(false))
+    else audio.pause()
+  }, [isPlaying])
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume
+  }, [volume])
+
+  const toggleMusic = () => {
+    setIsPlaying((playing) => {
+      shouldResumeRef.current = !playing
+      return !playing
+    })
+  }
+
+  const playNextTrack = () => {
+    setCurrentTrack((track) => (track + 1) % musicTracks.length)
+  }
+
+  const playPreviousTrack = () => {
+    setCurrentTrack((track) => (track - 1 + musicTracks.length) % musicTracks.length)
+  }
+
+  const seekTo = (event) => {
+    const time = Number(event.target.value)
+    if (audioRef.current) audioRef.current.currentTime = time
+    setCurrentTime(time)
+  }
+
+  const formatTime = (seconds) => {
+    if (!Number.isFinite(seconds)) return '0:00'
+    return `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`
   }
 
   return (
-    <main className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-[#070908] px-4 py-8 text-slate-100 sm:px-6">
-      <div className="pointer-events-none absolute -left-36 top-[-8rem] h-[30rem] w-[30rem] rounded-full bg-[#35d88a]/20 blur-3xl float-slow" />
-      <div className="pointer-events-none absolute -bottom-40 -right-24 h-[32rem] w-[32rem] rounded-full bg-[#7854e9]/25 blur-3xl float-fast" />
-      <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:42px_42px]" />
+    <main className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden px-4 py-8 text-slate-100 sm:px-6">
+      <audio
+        ref={audioRef}
+        src={musicTracks[currentTrack].src}
+        preload="metadata"
+        onEnded={playNextTrack}
+        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
+        onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+      />
+      <div className="pointer-events-none absolute -left-28 -top-28 h-96 w-96 rounded-full bg-[#7a3fd4]/25 blur-3xl float-slow" />
+      <div className="pointer-events-none absolute -bottom-32 -right-24 h-[26rem] w-[26rem] rounded-full bg-[#5d21b6]/20 blur-3xl float-fast" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(191,151,255,0.12),transparent_45%)]" />
 
-      <section className="relative grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#101312]/85 shadow-[0_32px_100px_rgba(0,0,0,0.55)] backdrop-blur-xl lg:grid-cols-[1.08fr_0.92fr]">
-        <div className="relative flex min-h-[500px] flex-col justify-between overflow-hidden bg-[linear-gradient(145deg,#1d5541_0%,#133329_42%,#101312_100%)] p-7 sm:p-10">
-          <div className="pointer-events-none absolute -right-20 top-14 h-72 w-72 rounded-full border-[35px] border-[#62e6a9]/15" />
-          <div className="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full border-[45px] border-white/5" />
-          <div className="relative flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] shadow-[0_0_30px_rgba(98,230,169,0.38)]">
-              <SoundwaveMark />
+      <section className="relative w-full max-w-xl overflow-hidden rounded-3xl border border-[#b990f5]/25 bg-[#0f1022]/90 p-7 text-center shadow-2xl backdrop-blur-xl sm:p-10">
+        <button
+          type="button"
+          onClick={toggleMusic}
+          className="absolute right-5 top-5 flex h-10 items-center gap-2 rounded-full border border-[#b990f5]/35 bg-[#171832]/90 px-3 text-xs font-semibold text-[#e2d5f7] transition hover:border-[#caa5ff]/75 hover:bg-[#23204a] focus:outline-none focus:ring-2 focus:ring-[#caa5ff] focus:ring-offset-2 focus:ring-offset-[#0f1022]"
+          aria-label={isPlaying ? 'Pause background music' : 'Play background music'}
+        >
+          <span aria-hidden="true">{isPlaying ? '❚❚' : '♫'}</span>
+          {isPlaying ? 'Pause music' : 'Play music'}
+        </button>
+
+        {isPlaying && <p className="absolute left-5 top-7 text-xs text-[#cdb2f4]">Now playing: {musicTracks[currentTrack].title}</p>}
+
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#7a3fd4] to-[#4b1d91] text-lg font-extrabold shadow-[0_0_32px_rgba(111,42,212,0.45)]">
+          PCC
+        </div>
+
+        <p className="mt-7 text-xs font-semibold uppercase tracking-[0.32em] text-[#caa5ff]/90">Premier Customer Care</p>
+        <h1 className="font-display mt-3 text-3xl leading-tight text-white sm:text-4xl">Revision in progress</h1>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#ddd0ef] sm:text-base">
+          We are currently revising the spiel workspace to improve the experience and make it more reliable.
+        </p>
+
+        <div className="mt-8 rounded-2xl border border-amber-300/30 bg-amber-400/10 p-5 text-left text-amber-50">
+          <div className="flex items-center gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-amber-200/50 bg-amber-200/10 text-base font-bold">
+              !
             </span>
-            <div>
-              <p className="font-display text-lg leading-none tracking-tight text-white">PCC Soundroom</p>
-              <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#a6f6cb]">Premier Customer Care</p>
-            </div>
+            <p className="font-semibold text-amber-100">Login is temporarily unavailable</p>
           </div>
-
-          <div className="relative mt-14 max-w-md">
-            <p className="text-xs font-bold uppercase tracking-[0.26em] text-[#9cf3c2]">Your personal listening space</p>
-            <h1 className="mt-4 text-4xl font-black leading-[0.98] tracking-tight text-white sm:text-6xl">
-              Press play.<br />
-              Stay in flow.
-            </h1>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-[#d2e9dd] sm:text-base">
-              A focused music space for your workday—your songs, your playlists, and controls that keep everything moving.
-            </p>
-            <button
-              type="button"
-              onClick={onOpenMusic}
-              className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#62e6a9] px-6 py-3.5 text-sm font-black text-[#07130e] shadow-[0_10px_30px_rgba(98,230,169,0.3)] transition hover:scale-[1.03] hover:bg-[#96f9c4] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#133329]"
-            >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#07130e] text-[9px] text-[#62e6a9]">▶</span>
-              Open PCC Soundroom
-            </button>
-          </div>
-
-          <div className="relative mt-10 flex items-center gap-4 text-xs font-semibold text-[#b9d9c8]">
-            <SoundwaveMark />
-            <span>Local playlists · Queue controls · Liked songs</span>
-          </div>
+          <p className="mt-3 text-sm leading-relaxed text-amber-100/85">
+            You will not be able to sign in at this time, even with the correct username and password.
+          </p>
         </div>
 
-        <div className="flex flex-col justify-center p-7 sm:p-10">
-          <div className="mx-auto w-full max-w-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#62e6a9]">PCC Workspace</p>
-            <h2 className="mt-3 text-2xl font-black tracking-tight text-white sm:text-3xl">Sign in to your spiel.</h2>
-            <p className="mt-3 text-sm leading-relaxed text-[#aebbb4]">Access the PCC email response workspace and composer tools.</p>
-
-            <form onSubmit={handleSubmit} className="mt-7 space-y-4" noValidate>
-              <label className="block">
-                <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#cfe6d8]">Username</span>
-                <input
-                  type="text"
-                  autoComplete="username"
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
-                  required
-                  disabled={isAuthenticating}
-                  className="mt-2 w-full rounded-xl border border-white/15 bg-black/25 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#739080] focus:border-[#62e6a9] focus:ring-2 focus:ring-[#62e6a9]/20 disabled:cursor-not-allowed disabled:opacity-60"
-                  placeholder="Enter your username"
-                />
-              </label>
-              <label className="block">
-                <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#cfe6d8]">Password</span>
-                <input
-                  type="password"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  required
-                  disabled={isAuthenticating}
-                  className="mt-2 w-full rounded-xl border border-white/15 bg-black/25 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#739080] focus:border-[#62e6a9] focus:ring-2 focus:ring-[#62e6a9]/20 disabled:cursor-not-allowed disabled:opacity-60"
-                  placeholder="Enter your password"
-                />
-              </label>
-              {error ? <p role="alert" className="rounded-lg border border-red-300/25 bg-red-400/10 px-3 py-2.5 text-sm text-red-100">{error}</p> : null}
-              <button
-                type="submit"
-                disabled={isAuthenticating || !username.trim() || !password}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 text-sm font-black text-[#0b1711] transition hover:scale-[1.01] hover:bg-[#dfffea] focus:outline-none focus:ring-2 focus:ring-[#62e6a9] disabled:cursor-not-allowed disabled:opacity-55"
-              >
-                {isAuthenticating ? <><span className="h-4 w-4 animate-spin rounded-full border-2 border-[#1b5b3b] border-t-transparent" /> Signing in…</> : 'Enter PCC Workspace'}
-              </button>
-            </form>
-
-            <div className="mt-7 border-t border-white/10 pt-5">
-              <p className="text-xs leading-relaxed text-[#9fbcaa]">Need access? Contact the PCC workspace administrator to receive your login credentials.</p>
-            </div>
-          </div>
+        <div className="mt-5 rounded-xl border border-[#b990f5]/20 bg-[#15172e]/80 px-5 py-4 text-left">
+          <p className="text-sm font-semibold text-white">What to use for now</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
+            Please continue using the original spiel for all customer responses until the updated workspace is ready.
+          </p>
         </div>
+
+        <p className="mt-7 text-xs text-[#cdb2f4]">Thank you for your patience while we complete this revision.</p>
       </section>
     </main>
   )
