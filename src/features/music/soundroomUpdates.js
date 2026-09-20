@@ -1,5 +1,13 @@
 // Add a new item here whenever you add artists, songs, or artwork to PCC Soundroom.
 export const soundroomUpdates = [
+{
+    id: 'joji-cupofjoe-added-2026-09-20',
+    date: 'September 20, 2026',
+    title: 'Cup of Joe collections added',
+    description: 'Added album covers, randomized Tagalog conceptual albums for Cup of Joe.',
+    artist: 'Cup of Joe',
+    type: 'Library update',
+  },
   {
     id: 'paramore-niki-added-2026-09-20',
     date: 'September 20, 2026',
