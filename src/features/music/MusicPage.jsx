@@ -19,6 +19,8 @@ const ARTIST_PROFILE_IMAGES = {
   'Jason Mraz': '/covers/profilepicture-jasonmraz.jpg',
   'Bruno Mars': '/covers/profilepicture-brunomars.jpg',
   'Gotye': '/covers/profilepicture-gotye.png',
+  'NIKI': '/covers/profilepicture-niki.jpg',
+  'Paramore': '/covers/profilepicture-paramore.jpg',
 }
 
 function Icon({ name, className = 'h-5 w-5' }) {

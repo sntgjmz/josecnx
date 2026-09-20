@@ -1,5 +1,9 @@
 // SZA collection generated from public/sza/.
 const szaArtwork = 'from-amber-300 via-orange-500 to-rose-950'
+const szaAlbumCovers = {
+  'Ctrl(Deluxe)': '/covers/sza-ctrl-deluxe.jpg',
+  'SOS Deluxe Lana': '/covers/sza-SOS-album.jpg',
+}
 
 const szaTracks = [
   {
@@ -449,5 +453,6 @@ export const szaLibraryTracks = szaTracks.map((track, index) => ({
   id: `sza-${index}-${track.src.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
   ...track,
   artwork: szaArtwork,
+  artworkSrc: szaAlbumCovers[track.album],
   mood: 'SZA collection',
 }))

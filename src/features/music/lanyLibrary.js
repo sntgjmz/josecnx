@@ -1,5 +1,18 @@
 // LANY collection generated from public/Lany/.
-const lanyArtwork = 'from-pink-400 via-fuchsia-600 to-indigo-950'
+const lanyArtwork = 'from-pink-400 via-fuchsia-600 to-indigo-950';
+
+// Map specific album names to their image paths. 
+// If an album isn't listed here, it will automatically use the `lanyArtwork` gradient fallback.
+const lanyAlbumCovers = {
+  // Example: "Malibu Nights": "/covers/lany-malibu-nights.jpg",
+  // "mama's boy": "/covers/lany-mamas-boy.jpg",
+  "a beautiful blur(deluxe)": "/covers/lany-abeautifuleblur-album.jpg",
+  "gg bb xx(deluxe)": "/covers/lany-gg-bb-xx-album.jpg",
+  "LANY": "/covers/lany-lany-album.jpg",
+  "Malibu Nights": "/covers/lany-malibunights-album.jpg",
+  "mama's boy": "/covers/lany-mamasboy-album.jpg",
+  "Soft2": "/covers/lany-soft-album.jpg",
+};
 
 const lanyTracks = [
   {
@@ -631,5 +644,6 @@ export const lanyLibraryTracks = lanyTracks.map((track, index) => ({
   id: `lany-${index}-${track.src.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
   ...track,
   artwork: lanyArtwork,
+  artworkSrc: lanyAlbumCovers[track.album], // Will be undefined if not in the dictionary, falling back cleanly in your UI
   mood: 'LANY collection',
-}))
+}));

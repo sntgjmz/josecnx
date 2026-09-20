@@ -34,21 +34,21 @@ const taylorSwiftTracks = [
     "album": "1989(Taylor's Version)",
     "title": "Bad Blood (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Bad Blood (Taylor's Version)_spotdown.org.mp3",
-    "duration": "12:41"
+    "duration": "2:41"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Blank Space (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Blank Space (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:19"
+    "duration": "4:19"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Clean (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Clean (Taylor's Version)_spotdown.org.mp3",
-    "duration": "18:14"
+    "duration": "8:14"
   },
   {
     "artist": "Taylor Swift",

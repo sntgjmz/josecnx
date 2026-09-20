@@ -1,8 +1,28 @@
-// Generated from artist folders in public/. Keep the folder structure when adding files.
-const artistArtwork = {
-  "Bruno Mars": "from-amber-400 via-orange-600 to-red-950",
-  "Gotye": "from-indigo-400 via-violet-600 to-fuchsia-950",
-  "Jason Mraz": "from-emerald-400 via-teal-600 to-cyan-950"
+const defaultArtworkGradient = "from-neutral-700 via-neutral-800 to-neutral-950";
+
+const albumArtworkMap = {
+  "24K Magic": "/covers/brunomars-24k-album.png",
+  "An Evening With Silk Sonic": "/covers/brunomars-aneveningwithsilksonic-album.png",
+  "Doo-Wops & Hooligans (Deluxe) - bruno mars": "/covers/brunomars-doo-wops-album.png",
+  "Doo-Wops & Hooligans": "/covers/brunomars-doo-wops-album.png",
+  "Leave The Door Open(Live)": "/covers/brunomars-leavethedooropen-album.png",
+  "Please Me": "/covers/brunomars-pleaseme-album.png",
+  "The Romantic": "/covers/brunomars-theromantic-album.png",
+  "Unorthodox Jukebox": "/covers/brunomars-unorthodoxjukebox-album.png",
+
+  "Like Drawing Blood": "from-orange-400 via-amber-600 to-stone-900",
+  "Making Mirrors": "from-blue-400 via-indigo-600 to-slate-950",
+
+  "Grandma’s Gospel Favorites": "from-amber-600 via-yellow-700 to-stone-950",
+  "Know": "from-teal-400 via-emerald-600 to-slate-900",
+  "Lalalalovesongs": "from-rose-400 via-pink-600 to-purple-950",
+  "Look For The Good(Deluxe Edition)": "from-green-400 via-emerald-700 to-teal-950",
+  "Love Is a Four Letter Word": "from-yellow-400 via-orange-500 to-amber-950",
+  "Mr. A–Z(Deluxe Edition)": "from-purple-400 via-indigo-600 to-slate-950",
+  "Waiting for My Rocket to Come": "from-blue-500 via-indigo-700 to-slate-950",
+  "We Sing. We Dance. We Steal Things Deluxe Edition": "from-lime-400 via-green-600 to-emerald-950",
+  "We Sing. We Dance. We Steal Things": "from-emerald-400 via-teal-600 to-cyan-950",
+  "Yes!": "from-sky-400 via-blue-600 to-indigo-950"
 }
 
 const durationBySource = {
@@ -1608,10 +1628,19 @@ const artistTracks = [
   }
 ]
 
-export const artistLibraryTracks = artistTracks.map((track, index) => ({
-  id: `artist-library-${index}-${track.src.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
-  ...track,
-  duration: durationBySource[track.src] || '—',
-  artwork: artistArtwork[track.artist] || 'from-emerald-400 via-teal-600 to-cyan-950',
-  mood: 'Artist library',
-}))
+export const artistLibraryTracks = artistTracks.map((track, index) => {
+  const mappedValue = albumArtworkMap[track.album];
+  const isImage = mappedValue && mappedValue.startsWith('/');
+
+  return {
+    id: `artist-library-${index}-${track.src.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
+    ...track,
+    duration: durationBySource[track.src] || '—',
+    
+    // If it's an image path, set artwork to the default gradient (as a background fallback), and artworkSrc to the image.
+    artwork: isImage ? defaultArtworkGradient : (mappedValue || defaultArtworkGradient),
+    artworkSrc: isImage ? mappedValue : undefined,
+    
+    mood: 'Artist library',
+  };
+});
