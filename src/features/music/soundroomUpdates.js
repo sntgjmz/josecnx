@@ -1,6 +1,14 @@
 // Add a new item here whenever you add artists, songs, or artwork to PCC Soundroom.
 export const soundroomUpdates = [
-{
+  {
+    id: 'arthur-nery-added-2026-09-21',
+    date: 'September 21, 2026',
+    title: 'Arthur Nery collection added',
+    description: 'Added complete tracklists, audio files, and album folder structures for Arthur Nery.',
+    artist: 'Arthur Nery',
+    type: 'Library update',
+  },
+  {
     id: 'joji-cupofjoe-added-2026-09-20',
     date: 'September 20, 2026',
     title: 'Cup of Joe collections added',

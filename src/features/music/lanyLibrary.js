@@ -1,11 +1,7 @@
-// LANY collection generated from public/Lany/.
+
 const lanyArtwork = 'from-pink-400 via-fuchsia-600 to-indigo-950';
 
-// Map specific album names to their image paths. 
-// If an album isn't listed here, it will automatically use the `lanyArtwork` gradient fallback.
 const lanyAlbumCovers = {
-  // Example: "Malibu Nights": "/covers/lany-malibu-nights.jpg",
-  // "mama's boy": "/covers/lany-mamas-boy.jpg",
   "a beautiful blur(deluxe)": "/covers/lany-abeautifuleblur-album.jpg",
   "gg bb xx(deluxe)": "/covers/lany-gg-bb-xx-album.jpg",
   "LANY": "/covers/lany-lany-album.jpg",
