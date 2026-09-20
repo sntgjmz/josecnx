@@ -1,6 +1,15 @@
 // Joji collection generated from public/Joji/.
 const jojiArtwork = 'from-rose-400 via-red-600 to-stone-950'
 
+// Map specific album names to their corresponding cover image paths.
+const jojiAlbumCovers = {
+  'BALLADS 1': '/covers/joji-ballads1-album.jpg',
+  'In Tongues(Deluxe)': '/covers/joji-intoungues-album.jpg',
+  'Nectar': '/covers/joji-nectar-album.jpg',
+  'Piss In The Wind': '/covers/joji-pissinthewind-album.jpg',
+  'SMITHEREENS': '/covers/joji-smithereens-album.jpg',
+};
+
 const jojiTracks = [
   {
     "artist": "Joji",
@@ -407,5 +416,6 @@ export const jojiLibraryTracks = jojiTracks.map((track, index) => ({
   id: `joji-${index}-${track.src.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
   ...track,
   artwork: jojiArtwork,
+  artworkSrc: jojiAlbumCovers[track.album],
   mood: 'Joji collection',
 }))
