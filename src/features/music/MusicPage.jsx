@@ -22,6 +22,7 @@ const ARTIST_PROFILE_IMAGES = {
   'NIKI': '/covers/profilepicture-niki.jpg',
   'Paramore': '/covers/profilepicture-paramore.jpg',
   'Cup of Joe': '/covers/profilepicture-cupofjoe.jpg',
+  'Arthur Nery': '/covers/profilepicture-arthurnery.jpg',
 }
 
 function Icon({ name, className = 'h-5 w-5' }) {
