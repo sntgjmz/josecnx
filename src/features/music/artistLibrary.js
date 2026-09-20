@@ -10,19 +10,19 @@ const albumArtworkMap = {
   "The Romantic": "/covers/brunomars-theromantic-album.png",
   "Unorthodox Jukebox": "/covers/brunomars-unorthodoxjukebox-album.png",
 
-  "Like Drawing Blood": "from-orange-400 via-amber-600 to-stone-900",
-  "Making Mirrors": "from-blue-400 via-indigo-600 to-slate-950",
+  "Like Drawing Blood": "/covers/gotye-likedrawingblood-album.jpg",
+  "Making Mirrors": "/covers/gotye-makingmirros-album.jpg",
 
-  "Grandma’s Gospel Favorites": "from-amber-600 via-yellow-700 to-stone-950",
-  "Know": "from-teal-400 via-emerald-600 to-slate-900",
-  "Lalalalovesongs": "from-rose-400 via-pink-600 to-purple-950",
-  "Look For The Good(Deluxe Edition)": "from-green-400 via-emerald-700 to-teal-950",
-  "Love Is a Four Letter Word": "from-yellow-400 via-orange-500 to-amber-950",
-  "Mr. A–Z(Deluxe Edition)": "from-purple-400 via-indigo-600 to-slate-950",
-  "Waiting for My Rocket to Come": "from-blue-500 via-indigo-700 to-slate-950",
-  "We Sing. We Dance. We Steal Things Deluxe Edition": "from-lime-400 via-green-600 to-emerald-950",
-  "We Sing. We Dance. We Steal Things": "from-emerald-400 via-teal-600 to-cyan-950",
-  "Yes!": "from-sky-400 via-blue-600 to-indigo-950"
+  "Grandma’s Gospel Favorites": "/covers/jasonmraz-grandmasgospelfavorites-album.jpg",
+  "Know": "/covers/jasonmraz-know-album.jpg",
+  "Lalalalovesongs": "/covers/jasonmraz-lalalovesongs-album.png",
+  "Look For The Good(Deluxe Edition)": "/covers/jasonmraz-lookforthegood-album.jpg",
+  "Love Is a Four Letter Word": "/covers/jasonmraz-loveisafourletterword-album.jpg",
+  "Mr. A–Z(Deluxe Edition)": "/covers/jasonmraz-mraz-album.jpg",
+  "Waiting for My Rocket to Come": "/covers/jasonmraz-waitingformyrockettocome-album.jpg",
+  "We Sing. We Dance. We Steal Things Deluxe Edition": "/covers/jasonmraz-wesingwedancewestealthings-album.jpg",
+  "We Sing. We Dance. We Steal Things": "/covers/jasonmraz-wesingwedancewestealthings-album.jpg",
+  "Yes!": "/covers/jasonmraz-yes-album.jpg"
 }
 
 const durationBySource = {
