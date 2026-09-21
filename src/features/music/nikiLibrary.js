@@ -15,14 +15,14 @@ const nikiTracks = [
     "album": "Buzz",
     "title": "Blue Moon",
     "src": "/Niki/Buzz/Blue Moon_spotdown.org.mp3",
-    "duration": "3:45"
+    "duration": "3:46"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Colossal Loss",
     "src": "/Niki/Buzz/Colossal Loss_spotdown.org.mp3",
-    "duration": "3:40"
+    "duration": "2:55"
   },
   {
     "artist": "NIKI",
@@ -36,63 +36,63 @@ const nikiTracks = [
     "album": "Buzz",
     "title": "Focus",
     "src": "/Niki/Buzz/Focus_spotdown.org.mp3",
-    "duration": "3:10"
+    "duration": "3:26"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Heirloom Pain",
     "src": "/Niki/Buzz/Heirloom Pain_spotdown.org.mp3",
-    "duration": "3:25"
+    "duration": "3:04"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Magnets",
     "src": "/Niki/Buzz/Magnets_spotdown.org.mp3",
-    "duration": "2:55"
+    "duration": "3:37"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Nothing Can",
     "src": "/Niki/Buzz/Nothing Can_spotdown.org.mp3",
-    "duration": "3:15"
+    "duration": "3:43"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Paths",
     "src": "/Niki/Buzz/Paths_spotdown.org.mp3",
-    "duration": "3:20"
+    "duration": "3:09"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Strong Girl",
     "src": "/Niki/Buzz/Strong Girl_spotdown.org.mp3",
-    "duration": "3:12"
+    "duration": "3:34"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Take Care",
     "src": "/Niki/Buzz/Take Care_spotdown.org.mp3",
-    "duration": "3:40"
+    "duration": "2:32"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Too Much Of A Good Thing",
     "src": "/Niki/Buzz/Too Much Of A Good Thing_spotdown.org.mp3",
-    "duration": "3:15"
+    "duration": "2:51"
   },
   {
     "artist": "NIKI",
     "album": "Buzz",
     "title": "Tsunami",
     "src": "/Niki/Buzz/Tsunami_spotdown.org.mp3",
-    "duration": "3:25"
+    "duration": "3:51"
   },
 
   // --- MOONCHILD ---[cite: 7]
@@ -101,7 +101,7 @@ const nikiTracks = [
     "album": "MOONCHILD",
     "title": "Drive On",
     "src": "/Niki/MOONCHILD/Drive On_spotdown.org.mp3",
-    "duration": "3:35"
+    "duration": "3:37"
   },
   {
     "artist": "NIKI",
@@ -115,56 +115,56 @@ const nikiTracks = [
     "album": "MOONCHILD",
     "title": "Lose",
     "src": "/Niki/MOONCHILD/Lose_spotdown.org.mp3",
-    "duration": "4:20"
+    "duration": "4:16"
   },
   {
     "artist": "NIKI",
     "album": "MOONCHILD",
     "title": "Nightcrawlers",
     "src": "/Niki/MOONCHILD/Nightcrawlers_spotdown.org.mp3",
-    "duration": "3:07"
+    "duration": "3:27"
   },
   {
     "artist": "NIKI",
     "album": "MOONCHILD",
     "title": "Pandemonium",
     "src": "/Niki/MOONCHILD/Pandemonium_spotdown.org.mp3",
-    "duration": "3:27"
+    "duration": "3:47"
   },
   {
     "artist": "NIKI",
     "album": "MOONCHILD",
     "title": "Plot Twist",
     "src": "/Niki/MOONCHILD/Plot Twist_spotdown.org.mp3",
-    "duration": "3:22"
+    "duration": "3:27"
   },
   {
     "artist": "NIKI",
     "album": "MOONCHILD",
     "title": "Selene",
     "src": "/Niki/MOONCHILD/Selene_spotdown.org.mp3",
-    "duration": "3:21"
+    "duration": "3:17"
   },
   {
     "artist": "NIKI",
     "album": "MOONCHILD",
     "title": "Switchblade",
     "src": "/Niki/MOONCHILD/Switchblade_spotdown.org.mp3",
-    "duration": "3:33"
+    "duration": "3:24"
   },
   {
     "artist": "NIKI",
     "album": "MOONCHILD",
     "title": "Tide",
     "src": "/Niki/MOONCHILD/Tide_spotdown.org.mp3",
-    "duration": "3:14"
+    "duration": "3:04"
   },
   {
     "artist": "NIKI",
     "album": "MOONCHILD",
     "title": "Wide Open (Foreword)",
     "src": "/Niki/MOONCHILD/Wide Open (Foreword)_spotdown.org.mp3",
-    "duration": "2:10"
+    "duration": "2:59"
   },
 
   // --- Nicole ---[cite: 8]
@@ -173,84 +173,84 @@ const nikiTracks = [
     "album": "Nicole",
     "title": "Anaheim",
     "src": "/Niki/Nicole/Anaheim_spotdown.org.mp3",
-    "duration": "3:50"
+    "duration": "4:14"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Autumn",
     "src": "/Niki/Nicole/Autumn_spotdown.org.mp3",
-    "duration": "3:18"
+    "duration": "3:52"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Backburner",
     "src": "/Niki/Nicole/Backburner_spotdown.org.mp3",
-    "duration": "4:00"
+    "duration": "3:56"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Before",
     "src": "/Niki/Nicole/Before_spotdown.org.mp3",
-    "duration": "3:42"
+    "duration": "3:54"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Facebook Friends",
     "src": "/Niki/Nicole/Facebook Friends_spotdown.org.mp3",
-    "duration": "3:25"
+    "duration": "3:57"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "High School in Jakarta",
     "src": "/Niki/Nicole/High School in Jakarta_spotdown.org.mp3",
-    "duration": "3:36"
+    "duration": "3:39"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Keeping Tabs",
     "src": "/Niki/Nicole/Keeping Tabs_spotdown.org.mp3",
-    "duration": "3:30"
+    "duration": "2:57"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Milk Teeth",
     "src": "/Niki/Nicole/Milk Teeth_spotdown.org.mp3",
-    "duration": "3:45"
+    "duration": "2:50"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Oceans & Engines",
     "src": "/Niki/Nicole/Oceans & Engines_spotdown.org.mp3",
-    "duration": "5:21"
+    "duration": "6:35"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "On The Drive Home",
     "src": "/Niki/Nicole/On The Drive Home_spotdown.org.mp3",
-    "duration": "3:41"
+    "duration": "4:16"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "Take A Chance With Me",
     "src": "/Niki/Nicole/Take A Chance With Me_spotdown.org.mp3",
-    "duration": "3:58"
+    "duration": "5:03"
   },
   {
     "artist": "NIKI",
     "album": "Nicole",
     "title": "The Apartment We Won't Share",
     "src": "/Niki/Nicole/The Apartment We Won't Share_spotdown.org.mp3",
-    "duration": "3:52"
+    "duration": "2:29"
   },
 
   // --- Zephyr ---[cite: 8]
@@ -259,35 +259,35 @@ const nikiTracks = [
     "album": "Zephyr",
     "title": "Around",
     "src": "/Niki/Zephyr/Around_spotdown.org.mp3",
-    "duration": "3:10"
+    "duration": "3:03"
   },
   {
     "artist": "NIKI",
     "album": "Zephyr",
     "title": "Dancing with the Devil",
     "src": "/Niki/Zephyr/Dancing with the Devil_spotdown.org.mp3",
-    "duration": "3:22"
+    "duration": "2:42"
   },
   {
     "artist": "NIKI",
     "album": "Zephyr",
     "title": "Friends",
     "src": "/Niki/Zephyr/Friends_spotdown.org.mp3",
-    "duration": "3:15"
+    "duration": "3:14"
   },
   {
     "artist": "NIKI",
     "album": "Zephyr",
     "title": "Newsflash!",
     "src": "/Niki/Zephyr/Newsflash!_spotdown.org.mp3",
-    "duration": "3:05"
+    "duration": "3:24"
   },
   {
     "artist": "NIKI",
     "album": "Zephyr",
     "title": "Pools",
     "src": "/Niki/Zephyr/Pools_spotdown.org.mp3",
-    "duration": "3:30"
+    "duration": "3:28"
   },
   {
     "artist": "NIKI",
@@ -301,14 +301,14 @@ const nikiTracks = [
     "album": "Zephyr",
     "title": "Spell",
     "src": "/Niki/Zephyr/Spell_spotdown.org.mp3",
-    "duration": "3:25"
+    "duration": "3:46"
   },
   {
     "artist": "NIKI",
     "album": "Zephyr",
     "title": "Vintage",
     "src": "/Niki/Zephyr/Vintage_spotdown.org.mp3",
-    "duration": "3:18"
+    "duration": "2:57"
   }
 ]
 

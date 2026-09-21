@@ -19,13 +19,13 @@ function LoginPage({ onLogin, error, isAuthenticating, onOpenMusic }) {
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#f5cbcb] to-[#c5b3d3] text-lg font-extrabold text-[#2b2537] shadow-[0_0_32px_rgba(245,203,203,0.35)]">PCC</div>
         <p className="mt-7 text-xs font-semibold uppercase tracking-[0.32em] text-[#f5cbcb]">Premier Customer Care</p>
         <h1 className="font-display mt-3 text-3xl leading-tight text-white sm:text-4xl">Find your focus.</h1>
-        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#ffe2e2] sm:text-base">PCC Soundroom is your personal music space for the workday.</p>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#ffe2e2] sm:text-base">Jose Spotify is your personal music space for the workday.</p>
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-[#ffe2e2]/45 bg-[linear-gradient(135deg,rgba(197,179,211,0.5),rgba(63,52,73,0.96))] p-5 text-left shadow-[0_15px_40px_rgba(0,0,0,0.2)]">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#f5cbcb]">PCC Soundroom</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#f5cbcb]">Jose Spotify</p>
           <p className="mt-2 text-base font-semibold text-white">Your soundtrack for focus, calm, and momentum.</p>
           <p className="mt-1 text-sm text-[#ffe2e2]">Browse artists and albums, keep your music playing, and return to work when you are ready.</p>
-          <button type="button" onClick={onOpenMusic} className="mt-5 w-full rounded-xl bg-[#f5cbcb] px-5 py-3.5 text-sm font-extrabold text-[#2b2537] shadow-[0_8px_24px_rgba(245,203,203,0.25)] transition hover:scale-[1.01] hover:bg-[#ffe2e2]">Open PCC Soundroom</button>
+          <button type="button" onClick={onOpenMusic} className="mt-5 w-full rounded-xl bg-[#f5cbcb] px-5 py-3.5 text-sm font-extrabold text-[#2b2537] shadow-[0_8px_24px_rgba(245,203,203,0.25)] transition hover:scale-[1.01] hover:bg-[#ffe2e2]">Open Jose Spotify</button>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-6 border-t border-[#ffe2e2]/20 pt-5 text-left">

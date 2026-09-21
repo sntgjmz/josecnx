@@ -18,7 +18,7 @@ const paramoreTracks = [
     "album": "After Laughter",
     "title": "26",
     "src": "/Paramore/After Laughter/26_spotdown.org.mp3",
-    "duration": "3:40"
+    "duration": "3:41"
   },
   {
     "artist": "Paramore",
@@ -146,21 +146,21 @@ const paramoreTracks = [
     "album": "All We Know Is Falling(Deluxe)",
     "title": "My Heart",
     "src": "/Paramore/All We Know Is Falling(Deluxe)/My Heart_spotdown.org.mp3",
-    "duration": "3:55"
+    "duration": "3:59"
   },
   {
     "artist": "Paramore",
     "album": "All We Know Is Falling(Deluxe)",
     "title": "Never Let This Go",
     "src": "/Paramore/All We Know Is Falling(Deluxe)/Never Let This Go_spotdown.org.mp3",
-    "duration": "3:40"
+    "duration": "3:41"
   },
   {
     "artist": "Paramore",
     "album": "All We Know Is Falling(Deluxe)",
     "title": "O Star",
     "src": "/Paramore/All We Know Is Falling(Deluxe)/O Star_spotdown.org.mp3",
-    "duration": "3:49"
+    "duration": "3:45"
   },
   {
     "artist": "Paramore",
@@ -174,14 +174,14 @@ const paramoreTracks = [
     "album": "All We Know Is Falling(Deluxe)",
     "title": "Stuck On You",
     "src": "/Paramore/All We Know Is Falling(Deluxe)/Stuck On You_spotdown.org.mp3",
-    "duration": "4:27"
+    "duration": "4:29"
   },
   {
     "artist": "Paramore",
     "album": "All We Know Is Falling(Deluxe)",
     "title": "This Circle",
     "src": "/Paramore/All We Know Is Falling(Deluxe)/This Circle_spotdown.org.mp3",
-    "duration": "4:05"
+    "duration": "4:06"
   },
   {
     "artist": "Paramore",
@@ -197,14 +197,14 @@ const paramoreTracks = [
     "album": "Brand New Eyes",
     "title": "All I Wanted",
     "src": "/Paramore/Brand New Eyes/All I Wanted_spotdown.org.mp3",
-    "duration": "3:48"
+    "duration": "3:45"
   },
   {
     "artist": "Paramore",
     "album": "Brand New Eyes",
     "title": "Brick by Boring Brick",
     "src": "/Paramore/Brand New Eyes/Brick by Boring Brick_spotdown.org.mp3",
-    "duration": "4:13"
+    "duration": "4:14"
   },
   {
     "artist": "Paramore",
@@ -225,7 +225,7 @@ const paramoreTracks = [
     "album": "Brand New Eyes",
     "title": "Ignorance",
     "src": "/Paramore/Brand New Eyes/Ignorance_spotdown.org.mp3",
-    "duration": "3:38"
+    "duration": "3:39"
   },
   {
     "artist": "Paramore",
@@ -339,14 +339,14 @@ const paramoreTracks = [
     "album": "Paramore(Deluxe Edition)",
     "title": "Fast in My Car",
     "src": "/Paramore/Paramore(Deluxe Edition)/Fast in My Car_spotdown.org.mp3",
-    "duration": "3:39"
+    "duration": "3:42"
   },
   {
     "artist": "Paramore",
     "album": "Paramore(Deluxe Edition)",
     "title": "Future",
     "src": "/Paramore/Paramore(Deluxe Edition)/Future_spotdown.org.mp3",
-    "duration": "7:52"
+    "duration": "7:50"
   },
   {
     "artist": "Paramore",
@@ -395,7 +395,7 @@ const paramoreTracks = [
     "album": "Paramore(Deluxe Edition)",
     "title": "Last Hope",
     "src": "/Paramore/Paramore(Deluxe Edition)/Last Hope_spotdown.org.mp3",
-    "duration": "5:03"
+    "duration": "5:10"
   },
   {
     "artist": "Paramore",
@@ -409,14 +409,14 @@ const paramoreTracks = [
     "album": "Paramore(Deluxe Edition)",
     "title": "Native Tongue",
     "src": "/Paramore/Paramore(Deluxe Edition)/Native Tongue_spotdown.org.mp3",
-    "duration": "3:13"
+    "duration": "3:12"
   },
   {
     "artist": "Paramore",
     "album": "Paramore(Deluxe Edition)",
     "title": "Now",
     "src": "/Paramore/Paramore(Deluxe Edition)/Now_spotdown.org.mp3",
-    "duration": "4:07"
+    "duration": "4:10"
   },
   {
     "artist": "Paramore",
@@ -444,7 +444,7 @@ const paramoreTracks = [
     "album": "Paramore(Deluxe Edition)",
     "title": "Proof",
     "src": "/Paramore/Paramore(Deluxe Edition)/Proof_spotdown.org.mp3",
-    "duration": "3:39"
+    "duration": "3:15"
   },
   {
     "artist": "Paramore",
@@ -465,7 +465,7 @@ const paramoreTracks = [
     "album": "Paramore(Deluxe Edition)",
     "title": "Tell Me It's Okay - Demo",
     "src": "/Paramore/Paramore(Deluxe Edition)/Tell Me It's Okay - Demo_spotdown.org.mp3",
-    "duration": "2:34"
+    "duration": "2:43"
   },
   {
     "artist": "Paramore",
@@ -481,7 +481,7 @@ const paramoreTracks = [
     "album": "Riot!",
     "title": "Born for This",
     "src": "/Paramore/Riot!/Born for This_spotdown.org.mp3",
-    "duration": "4:00"
+    "duration": "3:58"
   },
   {
     "artist": "Paramore",
@@ -495,7 +495,7 @@ const paramoreTracks = [
     "album": "Riot!",
     "title": "Fences",
     "src": "/Paramore/Riot!/Fences_spotdown.org.mp3",
-    "duration": "3:18"
+    "duration": "3:19"
   },
   {
     "artist": "Paramore",
@@ -516,7 +516,7 @@ const paramoreTracks = [
     "album": "Riot!",
     "title": "Let the Flames Begin",
     "src": "/Paramore/Riot!/Let the Flames Begin_spotdown.org.mp3",
-    "duration": "4:13"
+    "duration": "3:18"
   },
   {
     "artist": "Paramore",
@@ -581,21 +581,21 @@ const paramoreTracks = [
     "album": "This Is Why",
     "title": "Crave",
     "src": "/Paramore/This Is Why/Crave_spotdown.org.mp3",
-    "duration": "3:23"
+    "duration": "3:55"
   },
   {
     "artist": "Paramore",
     "album": "This Is Why",
     "title": "Figure 8",
     "src": "/Paramore/This Is Why/Figure 8_spotdown.org.mp3",
-    "duration": "3:24"
+    "duration": "3:25"
   },
   {
     "artist": "Paramore",
     "album": "This Is Why",
     "title": "Liar",
     "src": "/Paramore/This Is Why/Liar_spotdown.org.mp3",
-    "duration": "3:22"
+    "duration": "4:22"
   },
   {
     "artist": "Paramore",
@@ -609,21 +609,21 @@ const paramoreTracks = [
     "album": "This Is Why",
     "title": "The News",
     "src": "/Paramore/This Is Why/The News_spotdown.org.mp3",
-    "duration": "2:57"
+    "duration": "3:07"
   },
   {
     "artist": "Paramore",
     "album": "This Is Why",
     "title": "Thick Skull",
     "src": "/Paramore/This Is Why/Thick Skull_spotdown.org.mp3",
-    "duration": "3:52"
+    "duration": "3:53"
   },
   {
     "artist": "Paramore",
     "album": "This Is Why",
     "title": "This Is Why",
     "src": "/Paramore/This Is Why/This Is Why_spotdown.org.mp3",
-    "duration": "3:27"
+    "duration": "3:26"
   },
   {
     "artist": "Paramore",

@@ -23,7 +23,7 @@ function WorkspaceMusicControls({ player, onOpenMusic }) {
   if (!player?.track) {
     return (
       <button onClick={onOpenMusic} className="rounded-xl border border-[#8fe6b4]/35 bg-[#27865c]/20 px-3 py-1.5 text-sm font-semibold text-[#e7f9ee] hover:bg-[#27865c]/35">
-        Soundroom
+        Jose Spotify
       </button>
     )
   }
@@ -35,7 +35,7 @@ function WorkspaceMusicControls({ player, onOpenMusic }) {
     <div className="min-w-[235px] rounded-xl border border-[#8fe6b4]/25 bg-[#112b1d] px-3 py-2 shadow-[0_8px_22px_rgba(0,0,0,0.16)]">
       <div className="flex items-center gap-2.5">
         <div className={`h-8 w-8 shrink-0 rounded-md bg-gradient-to-br ${player.track.artwork}`} />
-        <button onClick={onOpenMusic} className="min-w-0 flex-1 text-left" title="Open PCC Soundroom">
+        <button onClick={onOpenMusic} className="min-w-0 flex-1 text-left" title="Open Jose Spotify">
           <p className="truncate text-xs font-bold text-white">{player.track.title}</p>
           <p className="truncate text-[10px] text-[#b9e0c8]">{player.track.artist}</p>
         </button>
@@ -43,7 +43,7 @@ function WorkspaceMusicControls({ player, onOpenMusic }) {
         <button onClick={() => sendCommand('toggle')} className="flex h-7 w-7 items-center justify-center rounded-full bg-[#62e6a9] text-[10px] text-[#07130e] hover:bg-[#a3f7ca]" aria-label={player.isPlaying ? 'Pause music' : 'Play music'}>{player.isPlaying ? 'Ⅱ' : '▶'}</button>
         <button onClick={() => sendCommand('next')} className="text-xs font-bold text-[#d8f1e1] hover:text-white" aria-label="Next song">▶</button>
       </div>
-      <button onClick={onOpenMusic} className="mt-2 block h-0.5 w-full overflow-hidden rounded-full bg-[#294a35]" aria-label="Open PCC Soundroom">
+      <button onClick={onOpenMusic} className="mt-2 block h-0.5 w-full overflow-hidden rounded-full bg-[#294a35]" aria-label="Open Jose Spotify">
         <span className="block h-full rounded-full bg-[#62e6a9]" style={{ width: `${progress}%` }} />
       </button>
     </div>

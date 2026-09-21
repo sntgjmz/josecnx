@@ -5,6 +5,7 @@ import { soundroomUpdates } from './soundroomUpdates.js'
 const LIKED_TRACKS_KEY = 'pcc_soundroom_liked_tracks'
 const RECENT_TRACKS_KEY = 'pcc_soundroom_recent_tracks'
 const PLAYLISTS_KEY = 'pcc_soundroom_playlists'
+const FOLLOWED_ARTISTS_KEY = 'jose_spotify_followed_artists'
 const PLAYLIST_ARTWORKS = [
   'from-emerald-500 via-teal-600 to-cyan-950',
   'from-rose-500 via-fuchsia-600 to-violet-950',
@@ -104,13 +105,17 @@ function SoundwaveMark({ compact = false }) {
   )
 }
 
-function PlayButton({ playing, onClick, label, small = false }) {
+function JoseLogo({ className = 'h-10 w-10' }) {
+  return <span className={`inline-flex shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ffe2e2] via-[#f5cbcb] to-[#c5b3d3] font-black text-[#372e42] shadow-[0_8px_20px_rgba(245,203,203,0.22)] ${className}`}>J</span>
+}
+
+function PlayButton({ playing, onClick, label, small = false, className = '' }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`flex shrink-0 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] shadow-[0_8px_22px_rgba(98,230,169,0.28)] transition hover:scale-105 hover:bg-[#8af7c2] focus:outline-none focus:ring-2 focus:ring-[#b4ffda] ${small ? 'h-10 w-10' : 'h-14 w-14'}`}
+      className={`flex shrink-0 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] shadow-[0_8px_22px_rgba(98,230,169,0.28)] transition hover:scale-105 hover:bg-[#8af7c2] focus:outline-none focus:ring-2 focus:ring-[#b4ffda] ${small ? 'h-10 w-10' : 'h-14 w-14'} ${className}`}
     >
       <Icon name={playing ? 'pause' : 'play'} className={small ? 'h-4 w-4' : 'h-6 w-6'} />
     </button>
@@ -133,6 +138,7 @@ function MusicPage({ onExit, isVisible = true }) {
   const [likedTrackIds, setLikedTrackIds] = useState(() => getStoredArray(LIKED_TRACKS_KEY))
   const [recentTrackIds, setRecentTrackIds] = useState(() => getStoredArray(RECENT_TRACKS_KEY))
   const [customPlaylists, setCustomPlaylists] = useState(getStoredPlaylists)
+  const [followedArtistNames, setFollowedArtistNames] = useState(() => getStoredArray(FOLLOWED_ARTISTS_KEY))
   const [isQueueOpen, setIsQueueOpen] = useState(false)
   const [isNowPlayingOpen, setIsNowPlayingOpen] = useState(false)
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
@@ -141,6 +147,9 @@ function MusicPage({ onExit, isVisible = true }) {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null)
   const [selectedArtist, setSelectedArtist] = useState(null)
   const [selectedAlbum, setSelectedAlbum] = useState(null)
+  const [isFeaturedPerformancePlaying, setIsFeaturedPerformancePlaying] = useState(false)
+  const [isPerformanceFullScreenOpen, setIsPerformanceFullScreenOpen] = useState(false)
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
 
   const currentTrack = useMemo(
     () => musicLibrary.find((track) => track.id === currentTrackId) || musicLibrary[0],
@@ -181,6 +190,10 @@ function MusicPage({ onExit, isVisible = true }) {
     () => artistCatalog.find((artist) => artist.name === selectedArtist) || null,
     [artistCatalog, selectedArtist],
   )
+  const followedArtists = useMemo(
+    () => artistCatalog.filter((artist) => followedArtistNames.includes(artist.name)),
+    [artistCatalog, followedArtistNames],
+  )
   const selectedArtistAlbums = useMemo(() => {
     const grouped = selectedArtistTracks.reduce((albums, track) => {
       const albumName = track.album || 'Singles'
@@ -192,6 +205,7 @@ function MusicPage({ onExit, isVisible = true }) {
       .map(([name, tracks]) => ({ name, tracks, artwork: tracks[0]?.artwork || 'from-emerald-400 via-teal-600 to-cyan-950', artworkSrc: tracks[0]?.artworkSrc }))
       .sort((first, second) => first.name.localeCompare(second.name))
   }, [selectedArtistTracks])
+  const greeting = new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 18 ? 'Good afternoon' : 'Good evening'
 
   useEffect(() => {
     try {
@@ -218,12 +232,23 @@ function MusicPage({ onExit, isVisible = true }) {
   }, [customPlaylists])
 
   useEffect(() => {
+    try {
+      localStorage.setItem(FOLLOWED_ARTISTS_KEY, JSON.stringify(followedArtistNames))
+    } catch {
+      // Following still works until the page is refreshed if storage is unavailable.
+    }
+  }, [followedArtistNames])
+
+  useEffect(() => {
     isPlayingRef.current = isPlaying
   }, [isPlaying])
 
   useEffect(() => {
     const closeOnEscape = (event) => {
-      if (event.key === 'Escape') setIsNowPlayingOpen(false)
+      if (event.key === 'Escape') {
+        setIsNowPlayingOpen(false)
+        setIsPerformanceFullScreenOpen(false)
+      }
     }
     window.addEventListener('keydown', closeOnEscape)
     return () => window.removeEventListener('keydown', closeOnEscape)
@@ -326,7 +351,15 @@ function MusicPage({ onExit, isVisible = true }) {
     setIsPlaylistPickerOpen(true)
   }
 
-  const createPlaylist = (name) => {
+  const toggleFollowArtist = (artistName) => {
+    setFollowedArtistNames((current) => (
+      current.includes(artistName)
+        ? current.filter((name) => name !== artistName)
+        : [...current, artistName]
+    ))
+  }
+
+  const createPlaylist = (name, description, artworkSrc) => {
     const trimmedName = name.trim()
     if (!trimmedName) return false
     const playlistId = `playlist-${Date.now()}`
@@ -335,9 +368,10 @@ function MusicPage({ onExit, isVisible = true }) {
       {
         id: playlistId,
         name: trimmedName,
-        description: 'Your personal playlist.',
+        description: description.trim() || 'Your personal playlist.',
         trackIds: trackToAdd ? [trackToAdd] : [],
         artwork: PLAYLIST_ARTWORKS[current.length % PLAYLIST_ARTWORKS.length],
+        artworkSrc: artworkSrc || (trackToAdd ? musicLibrary.find((track) => track.id === trackToAdd)?.artworkSrc : undefined),
         isCustom: true,
       },
     ])
@@ -350,7 +384,13 @@ function MusicPage({ onExit, isVisible = true }) {
   const addTrackToPlaylist = (playlistId, trackId) => {
     setCustomPlaylists((current) => current.map((playlist) => {
       if (playlist.id !== playlistId || playlist.trackIds.includes(trackId)) return playlist
-      return { ...playlist, trackIds: [...playlist.trackIds, trackId] }
+      const addedTrack = musicLibrary.find((track) => track.id === trackId)
+      return {
+        ...playlist,
+        trackIds: [...playlist.trackIds, trackId],
+        artwork: playlist.trackIds.length ? playlist.artwork : (addedTrack?.artwork || playlist.artwork),
+        artworkSrc: playlist.trackIds.length ? playlist.artworkSrc : addedTrack?.artworkSrc,
+      }
     }))
     setIsPlaylistPickerOpen(false)
     setTrackToAdd(null)
@@ -405,6 +445,14 @@ function MusicPage({ onExit, isVisible = true }) {
     setIsPlaying(true)
   }
 
+  const playSomethingRandom = () => {
+    if (!musicLibrary.length) return
+    const choices = musicLibrary.filter((track) => track.id !== currentTrack?.id)
+    const nextTrack = choices[Math.floor(Math.random() * choices.length)] || musicLibrary[0]
+    setQueue([nextTrack.id, ...musicLibrary.filter((track) => track.id !== nextTrack.id).map((track) => track.id)])
+    startTrack(nextTrack.id)
+  }
+
   const changeRepeatMode = () => {
     setRepeatMode((current) => current === 'off' ? 'all' : current === 'all' ? 'one' : 'off')
   }
@@ -436,6 +484,23 @@ function MusicPage({ onExit, isVisible = true }) {
     }))
   }, [currentTrack, duration, isPlaying, playbackSecond])
 
+  useEffect(() => {
+    const handleShortcut = (event) => {
+      const tagName = document.activeElement?.tagName
+      if (tagName === 'INPUT' || tagName === 'TEXTAREA') return
+      if (event.key === ' ') { event.preventDefault(); togglePlay() }
+      if (event.key.toLowerCase() === 'n') playNext()
+      if (event.key.toLowerCase() === 'f') setIsNowPlayingOpen(true)
+      if (event.key === '/') {
+        event.preventDefault()
+        setActiveView('search')
+        window.setTimeout(() => document.getElementById('soundroom-search')?.focus(), 0)
+      }
+    }
+    window.addEventListener('keydown', handleShortcut)
+    return () => window.removeEventListener('keydown', handleShortcut)
+  })
+
   const openSearch = () => {
     setActiveView('search')
     window.setTimeout(() => document.getElementById('soundroom-search')?.focus(), 0)
@@ -458,7 +523,7 @@ function MusicPage({ onExit, isVisible = true }) {
         : 'Your Library'
 
   return (
-    <main className={`pcc-soundroom min-h-[100dvh] bg-[#080909] pb-28 text-[#f7f7f7] ${isVisible ? '' : 'hidden'}`}>
+    <main className={`pcc-soundroom jose-spotify min-h-[100dvh] bg-[#080909] pb-28 text-[#f7f7f7] ${isVisible ? '' : 'hidden'}`}>
       <audio
         ref={audioRef}
         src={currentTrack?.src}
@@ -471,59 +536,59 @@ function MusicPage({ onExit, isVisible = true }) {
       />
 
       <div className="flex min-h-[calc(100dvh-112px)]">
-        <aside className="sticky top-0 hidden h-[calc(100dvh-112px)] w-[280px] shrink-0 flex-col bg-[#050505] p-3 md:flex">
-          <div className="mb-6 flex items-center gap-2 px-3 py-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e]">
-              <SoundwaveMark compact />
-            </div>
-            <span className="font-display text-lg tracking-tight text-white">PCC Soundroom</span>
+        <aside className="jose-sidebar sticky top-0 hidden h-[calc(100dvh-112px)] w-[280px] shrink-0 flex-col p-3 md:flex">
+          <div className="jose-sidebar-brand mb-5 flex items-center gap-3 rounded-2xl px-3 py-3">
+            <JoseLogo />
+            <div className="min-w-0"><span className="block truncate font-display text-base tracking-tight text-white">Jose Spotify</span><span className="mt-0.5 block text-[10px] font-bold uppercase tracking-[0.16em] text-[#c5b3d3]">Personal library</span></div>
           </div>
           <nav className="space-y-1">
-            <button type="button" onClick={() => setActiveView('home')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'home' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="home" /> Home</button>
-            <button type="button" onClick={openSearch} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'search' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="search" /> Search</button>
-            <button type="button" onClick={() => setActiveView('library')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'library' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="library" /> Your Library</button>
-            <button type="button" onClick={() => setActiveView('artists')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${['artists', 'artist', 'album'].includes(activeView) ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="music" /> Artists</button>
-            <button type="button" onClick={() => setActiveView('updates')} className={`flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold transition ${activeView === 'updates' ? 'bg-[#1f1f1f] text-white' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="updates" /> What’s new <span className="ml-auto rounded-full bg-[#f5cbcb] px-1.5 py-0.5 text-[10px] text-[#2b2537]">{soundroomUpdates.length}</span></button>
+            <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#c5b3d3]">Browse</p>
+            <button type="button" onClick={() => setActiveView('home')} className={`jose-sidebar-link flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition ${activeView === 'home' ? 'jose-sidebar-link-active text-white' : 'text-[#c5b3d3] hover:text-white'}`}><Icon name="home" className="h-4 w-4" /> Home</button>
+            <button type="button" onClick={openSearch} className={`jose-sidebar-link flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition ${activeView === 'search' ? 'jose-sidebar-link-active text-white' : 'text-[#c5b3d3] hover:text-white'}`}><Icon name="search" className="h-4 w-4" /> Search</button>
+            <button type="button" onClick={() => setActiveView('artists')} className={`jose-sidebar-link flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition ${['artists', 'artist', 'album'].includes(activeView) ? 'jose-sidebar-link-active text-white' : 'text-[#c5b3d3] hover:text-white'}`}><Icon name="music" className="h-4 w-4" /> Artists</button>
           </nav>
           <div className="mt-5 border-t border-white/10 pt-4">
-            <button type="button" onClick={() => setIsPlaylistModalOpen(true)} className="flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><span className="flex h-6 w-6 items-center justify-center rounded-sm bg-gradient-to-br from-violet-500 to-indigo-900"><Icon name="plus" className="h-4 w-4 text-white" /></span> Create playlist</button>
-            <button type="button" onClick={() => setActiveView('library')} className="flex w-full items-center gap-4 rounded-md px-3 py-3 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><span className="flex h-6 w-6 items-center justify-center rounded-sm bg-gradient-to-br from-violet-600 to-[#62e6a9]"><Icon name="heart" className="h-3.5 w-3.5 text-white" /></span> Liked Songs</button>
+            <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#c5b3d3]">Your music</p>
+            <button type="button" onClick={() => setIsPlaylistModalOpen(true)} className="jose-sidebar-link flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-[#ffe2e2] transition hover:text-white"><span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-[#c5b3d3] to-[#765b92]"><Icon name="plus" className="h-4 w-4 text-white" /></span> Create playlist</button>
+            <button type="button" onClick={() => setActiveView('library')} className="jose-sidebar-link flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-[#ffe2e2] transition hover:text-white"><span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-[#f5cbcb] to-[#c5b3d3]"><Icon name="heart" className="h-3.5 w-3.5 text-[#372e42]" /></span> Liked Songs</button>
           </div>
-          <div className="mt-3 min-h-0 flex-1 overflow-y-auto border-t border-white/10 pt-4">
-            {allCollections.map((collection) => <button type="button" key={collection.id} onClick={() => openPlaylist(collection)} className="block w-full truncate px-3 py-2 text-left text-sm text-[#b3b3b3] transition hover:text-white">{collection.name}</button>)}
+          <div className="mt-4 min-h-0 flex-1 overflow-y-auto border-t border-white/10 pt-4">
+            <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#c5b3d3]">Playlists</p>
+            {allCollections.map((collection) => <button type="button" key={collection.id} onClick={() => openPlaylist(collection)} className="jose-sidebar-link block w-full truncate rounded-xl px-3 py-2 text-left text-sm font-medium text-[#c5b3d3] transition hover:text-white">{collection.name}</button>)}
+            {followedArtists.length ? <div className="mt-4 border-t border-white/10 pt-4"><p className="px-3 pb-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#c5b3d3]">Following</p>{followedArtists.map((artist) => <button type="button" key={artist.name} onClick={() => openArtist(artist.name)} className="jose-sidebar-link flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-medium text-[#ffe2e2] transition hover:text-white"><Artwork item={artist} className="h-7 w-7 shrink-0 rounded-full" /><span className="truncate">{artist.name}</span></button>)}</div> : null}
           </div>
-          <button type="button" onClick={onExit} className="mt-3 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-semibold text-[#b3b3b3] transition hover:bg-white/5 hover:text-white"><Icon name="back" className="h-4 w-4" /> Return to PCC</button>
+          <button type="button" onClick={onExit} className="jose-sidebar-return mt-3 flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold text-[#ffe2e2] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Return to workspace</button>
         </aside>
 
-        <section className="min-w-0 flex-1 bg-[linear-gradient(180deg,#4a3e56_0%,#312a3d_18%,#211d2a_44%,#211d2a_100%)]">
-          <header className="sticky top-0 z-20 flex min-h-16 items-center gap-3 border-b border-white/10 bg-[#2b2537]/90 px-4 py-3 backdrop-blur-lg sm:px-8">
+        <section className="jose-main min-w-0 flex-1 bg-[linear-gradient(180deg,#4a3e56_0%,#312a3d_18%,#211d2a_44%,#211d2a_100%)]">
+          <header className="jose-topbar sticky top-0 z-20 flex min-h-16 items-center gap-3 border-b border-white/10 bg-[#2b2537]/90 px-4 py-3 backdrop-blur-lg sm:px-8">
             <div className="hidden items-center gap-2 lg:flex"><button type="button" aria-label="Back" className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white"><Icon name="back" className="h-4 w-4" /></button><button type="button" aria-label="Forward" className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white"><Icon name="forward" className="h-4 w-4" /></button></div>
-            <button type="button" onClick={() => setActiveView('home')} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] md:hidden"><Icon name="music" className="h-4 w-4" /></button>
+            <button type="button" onClick={() => setActiveView('home')} className="md:hidden" aria-label="Jose Spotify home"><JoseLogo className="h-9 w-9 rounded-full text-sm" /></button>
             <div className={`min-w-0 flex-1 ${activeView === 'search' ? '' : 'hidden sm:block'}`}>
               <label className="flex max-w-md items-center gap-3 rounded-full bg-white px-4 py-2 text-black shadow-sm"><Icon name="search" className="h-5 w-5 shrink-0" /><input id="soundroom-search" value={searchTerm} onFocus={() => setActiveView('search')} onChange={(event) => setSearchTerm(event.target.value)} className="w-full bg-transparent text-sm outline-none placeholder:text-[#5d5d5d]" placeholder="What do you want to play?" /></label>
             </div>
-            <div className="flex items-center gap-2"><button type="button" onClick={() => setActiveView('updates')} className="relative flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white transition hover:bg-black/35" aria-label="Open Soundroom updates"><Icon name="updates" className="h-4 w-4" /><span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#f5cbcb] px-1 text-[9px] font-black text-[#2b2537]">{soundroomUpdates.length}</span></button><button type="button" onClick={() => setIsNowPlayingOpen(true)} className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/20 px-3 py-2 text-xs font-bold text-white transition hover:bg-black/35"><Icon name="fullscreen" className="h-3.5 w-3.5" /> Full screen</button><button type="button" onClick={onExit} className="rounded-full bg-white px-4 py-2 text-xs font-extrabold text-black transition hover:scale-[1.03]">Exit music</button></div>
+            <div className="relative flex items-center gap-2"><button type="button" onClick={() => setIsNotificationsOpen((open) => !open)} className="relative flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white transition hover:bg-black/35" aria-label="Open notifications" aria-expanded={isNotificationsOpen}><Icon name="updates" className="h-4 w-4" /><span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#f5cbcb] px-1 text-[9px] font-black text-[#2b2537]">{soundroomUpdates.length}</span></button>{isNotificationsOpen ? <NotificationsPopover updates={soundroomUpdates} onClose={() => setIsNotificationsOpen(false)} /> : null}</div>
           </header>
 
           <div className="mx-auto max-w-[1600px] px-4 pb-8 pt-5 sm:px-8 sm:pt-8">
-            <div className="mb-5 flex items-center justify-between gap-3"><h1 className="text-2xl font-black tracking-tight sm:text-3xl">{viewTitle}</h1><button type="button" onClick={openSearch} className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold text-white sm:hidden">Search</button></div>
+            <div className="mb-5 flex items-center justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#f5cbcb]">Your personal music desk</p><h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">{activeView === 'home' ? `${greeting}, alipin ng salapi` : viewTitle}</h1></div><button type="button" onClick={openSearch} className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold text-white sm:hidden">Search</button></div>
 
             {activeView === 'home' ? (
               <>
-                <section className="relative overflow-hidden rounded-2xl border border-[#ffe2e2]/20 bg-[linear-gradient(135deg,#6a556d_0%,#4a3e56_52%,#2b2537_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.24)] sm:p-9">
+                <section className="overflow-hidden rounded-2xl border border-[#ffe2e2]/25 bg-[#211d2a] shadow-[0_24px_60px_rgba(0,0,0,0.24)]"><div className="grid lg:grid-cols-[minmax(0,1fr)_52%]"><div className="p-6 sm:p-9"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#f5cbcb]">Featured performance</p><h2 className="mt-3 text-3xl font-black text-white sm:text-4xl">I Knew It, I Knew You × August × All Too Well</h2><p className="mt-3 max-w-xl text-sm leading-relaxed text-[#ffe2e2]">Taylor Swift at the Grammy Museum — a special live performance from your personal collection.</p><button type="button" onClick={() => setIsPerformanceFullScreenOpen(true)} className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#f5cbcb]/45 bg-[#372e42] px-4 py-2 text-xs font-extrabold text-[#ffe2e2] transition hover:bg-[#4b4058]"><Icon name="fullscreen" className="h-3.5 w-3.5" /> Performance</button></div><div className="relative aspect-video bg-black lg:aspect-auto"><video className="h-full w-full object-cover" controls={isFeaturedPerformancePlaying} autoPlay={isFeaturedPerformancePlaying} muted={!isFeaturedPerformancePlaying} playsInline onEnded={() => setIsFeaturedPerformancePlaying(false)}><source src="/Taylor%20Swift%20Performance%20-%20The%20Icon%20Sessions%20at%20the%20Grammy%20Museum%20-%20Taylor%20Swift.mp4" type="video/mp4" /></video>{!isFeaturedPerformancePlaying ? <button type="button" onClick={() => setIsFeaturedPerformancePlaying(true)} className="absolute inset-0 flex items-center justify-center bg-black/25" aria-label="Watch Taylor Swift performance"><span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f5cbcb] text-[#2b2537]"><Icon name="play" className="h-7 w-7" /></span></button> : null}</div></div></section>
+                <section className="relative mt-6 overflow-hidden rounded-2xl border border-[#ffe2e2]/20 bg-[linear-gradient(135deg,#6a556d_0%,#4a3e56_52%,#2b2537_100%)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.24)] sm:p-9">
                   <div className="pointer-events-none absolute -right-14 -top-24 h-80 w-80 rounded-full border-[34px] border-[#62e6a9]/10" />
                   <div className="pointer-events-none absolute -bottom-32 left-1/3 h-64 w-64 rounded-full border-[46px] border-white/5" />
                   <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
-                      <div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] shadow-[0_0_28px_rgba(98,230,169,0.3)]"><SoundwaveMark compact /></span><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a5f7c9]">PCC Soundroom</p></div>
-                      <h2 className="mt-6 text-3xl font-black leading-[0.98] tracking-tight text-white sm:text-5xl">Your workday,<br />your soundtrack.</h2>
-                      <p className="mt-4 max-w-lg text-sm leading-relaxed text-[#d0e9db] sm:text-base">Play what you love, save the songs that fit your flow, and make the space your own.</p>
-                      <div className="mt-7 flex flex-wrap items-center gap-3"><PlayButton playing={isPlaying} onClick={togglePlay} label={isPlaying ? 'Pause music' : 'Play music'} /><div><p className="text-sm font-bold text-white">{currentTrack?.title || 'Choose a song'}</p><p className="mt-0.5 text-xs text-[#afd0bd]">{currentTrack?.artist || 'PCC Soundroom'}</p></div></div>
+                      <div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#62e6a9] text-[#07130e] shadow-[0_0_28px_rgba(98,230,169,0.3)]"><SoundwaveMark compact /></span><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a5f7c9]">Jose Spotify</p></div>
+                      <h2 className="mt-6 text-3xl font-black leading-[0.98] tracking-tight text-white sm:text-5xl">More Music, Less Work.</h2>
+                      <p className="mt-4 max-w-lg text-sm leading-relaxed text-[#ffe2e2] sm:text-base">mag trabaho ka ng maayos.</p>
+                      <div className="mt-7 flex flex-wrap items-center gap-3"><PlayButton playing={isPlaying} onClick={togglePlay} label={isPlaying ? 'Pause music' : 'Play music'} /><button type="button" onClick={playSomethingRandom} className="rounded-full border border-white/30 bg-black/15 px-5 py-3 text-sm font-extrabold text-white transition hover:bg-white/15">Play something</button><div><p className="text-sm font-bold text-white">{currentTrack?.title || 'Choose a song'}</p><p className="mt-0.5 text-xs text-[#afd0bd]">{currentTrack?.artist || 'Jose Spotify'}</p></div></div>
                     </div>
-                    <div className="flex min-w-[190px] flex-col items-center rounded-2xl border border-white/10 bg-black/15 px-6 py-5 backdrop-blur-sm"><SoundwaveMark /><p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9af7c6]">In your flow</p><p className="mt-1 text-xs text-[#cde8d8]">{musicLibrary.length} song{musicLibrary.length === 1 ? '' : 's'} in your library</p></div>
+                    <div className="flex min-w-[190px] flex-col items-center rounded-2xl border border-white/10 bg-black/15 px-6 py-5 backdrop-blur-sm"><SoundwaveMark /><p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#9af7c6]">Your collection</p><p className="mt-1 text-xs text-[#cde8d8]">{musicLibrary.length} songs · {artistCatalog.length} artists</p><button type="button" onClick={openSearch} className="mt-4 text-xs font-bold text-white underline decoration-[#f5cbcb] underline-offset-4">Find a song</button></div>
                   </div>
                 </section>
-                <UpdatePreview updates={soundroomUpdates} onOpenUpdates={() => setActiveView('updates')} />
                 {customPlaylists.length ? <section className="mt-8 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                   {customPlaylists.map((collection) => (
                     <button type="button" key={collection.id} onClick={() => playCollection(collection)} className="group flex min-w-0 items-center overflow-hidden rounded-md bg-white/10 text-left transition hover:bg-white/20">
@@ -579,8 +644,6 @@ function MusicPage({ onExit, isVisible = true }) {
               </section>
             ) : null}
 
-            {activeView === 'updates' ? <UpdatesPage updates={soundroomUpdates} onBack={() => setActiveView('home')} /> : null}
-
             {activeView === 'artist' && selectedArtist ? (
               <>
                 <ArtistDetail
@@ -590,6 +653,8 @@ function MusicPage({ onExit, isVisible = true }) {
                 currentTrackId={currentTrack?.id}
                 isPlaying={isPlaying}
                 likedTrackIds={likedTrackIds}
+                isFollowed={followedArtistNames.includes(selectedArtist)}
+                onToggleFollow={() => toggleFollowArtist(selectedArtist)}
                 onBack={() => setActiveView('library')}
                 onPlay={() => {
                   setQueue(selectedArtistTracks.map((track) => track.id))
@@ -629,7 +694,8 @@ function MusicPage({ onExit, isVisible = true }) {
       {isQueueOpen ? <QueuePanel queue={queue} currentTrackId={currentTrack?.id} onClose={() => setIsQueueOpen(false)} onPlay={startTrack} onRemove={removeFromQueue} onClear={clearQueue} /> : null}
       {isPlaylistModalOpen ? <PlaylistModal onClose={() => setIsPlaylistModalOpen(false)} onCreate={createPlaylist} /> : null}
       {isPlaylistPickerOpen ? <PlaylistPicker trackId={trackToAdd} playlists={customPlaylists} onClose={() => { setIsPlaylistPickerOpen(false); setTrackToAdd(null) }} onAdd={addTrackToPlaylist} onCreate={() => { setIsPlaylistPickerOpen(false); setIsPlaylistModalOpen(true) }} /> : null}
-      {isNowPlayingOpen ? <NowPlayingScreen track={currentTrack} isPlaying={isPlaying} currentTime={currentTime} duration={duration} liked={likedTrackIds.includes(currentTrack?.id)} onClose={() => setIsNowPlayingOpen(false)} onTogglePlay={togglePlay} onPrevious={playPrevious} onNext={playNext} onLike={() => currentTrack && toggleLike(currentTrack.id)} onSeek={(event) => { const time = Number(event.target.value); if (audioRef.current) audioRef.current.currentTime = time; setCurrentTime(time) }} /> : null}
+      {isNowPlayingOpen ? <JoseNowPlayingScreen track={currentTrack} isPlaying={isPlaying} currentTime={currentTime} duration={duration} liked={likedTrackIds.includes(currentTrack?.id)} onClose={() => setIsNowPlayingOpen(false)} onTogglePlay={togglePlay} onPrevious={playPrevious} onNext={playNext} onLike={() => currentTrack && toggleLike(currentTrack.id)} onSeek={(event) => { const time = Number(event.target.value); if (audioRef.current) audioRef.current.currentTime = time; setCurrentTime(time) }} /> : null}
+      {isPerformanceFullScreenOpen ? <PerformanceFullScreen onClose={() => setIsPerformanceFullScreenOpen(false)} /> : null}
       <PlayerBar track={currentTrack} isPlaying={isPlaying} currentTime={currentTime} duration={duration} volume={volume} isShuffleOn={isShuffleOn} repeatMode={repeatMode} liked={likedTrackIds.includes(currentTrack?.id)} onTogglePlay={togglePlay} onPrevious={playPrevious} onNext={playNext} onShuffle={() => setIsShuffleOn((current) => !current)} onRepeat={changeRepeatMode} onLike={() => currentTrack && toggleLike(currentTrack.id)} onSeek={(event) => { const time = Number(event.target.value); if (audioRef.current) audioRef.current.currentTime = time; setCurrentTime(time) }} onVolume={(event) => setVolume(Number(event.target.value))} onQueue={() => setIsQueueOpen(true)} onFullscreen={() => setIsNowPlayingOpen(true)} />
     </main>
   )
@@ -639,14 +705,12 @@ function TrackSection({ title, subtitle, tracks, currentTrackId, isPlaying, onPl
   return <section className="mt-10"><div className="mb-4 flex items-end justify-between"><div><h2 className="text-xl font-black tracking-tight sm:text-2xl">{title}</h2>{subtitle ? <p className="mt-1 text-sm text-[#b3b3b3]">{subtitle}</p> : null}</div></div><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{tracks.map((track) => <TrackCard key={track.id} track={track} currentTrackId={currentTrackId} isPlaying={isPlaying} onPlay={onPlay} onLike={onLike} liked={likedTrackIds.includes(track.id)} />)}</div></section>
 }
 
-function UpdatePreview({ updates, onOpenUpdates }) {
-  const latestUpdate = updates[0]
-  if (!latestUpdate) return null
-  return <section className="mt-8 rounded-2xl border border-[#ffe2e2]/20 bg-[linear-gradient(135deg,rgba(197,179,211,0.26),rgba(43,37,55,0.8))] p-5 sm:p-6"><div className="flex flex-wrap items-start justify-between gap-4"><div className="flex min-w-0 gap-4"><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#f5cbcb] text-[#2b2537]"><Icon name="updates" /></span><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#f5cbcb]">Latest update · {latestUpdate.date}</p><h2 className="mt-1 text-lg font-black text-white">{latestUpdate.title}</h2><p className="mt-1 text-sm text-[#ffe2e2]">{latestUpdate.description}</p></div></div><button type="button" onClick={onOpenUpdates} className="rounded-full border border-[#ffe2e2]/35 px-4 py-2 text-xs font-extrabold text-[#fbefef] transition hover:bg-white/10">View all updates</button></div></section>
+function NotificationsPopover({ updates, onClose }) {
+  return <section className="absolute right-0 top-12 z-50 w-[min(23rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#ffe2e2]/25 bg-[#211d2a]/98 shadow-[0_24px_60px_rgba(0,0,0,0.48)] backdrop-blur-xl" role="dialog" aria-label="Notifications"><header className="flex items-center justify-between border-b border-white/10 px-4 py-3"><div><h2 className="text-base font-black text-white">Notifications</h2><p className="mt-0.5 text-xs text-[#c5b3d3]">Your latest Jose Spotify updates</p></div><button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#ffe2e2] transition hover:bg-white/10 hover:text-white" aria-label="Close notifications"><Icon name="close" className="h-4 w-4" /></button></header><div className="max-h-[min(28rem,calc(100dvh-7rem))] overflow-y-auto p-2">{updates.length ? updates.map((update) => <article key={update.id} className="flex gap-3 rounded-xl p-3 transition hover:bg-white/5"><span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f5cbcb] text-[#2b2537]"><Icon name="music" className="h-4 w-4" /></span><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><h3 className="text-sm font-bold leading-snug text-white">{update.title}</h3><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#f5cbcb]" /></div><p className="mt-1 text-xs leading-relaxed text-[#ffe2e2]">{update.description}</p><p className="mt-2 text-[10px] font-bold uppercase tracking-[0.13em] text-[#c5b3d3]">{update.date} · {update.type}</p></div></article>) : <p className="p-5 text-center text-sm text-[#ffe2e2]">You are all caught up.</p>}</div></section>
 }
 
 function UpdatesPage({ updates, onBack }) {
-  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#ffe2e2] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Back to Soundroom</button><div className="max-w-3xl"><p className="text-sm text-[#ffe2e2]">A record of new music, artists, artwork, and improvements added to PCC Soundroom.</p><div className="mt-7 space-y-4">{updates.map((update) => <article key={update.id} className="rounded-2xl border border-[#ffe2e2]/20 bg-[#372e42]/85 p-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#f5cbcb]">{update.type}</p><h2 className="mt-2 text-lg font-black text-white">{update.title}</h2></div><span className="rounded-full border border-[#ffe2e2]/25 px-3 py-1 text-xs font-semibold text-[#ffe2e2]">{update.date}</span></div><p className="mt-3 text-sm leading-relaxed text-[#ffe2e2]">{update.description}</p><p className="mt-4 text-xs font-bold text-[#c5b3d3]">{update.artist}</p></article>)}</div></div></section>
+  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#ffe2e2] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Back to Jose Spotify</button><div className="max-w-3xl"><p className="text-sm text-[#ffe2e2]">A record of new music, artists, artwork, and improvements added to Jose Spotify.</p><div className="mt-7 space-y-4">{updates.map((update) => <article key={update.id} className="rounded-2xl border border-[#ffe2e2]/20 bg-[#372e42]/85 p-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#f5cbcb]">{update.type}</p><h2 className="mt-2 text-lg font-black text-white">{update.title}</h2></div><span className="rounded-full border border-[#ffe2e2]/25 px-3 py-1 text-xs font-semibold text-[#ffe2e2]">{update.date}</span></div><p className="mt-3 text-sm leading-relaxed text-[#ffe2e2]">{update.description}</p><p className="mt-4 text-xs font-bold text-[#c5b3d3]">{update.artist}</p></article>)}</div></div></section>
 }
 
 function TrackCard({ track, currentTrackId, isPlaying, onPlay, onLike, liked }) {
@@ -677,12 +741,12 @@ function QueuePanel({ queue, currentTrackId, onClose, onPlay, onRemove, onClear 
 }
 
 function PlaylistDetail({ playlist, tracks, isPlaying, currentTrackId, likedTrackIds, onBack, onPlay, onPlayTrack, onLike, onQueue, onAddToPlaylist, onRemove, onDelete }) {
-  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Your Library</button><div className="flex flex-col gap-6 bg-gradient-to-b from-white/15 to-transparent p-5 sm:flex-row sm:items-end sm:p-8"><Artwork item={playlist} className="h-40 w-40 shrink-0 rounded-sm shadow-2xl sm:h-52 sm:w-52" /><div className="min-w-0"><p className="text-xs font-bold uppercase tracking-[0.12em]">{playlist.isCustom ? 'Playlist' : 'PCC playlist'}</p><h2 className="mt-2 truncate text-3xl font-black tracking-tight sm:text-5xl">{playlist.name}</h2><p className="mt-3 text-sm text-[#d3d3d3]">{playlist.description}</p><p className="mt-2 text-sm font-semibold text-[#b3b3b3]">PCC Soundroom · {tracks.length} song{tracks.length === 1 ? '' : 's'}</p></div></div><div className="mt-6 flex items-center gap-4"><PlayButton playing={isPlaying && currentTrackId === tracks[0]?.id} onClick={onPlay} label={`Play ${playlist.name}`} />{onDelete ? <button type="button" onClick={onDelete} className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold text-white transition hover:border-red-400 hover:text-red-300">Delete playlist</button> : null}</div><div className="mt-7"><TrackList tracks={tracks} currentTrackId={currentTrackId} isPlaying={isPlaying} likedTrackIds={likedTrackIds} onPlay={onPlayTrack} onLike={onLike} onQueue={onQueue} onAddToPlaylist={onAddToPlaylist} emptyMessage="This playlist has no songs yet. Add songs from All songs in Your Library." />{onRemove ? <div className="mt-3 space-y-2">{tracks.map((track) => <button type="button" key={track.id} onClick={() => onRemove(track.id)} className="text-xs font-bold text-[#b3b3b3] transition hover:text-red-300">Remove {track.title} from this playlist</button>)}</div> : null}</div></section>
+  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Your Library</button><div className="flex flex-col gap-6 bg-gradient-to-b from-white/15 to-transparent p-5 sm:flex-row sm:items-end sm:p-8"><Artwork item={playlist} className="h-40 w-40 shrink-0 rounded-sm shadow-2xl sm:h-52 sm:w-52" /><div className="min-w-0"><p className="text-xs font-bold uppercase tracking-[0.12em]">{playlist.isCustom ? 'Playlist' : 'Jose playlist'}</p><h2 className="mt-2 truncate text-3xl font-black tracking-tight sm:text-5xl">{playlist.name}</h2><p className="mt-3 text-sm text-[#d3d3d3]">{playlist.description}</p><p className="mt-2 text-sm font-semibold text-[#b3b3b3]">Jose Spotify · {tracks.length} song{tracks.length === 1 ? '' : 's'}</p></div></div><div className="mt-6 flex items-center gap-4"><PlayButton playing={isPlaying && currentTrackId === tracks[0]?.id} onClick={onPlay} label={`Play ${playlist.name}`} />{onDelete ? <button type="button" onClick={onDelete} className="rounded-full border border-white/25 px-4 py-2 text-sm font-bold text-white transition hover:border-red-400 hover:text-red-300">Delete playlist</button> : null}</div><div className="mt-7"><TrackList tracks={tracks} currentTrackId={currentTrackId} isPlaying={isPlaying} likedTrackIds={likedTrackIds} onPlay={onPlayTrack} onLike={onLike} onQueue={onQueue} onAddToPlaylist={onAddToPlaylist} emptyMessage="This playlist has no songs yet. Add songs from Your Library." />{onRemove ? <div className="mt-3 space-y-2">{tracks.map((track) => <button type="button" key={track.id} onClick={() => onRemove(track.id)} className="text-xs font-bold text-[#b3b3b3] transition hover:text-red-300">Remove {track.title} from this playlist</button>)}</div> : null}</div></section>
 }
 
-function ArtistDetail({ artist, tracks, artistArtworkSrc, currentTrackId, isPlaying, onBack, onPlay }) {
+function ArtistDetail({ artist, tracks, artistArtworkSrc, currentTrackId, isPlaying, isFollowed, onToggleFollow, onBack, onPlay }) {
   const artwork = tracks[0]?.artwork || 'from-emerald-400 via-teal-600 to-cyan-950'
-  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Artists</button><div className="flex flex-col gap-6 bg-gradient-to-b from-white/15 to-transparent p-5 sm:flex-row sm:items-end sm:p-8"><Artwork item={{ artwork, artworkSrc: artistArtworkSrc }} className="h-40 w-40 shrink-0 rounded-full shadow-2xl sm:h-52 sm:w-52" /><div><p className="text-xs font-bold uppercase tracking-[0.12em]">Artist</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">{artist}</h2><p className="mt-3 text-sm text-[#d3d3d3]">Choose an album to see its songs.</p></div></div><div className="mt-6"><PlayButton playing={isPlaying && currentTrackId === tracks[0]?.id} onClick={onPlay} label={`Play ${artist}`} /></div></section>
+  return <section><button type="button" onClick={onBack} className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#b3b3b3] transition hover:text-white"><Icon name="back" className="h-4 w-4" /> Artists</button><div className="flex flex-col gap-6 rounded-3xl border border-[#ffe2e2]/15 bg-gradient-to-br from-[#6a556d]/60 via-[#403548]/80 to-[#211d2a] p-5 shadow-[0_24px_55px_rgba(0,0,0,0.2)] sm:flex-row sm:items-end sm:p-8"><Artwork item={{ artwork, artworkSrc: artistArtworkSrc }} className="h-40 w-40 shrink-0 rounded-full border-4 border-white/10 shadow-2xl sm:h-52 sm:w-52" /><div className="flex-1"><p className="text-xs font-bold uppercase tracking-[0.12em] text-[#f5cbcb]">Artist</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">{artist}</h2><p className="mt-3 text-sm text-[#ffe2e2]">Choose an album to see its songs.</p><div className="mt-5 flex flex-wrap gap-3"><button type="button" onClick={onToggleFollow} className={`rounded-full px-5 py-2.5 text-sm font-extrabold transition ${isFollowed ? 'border border-[#f5cbcb]/45 bg-[#f5cbcb]/15 text-[#ffe2e2] hover:bg-[#f5cbcb]/25' : 'bg-[#f5cbcb] text-[#372e42] hover:scale-[1.02]'}`}>{isFollowed ? 'Following' : 'Follow artist'}</button><span className="self-center text-xs font-semibold text-[#c5b3d3]">{tracks.length} songs in your library</span></div></div></div><div className="mt-6"><PlayButton playing={isPlaying && currentTrackId === tracks[0]?.id} onClick={onPlay} label={`Play ${artist}`} /></div></section>
 }
 
 function AlbumDetail({ artist, album, currentTrackId, isPlaying, likedTrackIds, onBack, onPlay, onPlayTrack, onLike, onQueue, onAddToPlaylist }) {
@@ -691,11 +755,32 @@ function AlbumDetail({ artist, album, currentTrackId, isPlaying, likedTrackIds, 
 
 function PlaylistModal({ onClose, onCreate }) {
   const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [coverImage, setCoverImage] = useState('')
+  const [imageError, setImageError] = useState('')
+
+  const handleCoverChange = (event) => {
+    const file = event.target.files?.[0]
+    setImageError('')
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setImageError('Please choose an image file.')
+      return
+    }
+    if (file.size > 1500000) {
+      setImageError('Use an image smaller than 1.5 MB so it can be saved safely.')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => setCoverImage(typeof reader.result === 'string' ? reader.result : '')
+    reader.readAsDataURL(file)
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (onCreate(name)) onClose()
+    if (onCreate(name, description, coverImage)) onClose()
   }
-  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true" aria-labelledby="playlist-modal-title"><form onSubmit={handleSubmit} className="w-full max-w-md rounded-xl bg-[#282828] p-6 shadow-2xl"><div className="flex items-center justify-between gap-4"><h2 id="playlist-modal-title" className="text-xl font-black">Create playlist</h2><button type="button" onClick={onClose} aria-label="Close" className="rounded-full p-1.5 text-[#b3b3b3] hover:bg-white/10 hover:text-white"><Icon name="close" /></button></div><label className="mt-6 block text-sm font-semibold" htmlFor="playlist-name">Playlist name</label><input id="playlist-name" autoFocus value={name} onChange={(event) => setName(event.target.value)} maxLength="60" className="mt-2 w-full rounded-md border border-white/15 bg-[#121212] px-3 py-2.5 text-sm text-white outline-none transition focus:border-[#62e6a9]" placeholder="My playlist" /><div className="mt-6 flex justify-end gap-3"><button type="button" onClick={onClose} className="rounded-full px-4 py-2 text-sm font-bold text-white hover:bg-white/10">Cancel</button><button type="submit" disabled={!name.trim()} className="rounded-full bg-[#62e6a9] px-5 py-2 text-sm font-extrabold text-[#07130e] disabled:cursor-not-allowed disabled:opacity-45">Create</button></div></form></div>
+  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#120f18]/80 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="playlist-modal-title"><form onSubmit={handleSubmit} className="w-full max-w-xl overflow-hidden rounded-3xl border border-[#ffe2e2]/20 bg-[#2b2537] shadow-[0_28px_80px_rgba(0,0,0,0.5)]"><header className="flex items-center justify-between border-b border-white/10 px-6 py-5"><div><p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#f5cbcb]">Your music</p><h2 id="playlist-modal-title" className="mt-1 text-2xl font-black text-white">Create playlist</h2></div><button type="button" onClick={onClose} aria-label="Close" className="rounded-full border border-white/10 p-2 text-[#ffe2e2] transition hover:bg-white/10 hover:text-white"><Icon name="close" className="h-4 w-4" /></button></header><div className="grid gap-6 p-6 sm:grid-cols-[132px_1fr]"><div><label htmlFor="playlist-cover" className="group relative flex aspect-square cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-dashed border-[#f5cbcb]/55 bg-gradient-to-br from-[#c5b3d3] via-[#765b92] to-[#372e42] shadow-lg">{coverImage ? <img src={coverImage} alt="Playlist cover preview" className="h-full w-full object-cover" /> : <span className="text-center"><span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/20"><Icon name="plus" className="h-5 w-5 text-white" /></span><span className="mt-2 block text-xs font-bold text-white">Add cover</span></span>}<span className="absolute inset-x-2 bottom-2 rounded-lg bg-black/60 px-2 py-1 text-center text-[10px] font-bold text-white opacity-0 transition group-hover:opacity-100">Change image</span></label><input id="playlist-cover" type="file" accept="image/*" onChange={handleCoverChange} className="sr-only" /><p className="mt-2 text-center text-[10px] leading-relaxed text-[#c5b3d3]">Optional · max 1.5 MB</p></div><div><label className="block text-sm font-bold text-[#ffe2e2]" htmlFor="playlist-name">Playlist name</label><input id="playlist-name" autoFocus value={name} onChange={(event) => setName(event.target.value)} maxLength="60" className="mt-2 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#c5b3d3]/65 focus:border-[#f5cbcb] focus:bg-white/10" placeholder="My playlist" /><label className="mt-5 block text-sm font-bold text-[#ffe2e2]" htmlFor="playlist-description">Description <span className="font-normal text-[#c5b3d3]">(optional)</span></label><textarea id="playlist-description" value={description} onChange={(event) => setDescription(event.target.value)} maxLength="160" rows="4" className="mt-2 w-full resize-none rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#c5b3d3]/65 focus:border-[#f5cbcb] focus:bg-white/10" placeholder="What is this playlist for?" />{imageError ? <p className="mt-3 text-xs font-semibold text-[#f5cbcb]">{imageError}</p> : <p className="mt-3 text-xs text-[#c5b3d3]">Without an image, your playlist receives a default cover. Its first added song can also supply its cover art.</p>}</div></div><footer className="flex justify-end gap-3 border-t border-white/10 px-6 py-4"><button type="button" onClick={onClose} className="rounded-full px-4 py-2 text-sm font-bold text-[#ffe2e2] transition hover:bg-white/10">Cancel</button><button type="submit" disabled={!name.trim()} className="rounded-full bg-[#f5cbcb] px-5 py-2 text-sm font-extrabold text-[#372e42] transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-45">Create playlist</button></footer></form></div>
 }
 
 function PlaylistPicker({ trackId, playlists, onClose, onAdd, onCreate }) {
@@ -710,12 +795,23 @@ function NowPlayingScreen({ track, isPlaying, currentTime, duration, liked, onCl
   return <section className="fixed inset-0 z-[60] overflow-y-auto bg-[radial-gradient(circle_at_50%_20%,rgba(197,179,211,0.38),transparent_38%),linear-gradient(160deg,#372e42_0%,#211d2a_58%,#2b2537_100%)] px-5 py-6 text-white sm:px-10" role="dialog" aria-modal="true" aria-label="Now playing"><div className="mx-auto flex min-h-[calc(100dvh-3rem)] max-w-5xl flex-col"><header className="flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#f5cbcb]">PCC Soundroom</p><p className="mt-1 text-sm text-[#ffe2e2]">Now playing</p></div><button type="button" onClick={onClose} className="flex h-11 w-11 items-center justify-center rounded-full bg-black/25 text-white transition hover:bg-black/40" aria-label="Exit full screen"><Icon name="close" /></button></header><div className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center py-10"><div className="w-full max-w-[min(68vw,520px)] aspect-square overflow-hidden rounded-2xl shadow-[0_28px_80px_rgba(0,0,0,0.42)]"><Artwork item={track} className="h-full w-full" /></div><div className="mt-8 w-full max-w-[min(68vw,520px)]"><div className="flex items-start gap-4"><div className="min-w-0 flex-1"><h1 className="truncate text-2xl font-black sm:text-3xl">{track.title}</h1><p className="mt-1 truncate text-base text-[#ffe2e2]">{track.artist} · {track.album}</p></div><button type="button" onClick={onLike} aria-label={liked ? 'Remove from Liked Songs' : 'Add to Liked Songs'} className={liked ? 'text-[#f5cbcb]' : 'text-[#ffe2e2] hover:text-white'}><Icon name="heart" className="h-6 w-6" /></button></div><div className="mt-7"><input type="range" min="0" max={safeDuration} step="0.1" value={Math.min(currentTime, safeDuration)} onChange={onSeek} aria-label="Song progress" className="soundroom-range h-1.5 w-full cursor-pointer" style={progressStyle} /><div className="mt-2 flex justify-between text-xs tabular-nums text-[#ffe2e2]"><span>{formatTime(currentTime)}</span><span>{formatTime(safeDuration)}</span></div></div><div className="mt-6 flex items-center justify-center gap-7"><button type="button" onClick={onPrevious} aria-label="Previous song" className="text-[#ffe2e2] transition hover:text-white"><Icon name="previous" className="h-7 w-7" /></button><PlayButton playing={isPlaying} onClick={onTogglePlay} label={isPlaying ? 'Pause' : 'Play'} /><button type="button" onClick={onNext} aria-label="Next song" className="text-[#ffe2e2] transition hover:text-white"><Icon name="next" className="h-7 w-7" /></button></div></div></div><p className="pb-2 text-center text-xs text-[#c5b3d3]">Press Esc or use the close button to return to PCC Soundroom.</p></div></section>
 }
 
-function PlayerBar({ track, isPlaying, currentTime, duration, volume, isShuffleOn, repeatMode, liked, onTogglePlay, onPrevious, onNext, onShuffle, onRepeat, onLike, onSeek, onVolume, onQueue }) {
+function JoseNowPlayingScreen({ track, isPlaying, currentTime, duration, liked, onClose, onTogglePlay, onPrevious, onNext, onLike, onSeek }) {
+  if (!track) return null
+  const safeDuration = Number.isFinite(duration) ? duration : 0
+  const progressStyle = { '--range-progress': `${safeDuration ? (Math.min(currentTime, safeDuration) / safeDuration) * 100 : 0}%` }
+  return <section className="fixed inset-0 z-[60] overflow-y-auto bg-[radial-gradient(circle_at_50%_18%,rgba(245,203,203,0.24),transparent_30%),radial-gradient(circle_at_10%_80%,rgba(197,179,211,0.24),transparent_32%),linear-gradient(145deg,#211d2a,#372e42)] px-5 py-5 text-white sm:px-10" role="dialog" aria-modal="true" aria-label="Jose Spotify now playing"><div className="mx-auto flex min-h-[calc(100dvh-2.5rem)] max-w-6xl flex-col"><header className="flex items-center justify-between border-b border-white/10 pb-4"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#f5cbcb] via-[#ffe2e2] to-[#c5b3d3] text-lg font-black text-[#372e42] shadow-lg">J</div><div><p className="font-display text-base tracking-tight text-white">Jose Spotify</p><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f5cbcb]">Now playing</p></div></div><div className="flex items-center gap-3"><span className="hidden text-xs text-[#ffe2e2] sm:block">Esc to exit</span><button type="button" onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white transition hover:bg-white/20" aria-label="Exit full screen"><Icon name="close" /></button></div></header><div className="grid flex-1 items-center gap-10 py-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)] lg:py-12"><div className="relative mx-auto w-full max-w-[min(82vw,620px)]"><div className="absolute -inset-8 rounded-[3rem] bg-[#f5cbcb]/15 blur-3xl" /><div className="relative aspect-square overflow-hidden rounded-[2rem] border border-white/15 shadow-[0_32px_90px_rgba(0,0,0,0.45)]"><Artwork item={track} className="h-full w-full" /></div></div><div className="mx-auto w-full max-w-xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#f5cbcb]">From your library</p><div className="mt-3 flex items-start gap-4"><div className="min-w-0 flex-1"><h1 className="truncate text-3xl font-black tracking-tight sm:text-5xl">{track.title}</h1><p className="mt-3 truncate text-lg text-[#ffe2e2]">{track.artist}</p><p className="mt-1 text-sm text-[#c5b3d3]">{track.album || 'Single'}</p></div><button type="button" onClick={onLike} aria-label={liked ? 'Remove from Liked Songs' : 'Add to Liked Songs'} className={`mt-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition ${liked ? 'border-[#f5cbcb] bg-[#f5cbcb] text-[#372e42]' : 'border-white/20 bg-white/10 text-[#ffe2e2] hover:bg-white/20'}`}><Icon name="heart" className="h-5 w-5" /></button></div><div className="mt-9"><input type="range" min="0" max={safeDuration} step="0.1" value={Math.min(currentTime, safeDuration)} onChange={onSeek} aria-label="Song progress" className="soundroom-range h-1.5 w-full cursor-pointer" style={progressStyle} /><div className="mt-2 flex justify-between text-xs tabular-nums text-[#ffe2e2]"><span>{formatTime(currentTime)}</span><span>{formatTime(safeDuration)}</span></div></div><div className="mt-8 flex items-center justify-between"><button type="button" onClick={onPrevious} aria-label="Previous song" className="rounded-full p-3 text-[#ffe2e2] transition hover:bg-white/10 hover:text-white"><Icon name="previous" className="h-7 w-7" /></button><PlayButton playing={isPlaying} onClick={onTogglePlay} label={isPlaying ? 'Pause' : 'Play'} /><button type="button" onClick={onNext} aria-label="Next song" className="rounded-full p-3 text-[#ffe2e2] transition hover:bg-white/10 hover:text-white"><Icon name="next" className="h-7 w-7" /></button></div><div className="mt-9 grid grid-cols-3 gap-3 border-t border-white/10 pt-5 text-center"><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#c5b3d3]">Artist</p><p className="mt-1 truncate text-sm font-semibold">{track.artist}</p></div><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#c5b3d3]">Album</p><p className="mt-1 truncate text-sm font-semibold">{track.album || 'Single'}</p></div><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#c5b3d3]">Status</p><p className="mt-1 text-sm font-semibold text-[#f5cbcb]">{isPlaying ? 'Playing' : 'Paused'}</p></div></div></div></div><p className="pb-2 text-center text-xs text-[#c5b3d3]">Jose Spotify · Personal music library</p></div></section>
+}
+
+function PerformanceFullScreen({ onClose }) {
+  return <section className="fixed inset-0 z-[70] overflow-y-auto bg-[radial-gradient(circle_at_50%_18%,rgba(245,203,203,0.24),transparent_30%),radial-gradient(circle_at_10%_80%,rgba(197,179,211,0.24),transparent_32%),linear-gradient(145deg,#211d2a,#372e42)] px-5 py-5 text-white sm:px-10" role="dialog" aria-modal="true" aria-label="Taylor Swift performance"><div className="mx-auto flex min-h-[calc(100dvh-2.5rem)] max-w-6xl flex-col"><header className="flex items-center justify-between border-b border-white/10 pb-4"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#f5cbcb] via-[#ffe2e2] to-[#c5b3d3] text-lg font-black text-[#372e42] shadow-lg">J</div><div><p className="font-display text-base tracking-tight text-white">Jose Spotify</p><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f5cbcb]">Featured performance</p></div></div><div className="flex items-center gap-3"><span className="hidden text-xs text-[#ffe2e2] sm:block">Esc to exit</span><button type="button" onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white transition hover:bg-white/20" aria-label="Exit performance"><Icon name="close" /></button></div></header><div className="grid flex-1 items-center gap-10 py-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)] lg:py-12"><div className="relative overflow-hidden rounded-[2rem] border border-white/15 bg-black shadow-[0_32px_90px_rgba(0,0,0,0.45)]"><video className="aspect-video h-full w-full object-contain" controls autoPlay playsInline><source src="/Taylor%20Swift%20Performance%20-%20The%20Icon%20Sessions%20at%20the%20Grammy%20Museum%20-%20Taylor%20Swift.mp4" type="video/mp4" /></video></div><div className="mx-auto w-full max-w-xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#f5cbcb]">Taylor Swift · Live at the Grammy Museum</p><h1 className="mt-4 text-3xl font-black leading-tight tracking-tight sm:text-5xl">I Knew It, I Knew You × August × All Too Well</h1><p className="mt-5 text-base leading-relaxed text-[#ffe2e2]">An intimate performance from Taylor Swift, chosen as a featured moment in your Jose Spotify library.</p><div className="mt-8 grid grid-cols-2 gap-3 border-y border-white/10 py-5"><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#c5b3d3]">Artist</p><p className="mt-1 text-sm font-semibold">Taylor Swift</p></div><div><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#c5b3d3]">Format</p><p className="mt-1 text-sm font-semibold text-[#f5cbcb]">Live performance</p></div></div><p className="mt-6 text-sm text-[#c5b3d3]">Use the video controls to play, pause, seek, or adjust volume.</p></div></div><p className="pb-2 text-center text-xs text-[#c5b3d3]">Jose Spotify · Featured performance</p></div></section>
+}
+
+function PlayerBar({ track, isPlaying, currentTime, duration, volume, isShuffleOn, repeatMode, liked, onTogglePlay, onPrevious, onNext, onShuffle, onRepeat, onLike, onSeek, onVolume, onQueue, onFullscreen }) {
   if (!track) return null
   const safeDuration = Number.isFinite(duration) ? duration : 0
   const progressStyle = { '--range-progress': `${safeDuration ? (Math.min(currentTime, safeDuration) / safeDuration) * 100 : 0}%` }
   const volumeStyle = { '--range-progress': `${volume * 100}%` }
-  return <footer className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-[#181818] px-3 py-3 sm:px-5"><div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 lg:grid-cols-[minmax(260px,1fr)_minmax(320px,1.4fr)_minmax(260px,1fr)]"><div className="flex min-w-0 items-center gap-3"><Artwork item={track} className="h-12 w-12 shrink-0 rounded-sm" /><div className="min-w-0"><p className="truncate text-sm font-bold text-white">{track.title}</p><p className="truncate text-xs text-[#b3b3b3]">{track.artist}</p></div><button type="button" onClick={onLike} aria-label={liked ? 'Remove from Liked Songs' : 'Add to Liked Songs'} className={liked ? 'text-[#62e6a9]' : 'text-[#b3b3b3] hover:text-white'}><Icon name="heart" className="h-4 w-4" /></button></div><div className="hidden min-w-0 flex-col items-center gap-1.5 lg:flex"><div className="flex items-center gap-5"><button type="button" onClick={onShuffle} aria-label="Toggle shuffle" className={isShuffleOn ? 'text-[#62e6a9]' : 'text-[#b3b3b3] hover:text-white'}><Icon name="shuffle" className="h-4 w-4" /></button><button type="button" onClick={onPrevious} aria-label="Previous song" className="text-[#b3b3b3] hover:text-white"><Icon name="previous" className="h-5 w-5" /></button><PlayButton small playing={isPlaying} onClick={onTogglePlay} label={isPlaying ? 'Pause' : 'Play'} /><button type="button" onClick={onNext} aria-label="Next song" className="text-[#b3b3b3] hover:text-white"><Icon name="next" className="h-5 w-5" /></button><button type="button" onClick={onRepeat} aria-label="Change repeat mode" className={`relative ${repeatMode !== 'off' ? 'text-[#62e6a9]' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="repeat" className="h-4 w-4" />{repeatMode === 'one' ? <span className="absolute -right-1 -top-2 text-[9px] font-black">1</span> : null}</button></div><div className="flex w-full items-center gap-2 text-[10px] tabular-nums text-[#b3b3b3]"><span>{formatTime(currentTime)}</span><input type="range" min="0" max={safeDuration} step="0.1" value={Math.min(currentTime, safeDuration)} onChange={onSeek} aria-label="Song progress" className="soundroom-range h-1 w-full cursor-pointer" style={progressStyle} /><span>{formatTime(safeDuration)}</span></div></div><div className="flex items-center justify-end gap-3"><div className="flex items-center gap-2"><button type="button" onClick={onPrevious} aria-label="Previous song" className="text-[#b3b3b3] hover:text-white lg:hidden"><Icon name="previous" className="h-5 w-5" /></button><PlayButton small playing={isPlaying} onClick={onTogglePlay} label={isPlaying ? 'Pause' : 'Play'} /><button type="button" onClick={onNext} aria-label="Next song" className="text-[#b3b3b3] hover:text-white lg:hidden"><Icon name="next" className="h-5 w-5" /></button></div><div className="hidden items-center gap-2 xl:flex"><Icon name="volume" className="h-4 w-4 text-[#b3b3b3]" /><input type="range" min="0" max="1" step="0.01" value={volume} onChange={onVolume} aria-label="Volume" className="soundroom-range h-1 w-24 cursor-pointer" style={volumeStyle} /></div><button type="button" onClick={onQueue} aria-label="Open queue" className="text-[#b3b3b3] hover:text-white"><Icon name="queue" className="h-5 w-5" /></button></div></div></footer>
+  return <footer className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-[#181818] px-3 py-3 sm:px-5"><div className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 lg:grid-cols-[minmax(260px,1fr)_minmax(320px,1.4fr)_minmax(260px,1fr)]"><div className="flex min-w-0 items-center gap-3"><Artwork item={track} className="h-12 w-12 shrink-0 rounded-sm" /><div className="min-w-0"><p className="truncate text-sm font-bold text-white">{track.title}</p><p className="truncate text-xs text-[#b3b3b3]">{track.artist}</p></div><button type="button" onClick={onLike} aria-label={liked ? 'Remove from Liked Songs' : 'Add to Liked Songs'} className={liked ? 'text-[#62e6a9]' : 'text-[#b3b3b3] hover:text-white'}><Icon name="heart" className="h-4 w-4" /></button></div><div className="hidden min-w-0 flex-col items-center gap-1.5 lg:flex"><div className="flex items-center gap-5"><button type="button" onClick={onShuffle} aria-label="Toggle shuffle" className={isShuffleOn ? 'text-[#62e6a9]' : 'text-[#b3b3b3] hover:text-white'}><Icon name="shuffle" className="h-4 w-4" /></button><button type="button" onClick={onPrevious} aria-label="Previous song" className="text-[#b3b3b3] hover:text-white"><Icon name="previous" className="h-5 w-5" /></button><PlayButton small playing={isPlaying} onClick={onTogglePlay} label={isPlaying ? 'Pause' : 'Play'} /><button type="button" onClick={onNext} aria-label="Next song" className="text-[#b3b3b3] hover:text-white"><Icon name="next" className="h-5 w-5" /></button><button type="button" onClick={onRepeat} aria-label="Change repeat mode" className={`relative ${repeatMode !== 'off' ? 'text-[#62e6a9]' : 'text-[#b3b3b3] hover:text-white'}`}><Icon name="repeat" className="h-4 w-4" />{repeatMode === 'one' ? <span className="absolute -right-1 -top-2 text-[9px] font-black">1</span> : null}</button><button type="button" onClick={onFullscreen} aria-label="Open full-screen player" title="Full screen" className="text-[#f5cbcb] transition hover:text-white"><Icon name="fullscreen" className="h-4 w-4" /></button></div><div className="flex w-full items-center gap-2 text-[10px] tabular-nums text-[#b3b3b3]"><span>{formatTime(currentTime)}</span><input type="range" min="0" max={safeDuration} step="0.1" value={Math.min(currentTime, safeDuration)} onChange={onSeek} aria-label="Song progress" className="soundroom-range h-1 w-full cursor-pointer" style={progressStyle} /><span>{formatTime(safeDuration)}</span></div></div><div className="flex items-center justify-end gap-3"><div className="flex items-center gap-2"><button type="button" onClick={onPrevious} aria-label="Previous song" className="text-[#b3b3b3] hover:text-white lg:hidden"><Icon name="previous" className="h-5 w-5" /></button><PlayButton small playing={isPlaying} onClick={onTogglePlay} label={isPlaying ? 'Pause' : 'Play'} /><button type="button" onClick={onNext} aria-label="Next song" className="text-[#b3b3b3] hover:text-white lg:hidden"><Icon name="next" className="h-5 w-5" /></button></div><div className="hidden items-center gap-2 xl:flex"><Icon name="volume" className="h-4 w-4 text-[#b3b3b3]" /><input type="range" min="0" max="1" step="0.01" value={volume} onChange={onVolume} aria-label="Volume" className="soundroom-range h-1 w-24 cursor-pointer" style={volumeStyle} /></div><button type="button" onClick={onQueue} aria-label="Open queue" className="text-[#b3b3b3] hover:text-white"><Icon name="queue" className="h-5 w-5" /></button></div></div></footer>
 }
 
 export default MusicPage

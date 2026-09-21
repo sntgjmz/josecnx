@@ -1,4 +1,4 @@
-// Add a new item here whenever you add artists, songs, or artwork to PCC Soundroom.
+// Add a new item here whenever you add artists, songs, or artwork to Jose Spotify.
 export const soundroomUpdates = [
   {
     id: 'arthur-nery-added-2026-09-21',

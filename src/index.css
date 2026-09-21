@@ -296,6 +296,90 @@ body {
   color: #fbefef !important;
 }
 
+/* Jose Spotify: elevated, readable music surfaces for shared daily use. */
+.jose-spotify {
+  background:
+    radial-gradient(circle at 74% 3%, rgba(245, 203, 203, 0.2), transparent 26rem),
+    radial-gradient(circle at 10% 28%, rgba(197, 179, 211, 0.26), transparent 34rem),
+    #211d2a;
+}
+
+.jose-spotify aside {
+  box-shadow: 14px 0 40px rgba(22, 16, 29, 0.14);
+}
+
+.jose-spotify .jose-sidebar {
+  background:
+    radial-gradient(circle at 8% 5%, rgba(197, 179, 211, 0.22), transparent 13rem),
+    linear-gradient(180deg, #2d2638 0%, #24202e 58%, #1d1925 100%);
+  border-right: 1px solid rgba(255, 226, 226, 0.12);
+}
+
+.jose-spotify .jose-sidebar-brand {
+  border: 1px solid rgba(255, 226, 226, 0.16);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(197, 179, 211, 0.08));
+}
+
+.jose-spotify .jose-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.jose-spotify .jose-sidebar-link-active {
+  background: linear-gradient(135deg, rgba(245, 203, 203, 0.36), rgba(197, 179, 211, 0.3));
+  box-shadow: inset 3px 0 0 #f5cbcb, 0 8px 20px rgba(16, 12, 23, 0.14);
+}
+
+.jose-spotify .jose-sidebar-return {
+  border: 1px solid rgba(255, 226, 226, 0.13);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.jose-spotify .jose-sidebar-return:hover {
+  background: rgba(245, 203, 203, 0.13);
+}
+
+.jose-spotify .jose-main {
+  background:
+    radial-gradient(circle at 86% 10%, rgba(245, 203, 203, 0.13), transparent 25rem),
+    radial-gradient(circle at 27% 55%, rgba(197, 179, 211, 0.12), transparent 30rem),
+    linear-gradient(180deg, #4a3e56 0%, #312a3d 18%, #211d2a 44%, #211d2a 100%);
+}
+
+.jose-spotify .jose-topbar {
+  background: linear-gradient(90deg, rgba(43, 37, 55, 0.96), rgba(60, 50, 69, 0.91)) !important;
+  box-shadow: 0 10px 30px rgba(20, 15, 28, 0.13);
+}
+
+.jose-spotify .jose-main > div > div > section,
+.jose-spotify .jose-main > div > div > article {
+  scroll-margin-top: 5rem;
+}
+
+.jose-spotify .bg-\[\#181818\] {
+  background: linear-gradient(145deg, rgba(67, 56, 78, 0.96), rgba(47, 39, 57, 0.98)) !important;
+}
+
+.jose-spotify .bg-\[\#1f1f1f\],
+.jose-spotify .bg-\[\#282828\] {
+  background: linear-gradient(145deg, #75617b, #57485f) !important;
+}
+
+.jose-spotify .rounded-md,
+.jose-spotify .rounded-xl,
+.jose-spotify .rounded-2xl {
+  scroll-margin-top: 5rem;
+}
+
+.jose-spotify .group:hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jose-spotify .group:hover {
+    transform: none;
+  }
+}
+
 @keyframes soundroomPulse {
   from {
     opacity: 0.55;
@@ -474,5 +558,12 @@ body {
   100% {
     transform: translateX(115%);
     opacity: 0;
+  }
+}
+
+/* The compact player controls are for small screens only. */
+@media (min-width: 1024px) {
+  .jose-spotify footer > div > div:nth-child(3) > div:first-child > button:nth-child(2) {
+    display: none;
   }
 }

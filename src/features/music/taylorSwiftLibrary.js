@@ -20,112 +20,112 @@ const taylorSwiftTracks = [
     "album": "1989(Taylor's Version)",
     "title": "_Slut!_ (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/1989(Taylor's Version)/_Slut!_ (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "10:36"
+    "duration": "3:00"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "All You Had To Do Was Stay (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/All You Had To Do Was Stay (Taylor's Version)_spotdown.org.mp3",
-    "duration": "11:40"
+    "duration": "3:13"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Bad Blood (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Bad Blood (Taylor's Version)_spotdown.org.mp3",
-    "duration": "2:41"
+    "duration": "3:31"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Blank Space (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Blank Space (Taylor's Version)_spotdown.org.mp3",
-    "duration": "4:19"
+    "duration": "3:51"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Clean (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Clean (Taylor's Version)_spotdown.org.mp3",
-    "duration": "8:14"
+    "duration": "4:31"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "How You Get The Girl (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/How You Get The Girl (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:51"
+    "duration": "4:07"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "I Know Places (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/I Know Places (Taylor's Version)_spotdown.org.mp3",
-    "duration": "11:52"
+    "duration": "3:15"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "I Wish You Would (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/I Wish You Would (Taylor's Version)_spotdown.org.mp3",
-    "duration": "12:27"
+    "duration": "3:27"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Is It Over Now_ (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Is It Over Now_ (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "13:53"
+    "duration": "3:49"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "New Romantics (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/New Romantics (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:46"
+    "duration": "3:50"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Now That We Don't Talk (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Now That We Don't Talk (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "8:47"
+    "duration": "2:26"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Out Of The Woods (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Out Of The Woods (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:01"
+    "duration": "3:55"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Say Don't Go (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Say Don't Go (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "16:38"
+    "duration": "4:39"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Shake It Off (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Shake It Off (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:15"
+    "duration": "3:39"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Style (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Style (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:51"
+    "duration": "3:51"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Suburban Legends (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Suburban Legends (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "10:13"
+    "duration": "2:51"
   },
   {
     "artist": "Taylor Swift",
@@ -139,28 +139,28 @@ const taylorSwiftTracks = [
     "album": "1989(Taylor's Version)",
     "title": "Welcome To New York (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Welcome To New York (Taylor's Version)_spotdown.org.mp3",
-    "duration": "12:51"
+    "duration": "3:32"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Wildest Dreams (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Wildest Dreams (Taylor's Version)_spotdown.org.mp3",
-    "duration": "12:59"
+    "duration": "3:40"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "Wonderland (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/Wonderland (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:33"
+    "duration": "4:05"
   },
   {
     "artist": "Taylor Swift",
     "album": "1989(Taylor's Version)",
     "title": "You Are In Love (Taylor's Version)",
     "src": "/Taylor Swift/1989(Taylor's Version)/You Are In Love (Taylor's Version)_spotdown.org.mp3",
-    "duration": "15:48"
+    "duration": "4:27"
   },
   {
     "artist": "Taylor Swift",
@@ -174,98 +174,98 @@ const taylorSwiftTracks = [
     "album": "Evermore",
     "title": "champagne problems",
     "src": "/Taylor Swift/Evermore/champagne problems_spotdown.org.mp3",
-    "duration": "14:09"
+    "duration": "4:04"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "closure",
     "src": "/Taylor Swift/Evermore/closure_spotdown.org.mp3",
-    "duration": "10:05"
+    "duration": "3:00"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "coney island (feat. The National)",
     "src": "/Taylor Swift/Evermore/coney island (feat. The National)_spotdown.org.mp3",
-    "duration": "15:50"
+    "duration": "4:35"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "cowboy like me",
     "src": "/Taylor Swift/Evermore/cowboy like me_spotdown.org.mp3",
-    "duration": "15:36"
+    "duration": "4:35"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "dorothea",
     "src": "/Taylor Swift/Evermore/dorothea_spotdown.org.mp3",
-    "duration": "13:11"
+    "duration": "3:45"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "evermore (feat. Bon Iver)",
     "src": "/Taylor Swift/Evermore/evermore (feat. Bon Iver)_spotdown.org.mp3",
-    "duration": "17:27"
+    "duration": "5:04"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "gold rush",
     "src": "/Taylor Swift/Evermore/gold rush_spotdown.org.mp3",
-    "duration": "10:55"
+    "duration": "3:05"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "happiness",
     "src": "/Taylor Swift/Evermore/happiness_spotdown.org.mp3",
-    "duration": "16:29"
+    "duration": "5:15"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "ivy",
     "src": "/Taylor Swift/Evermore/ivy_spotdown.org.mp3",
-    "duration": "15:12"
+    "duration": "4:20"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "long story short",
     "src": "/Taylor Swift/Evermore/long story short_spotdown.org.mp3",
-    "duration": "11:56"
+    "duration": "3:35"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "marjorie",
     "src": "/Taylor Swift/Evermore/marjorie_spotdown.org.mp3",
-    "duration": "15:17"
+    "duration": "4:17"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "no body, no crime (feat. HAIM)",
     "src": "/Taylor Swift/Evermore/no body, no crime (feat. HAIM)_spotdown.org.mp3",
-    "duration": "12:38"
+    "duration": "3:35"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "tolerate it",
     "src": "/Taylor Swift/Evermore/tolerate it_spotdown.org.mp3",
-    "duration": "14:02"
+    "duration": "4:05"
   },
   {
     "artist": "Taylor Swift",
     "album": "Evermore",
     "title": "willow",
     "src": "/Taylor Swift/Evermore/willow_spotdown.org.mp3",
-    "duration": "12:47"
+    "duration": "3:34"
   },
   {
     "artist": "Taylor Swift",
@@ -454,168 +454,168 @@ const taylorSwiftTracks = [
     "album": "Folklore",
     "title": "august",
     "src": "/Taylor Swift/Folklore/august_spotdown.org.mp3",
-    "duration": "15:50"
+    "duration": "4:21"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "betty",
     "src": "/Taylor Swift/Folklore/betty_spotdown.org.mp3",
-    "duration": "17:31"
+    "duration": "4:54"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "cardigan",
     "src": "/Taylor Swift/Folklore/cardigan_spotdown.org.mp3",
-    "duration": "14:09"
+    "duration": "3:59"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "epiphany",
     "src": "/Taylor Swift/Folklore/epiphany_spotdown.org.mp3",
-    "duration": "17:27"
+    "duration": "4:49"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "exile (feat. Bon Iver)",
     "src": "/Taylor Swift/Folklore/exile (feat. Bon Iver)_spotdown.org.mp3",
-    "duration": "17:01"
+    "duration": "4:45"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "hoax",
     "src": "/Taylor Swift/Folklore/hoax_spotdown.org.mp3",
-    "duration": "12:37"
+    "duration": "3:40"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "illicit affairs",
     "src": "/Taylor Swift/Folklore/illicit affairs_spotdown.org.mp3",
-    "duration": "11:14"
+    "duration": "3:10"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "invisible string",
     "src": "/Taylor Swift/Folklore/invisible string_spotdown.org.mp3",
-    "duration": "15:02"
+    "duration": "4:12"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "mad woman",
     "src": "/Taylor Swift/Folklore/mad woman_spotdown.org.mp3",
-    "duration": "14:10"
+    "duration": "3:57"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "mirrorball",
     "src": "/Taylor Swift/Folklore/mirrorball_spotdown.org.mp3",
-    "duration": "12:17"
+    "duration": "3:29"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "my tears ricochet",
     "src": "/Taylor Swift/Folklore/my tears ricochet_spotdown.org.mp3",
-    "duration": "14:58"
+    "duration": "4:15"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "peace",
     "src": "/Taylor Swift/Folklore/peace_spotdown.org.mp3",
-    "duration": "12:21"
+    "duration": "3:54"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "seven",
     "src": "/Taylor Swift/Folklore/seven_spotdown.org.mp3",
-    "duration": "12:19"
+    "duration": "3:28"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "the 1",
     "src": "/Taylor Swift/Folklore/the 1_spotdown.org.mp3",
-    "duration": "12:17"
+    "duration": "3:30"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "the last great american dynasty",
     "src": "/Taylor Swift/Folklore/the last great american dynasty_spotdown.org.mp3",
-    "duration": "13:43"
+    "duration": "3:51"
   },
   {
     "artist": "Taylor Swift",
     "album": "Folklore",
     "title": "this is me trying",
     "src": "/Taylor Swift/Folklore/this is me trying_spotdown.org.mp3",
-    "duration": "11:26"
+    "duration": "3:15"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Afterglow",
     "src": "/Taylor Swift/Lover/Afterglow_spotdown.org.mp3",
-    "duration": "13:15"
+    "duration": "3:43"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Cornelia Street",
     "src": "/Taylor Swift/Lover/Cornelia Street_spotdown.org.mp3",
-    "duration": "17:31"
+    "duration": "4:47"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Cruel Summer",
     "src": "/Taylor Swift/Lover/Cruel Summer_spotdown.org.mp3",
-    "duration": "10:54"
+    "duration": "2:58"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Daylight",
     "src": "/Taylor Swift/Lover/Daylight_spotdown.org.mp3",
-    "duration": "16:38"
+    "duration": "4:53"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Death By A Thousand Cuts",
     "src": "/Taylor Swift/Lover/Death By A Thousand Cuts_spotdown.org.mp3",
-    "duration": "12:20"
+    "duration": "3:18"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "False God",
     "src": "/Taylor Swift/Lover/False God_spotdown.org.mp3",
-    "duration": "12:15"
+    "duration": "3:20"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "I Forgot That You Existed",
     "src": "/Taylor Swift/Lover/I Forgot That You Existed_spotdown.org.mp3",
-    "duration": "10:43"
+    "duration": "2:50"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "I Think He Knows",
     "src": "/Taylor Swift/Lover/I Think He Knows_spotdown.org.mp3",
-    "duration": "9:54"
+    "duration": "2:53"
   },
   {
     "artist": "Taylor Swift",
@@ -629,28 +629,28 @@ const taylorSwiftTracks = [
     "album": "Lover",
     "title": "London Boy",
     "src": "/Taylor Swift/Lover/London Boy_spotdown.org.mp3",
-    "duration": "11:28"
+    "duration": "3:10"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Lover",
     "src": "/Taylor Swift/Lover/Lover_spotdown.org.mp3",
-    "duration": "13:11"
+    "duration": "3:41"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Miss Americana & The Heartbreak Prince",
     "src": "/Taylor Swift/Lover/Miss Americana & The Heartbreak Prince_spotdown.org.mp3",
-    "duration": "15:38"
+    "duration": "3:54"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "Paper Rings",
     "src": "/Taylor Swift/Lover/Paper Rings_spotdown.org.mp3",
-    "duration": "13:42"
+    "duration": "3:42"
   },
   {
     "artist": "Taylor Swift",
@@ -664,231 +664,231 @@ const taylorSwiftTracks = [
     "album": "Lover",
     "title": "The Archer",
     "src": "/Taylor Swift/Lover/The Archer_spotdown.org.mp3",
-    "duration": "12:31"
+    "duration": "3:31"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "The Man",
     "src": "/Taylor Swift/Lover/The Man_spotdown.org.mp3",
-    "duration": "11:44"
+    "duration": "3:10"
   },
   {
     "artist": "Taylor Swift",
     "album": "Lover",
     "title": "You Need To Calm Down",
     "src": "/Taylor Swift/Lover/You Need To Calm Down_spotdown.org.mp3",
-    "duration": "10:43"
+    "duration": "2:51"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Anti-Hero",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Anti-Hero_spotdown.org.mp3",
-    "duration": "11:47"
+    "duration": "3:20"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Bejeweled",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Bejeweled_spotdown.org.mp3",
-    "duration": "12:04"
+    "duration": "3:14"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Bigger Than The Whole Sky",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Bigger Than The Whole Sky_spotdown.org.mp3",
-    "duration": "13:11"
+    "duration": "3:38"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Dear Reader",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Dear Reader_spotdown.org.mp3",
-    "duration": "13:33"
+    "duration": "3:45"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Glitch",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Glitch_spotdown.org.mp3",
-    "duration": "8:55"
+    "duration": "2:28"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "High Infidelity",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/High Infidelity_spotdown.org.mp3",
-    "duration": "13:49"
+    "duration": "3:51"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Hits Different",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Hits Different_spotdown.org.mp3",
-    "duration": "14:16"
+    "duration": "3:54"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Karma (feat. Ice Spice)",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Karma (feat. Ice Spice)_spotdown.org.mp3",
-    "duration": "12:06"
+    "duration": "3:21"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Karma",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Karma_spotdown.org.mp3",
-    "duration": "12:14"
+    "duration": "3:24"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Labyrinth",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Labyrinth_spotdown.org.mp3",
-    "duration": "14:45"
+    "duration": "4:08"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Lavender Haze",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Lavender Haze_spotdown.org.mp3",
-    "duration": "12:23"
+    "duration": "3:22"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Maroon",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Maroon_spotdown.org.mp3",
-    "duration": "12:57"
+    "duration": "3:38"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Mastermind",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Mastermind_spotdown.org.mp3",
-    "duration": "11:08"
+    "duration": "3:11"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Midnight Rain",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Midnight Rain_spotdown.org.mp3",
-    "duration": "10:13"
+    "duration": "2:54"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Paris",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Paris_spotdown.org.mp3",
-    "duration": "11:36"
+    "duration": "3:16"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Question...",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Question...__spotdown.org.mp3",
-    "duration": "12:24"
+    "duration": "3:30"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Snow On The Beach (feat. Lana Del Rey)",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Snow On The Beach (feat. Lana Del Rey)_spotdown.org.mp3",
-    "duration": "15:10"
+    "duration": "4:16"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Snow On The Beach (feat. More Lana Del Rey)",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Snow On The Beach (feat. More Lana Del Rey)_spotdown.org.mp3",
-    "duration": "13:45"
+    "duration": "3:50"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Sweet Nothing",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Sweet Nothing_spotdown.org.mp3",
-    "duration": "10:59"
+    "duration": "3:08"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "The Great War",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/The Great War_spotdown.org.mp3",
-    "duration": "13:55"
+    "duration": "4:00"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Vigilante Shit",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Vigilante Shit_spotdown.org.mp3",
-    "duration": "9:34"
+    "duration": "2:44"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "Would've, Could've, Should've",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/Would've, Could've, Should've_spotdown.org.mp3",
-    "duration": "15:33"
+    "duration": "4:20"
   },
   {
     "artist": "Taylor Swift",
     "album": "Midnights(3am Edition-Til Dawn Edition)",
     "title": "You're On Your Own, Kid",
     "src": "/Taylor Swift/Midnights(3am Edition-Til Dawn Edition)/You're On Your Own, Kid_spotdown.org.mp3",
-    "duration": "11:19"
+    "duration": "3:14"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "22 (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/22 (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:51"
+    "duration": "3:51"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "All Too Well (10 Minute Version) (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/Red(Taylor's Version)/All Too Well (10 Minute Version) (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "36:52"
+    "duration": "10:13"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "All Too Well (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/All Too Well (Taylor's Version)_spotdown.org.mp3",
-    "duration": "19:49"
+    "duration": "5:29"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Babe (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Babe (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "13:43"
+    "duration": "3:44"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Begin Again (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Begin Again (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:07"
+    "duration": "3:58"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Better Man (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Better Man (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "17:54"
+    "duration": "4:57"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Come Back...Be Here (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Come Back...Be Here (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:18"
+    "duration": "3:43"
   },
   {
     "artist": "Taylor Swift",
@@ -902,28 +902,28 @@ const taylorSwiftTracks = [
     "album": "Red(Taylor's Version)",
     "title": "Forever Winter (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Forever Winter (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "16:04"
+    "duration": "4:23"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Girl At Home (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Girl At Home (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:42"
+    "duration": "3:40"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Holy Ground (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Holy Ground (Taylor's Version)_spotdown.org.mp3",
-    "duration": "11:51"
+    "duration": "3:23"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "I Almost Do (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/I Almost Do (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:25"
+    "duration": "4:04"
   },
   {
     "artist": "Taylor Swift",
@@ -937,14 +937,14 @@ const taylorSwiftTracks = [
     "album": "Red(Taylor's Version)",
     "title": "I Knew You Were Trouble (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/I Knew You Were Trouble (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:02"
+    "duration": "3:39"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Message In A Bottle (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Message In A Bottle (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "13:43"
+    "duration": "3:46"
   },
   {
     "artist": "Taylor Swift",
@@ -958,14 +958,14 @@ const taylorSwiftTracks = [
     "album": "Red(Taylor's Version)",
     "title": "Red (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Red (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:27"
+    "duration": "3:43"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Ronan (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Ronan (Taylor's Version)_spotdown.org.mp3",
-    "duration": "15:45"
+    "duration": "4:24"
   },
   {
     "artist": "Taylor Swift",
@@ -979,35 +979,35 @@ const taylorSwiftTracks = [
     "album": "Red(Taylor's Version)",
     "title": "Sad Beautiful Tragic (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Sad Beautiful Tragic (Taylor's Version)_spotdown.org.mp3",
-    "duration": "16:10"
+    "duration": "4:44"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Starlight (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Starlight (Taylor's Version)_spotdown.org.mp3",
-    "duration": "12:49"
+    "duration": "3:40"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "State Of Grace (Acoustic Version) (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/State Of Grace (Acoustic Version) (Taylor's Version)_spotdown.org.mp3",
-    "duration": "18:02"
+    "duration": "5:21"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "State Of Grace (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/State Of Grace (Taylor's Version)_spotdown.org.mp3",
-    "duration": "18:00"
+    "duration": "4:55"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Stay Stay Stay (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Stay Stay Stay (Taylor's Version)_spotdown.org.mp3",
-    "duration": "12:33"
+    "duration": "3:25"
   },
   {
     "artist": "Taylor Swift",
@@ -1021,56 +1021,56 @@ const taylorSwiftTracks = [
     "album": "Red(Taylor's Version)",
     "title": "The Lucky One (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/The Lucky One (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:15"
+    "duration": "4:00"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "The Moment I Knew (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/The Moment I Knew (Taylor's Version)_spotdown.org.mp3",
-    "duration": "16:42"
+    "duration": "4:45"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "The Very First Night (Taylor's Version) (From The Vault)",
     "src": "/Taylor Swift/Red(Taylor's Version)/The Very First Night (Taylor's Version) (From The Vault)_spotdown.org.mp3",
-    "duration": "12:09"
+    "duration": "3:20"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "Treacherous (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/Treacherous (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:12"
+    "duration": "4:02"
   },
   {
     "artist": "Taylor Swift",
     "album": "Red(Taylor's Version)",
     "title": "We Are Never Ever Getting Back Together (Taylor's Version)",
     "src": "/Taylor Swift/Red(Taylor's Version)/We Are Never Ever Getting Back Together (Taylor's Version)_spotdown.org.mp3",
-    "duration": "11:33"
+    "duration": "3:13"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "Call It What You Want",
     "src": "/Taylor Swift/Reputation/Call It What You Want_spotdown.org.mp3",
-    "duration": "12:37"
+    "duration": "3:23"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "Dancing With Our Hands Tied",
     "src": "/Taylor Swift/Reputation/Dancing With Our Hands Tied_spotdown.org.mp3",
-    "duration": "12:56"
+    "duration": "3:31"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "Delicate",
     "src": "/Taylor Swift/Reputation/Delicate_spotdown.org.mp3",
-    "duration": "14:05"
+    "duration": "3:52"
   },
   {
     "artist": "Taylor Swift",
@@ -1084,49 +1084,49 @@ const taylorSwiftTracks = [
     "album": "Reputation",
     "title": "Dress",
     "src": "/Taylor Swift/Reputation/Dress_spotdown.org.mp3",
-    "duration": "14:18"
+    "duration": "3:50"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "End Game",
     "src": "/Taylor Swift/Reputation/End Game_spotdown.org.mp3",
-    "duration": "14:48"
+    "duration": "4:04"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "Getaway Car",
     "src": "/Taylor Swift/Reputation/Getaway Car_spotdown.org.mp3",
-    "duration": "14:12"
+    "duration": "3:53"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "Gorgeous",
     "src": "/Taylor Swift/Reputation/Gorgeous_spotdown.org.mp3",
-    "duration": "12:45"
+    "duration": "3:29"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "I Did Something Bad",
     "src": "/Taylor Swift/Reputation/I Did Something Bad_spotdown.org.mp3",
-    "duration": "14:30"
+    "duration": "3:58"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "King Of My Heart",
     "src": "/Taylor Swift/Reputation/King Of My Heart_spotdown.org.mp3",
-    "duration": "13:13"
+    "duration": "3:34"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "Look What You Made Me Do",
     "src": "/Taylor Swift/Reputation/Look What You Made Me Do_spotdown.org.mp3",
-    "duration": "12:57"
+    "duration": "3:31"
   },
   {
     "artist": "Taylor Swift",
@@ -1140,35 +1140,35 @@ const taylorSwiftTracks = [
     "album": "Reputation",
     "title": "Ready For It",
     "src": "/Taylor Swift/Reputation/Ready For It__spotdown.org.mp3",
-    "duration": "12:55"
+    "duration": "3:28"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "So It Goes...",
     "src": "/Taylor Swift/Reputation/So It Goes..._spotdown.org.mp3",
-    "duration": "13:29"
+    "duration": "3:47"
   },
   {
     "artist": "Taylor Swift",
     "album": "Reputation",
     "title": "This Is Why We Can't Have Nice Things",
     "src": "/Taylor Swift/Reputation/This Is Why We Can't Have Nice Things_spotdown.org.mp3",
-    "duration": "12:56"
+    "duration": "3:27"
   },
   {
     "artist": "Taylor Swift",
     "album": "Speak Now(Taylor's Version)",
     "title": "Back To December (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Back To December (Taylor's Version)_spotdown.org.mp3",
-    "duration": "20:22"
+    "duration": "4:54"
   },
   {
     "artist": "Taylor Swift",
     "album": "Speak Now(Taylor's Version)",
     "title": "Better Than Revenge (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Better Than Revenge (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:05"
+    "duration": "3:40"
   },
   {
     "artist": "Taylor Swift",
@@ -1182,7 +1182,7 @@ const taylorSwiftTracks = [
     "album": "Speak Now(Taylor's Version)",
     "title": "Dear John (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Dear John (Taylor's Version)_spotdown.org.mp3",
-    "duration": "23:27"
+    "duration": "6:45"
   },
   {
     "artist": "Taylor Swift",
@@ -1196,7 +1196,7 @@ const taylorSwiftTracks = [
     "album": "Speak Now(Taylor's Version)",
     "title": "Enchanted (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Enchanted (Taylor's Version)_spotdown.org.mp3",
-    "duration": "20:39"
+    "duration": "5:53"
   },
   {
     "artist": "Taylor Swift",
@@ -1210,7 +1210,7 @@ const taylorSwiftTracks = [
     "album": "Speak Now(Taylor's Version)",
     "title": "Haunted (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Haunted (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:22"
+    "duration": "4:05"
   },
   {
     "artist": "Taylor Swift",
@@ -1224,42 +1224,42 @@ const taylorSwiftTracks = [
     "album": "Speak Now(Taylor's Version)",
     "title": "Innocent (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Innocent (Taylor's Version)_spotdown.org.mp3",
-    "duration": "17:18"
+    "duration": "5:01"
   },
   {
     "artist": "Taylor Swift",
     "album": "Speak Now(Taylor's Version)",
     "title": "Last Kiss (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Last Kiss (Taylor's Version)_spotdown.org.mp3",
-    "duration": "21:34"
+    "duration": "6:09"
   },
   {
     "artist": "Taylor Swift",
     "album": "Speak Now(Taylor's Version)",
     "title": "Long Live (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Long Live (Taylor's Version)_spotdown.org.mp3",
-    "duration": "18:45"
+    "duration": "5:17"
   },
   {
     "artist": "Taylor Swift",
     "album": "Speak Now(Taylor's Version)",
     "title": "Mean (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Mean (Taylor's Version)_spotdown.org.mp3",
-    "duration": "13:56"
+    "duration": "3:58"
   },
   {
     "artist": "Taylor Swift",
     "album": "Speak Now(Taylor's Version)",
     "title": "Mine (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Mine (Taylor's Version)_spotdown.org.mp3",
-    "duration": "15:35"
+    "duration": "3:51"
   },
   {
     "artist": "Taylor Swift",
     "album": "Speak Now(Taylor's Version)",
     "title": "Never Grow Up (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Never Grow Up (Taylor's Version)_spotdown.org.mp3",
-    "duration": "17:07"
+    "duration": "4:52"
   },
   {
     "artist": "Taylor Swift",
@@ -1280,7 +1280,7 @@ const taylorSwiftTracks = [
     "album": "Speak Now(Taylor's Version)",
     "title": "Speak Now (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/Speak Now (Taylor's Version)_spotdown.org.mp3",
-    "duration": "14:19"
+    "duration": "4:02"
   },
   {
     "artist": "Taylor Swift",
@@ -1294,7 +1294,7 @@ const taylorSwiftTracks = [
     "album": "Speak Now(Taylor's Version)",
     "title": "The Story Of Us (Taylor's Version)",
     "src": "/Taylor Swift/Speak Now(Taylor's Version)/The Story Of Us (Taylor's Version)_spotdown.org.mp3",
-    "duration": "16:01"
+    "duration": "4:27"
   },
   {
     "artist": "Taylor Swift",
@@ -1315,105 +1315,105 @@ const taylorSwiftTracks = [
     "album": "Taylor Swift",
     "title": "A Perfectly Good Heart",
     "src": "/Taylor Swift/Taylor Swift/A Perfectly Good Heart_spotdown.org.mp3",
-    "duration": "13:30"
+    "duration": "3:40"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "A Place in this World",
     "src": "/Taylor Swift/Taylor Swift/A Place in this World_spotdown.org.mp3",
-    "duration": "11:36"
+    "duration": "3:19"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Cold As You",
     "src": "/Taylor Swift/Taylor Swift/Cold As You_spotdown.org.mp3",
-    "duration": "13:58"
+    "duration": "3:59"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "I'm Only Me When I'm With You",
     "src": "/Taylor Swift/Taylor Swift/I'm Only Me When I'm With You_spotdown.org.mp3",
-    "duration": "13:05"
+    "duration": "3:33"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Invisible",
     "src": "/Taylor Swift/Taylor Swift/Invisible_spotdown.org.mp3",
-    "duration": "11:59"
+    "duration": "3:23"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Mary's Song (Oh My My My)",
     "src": "/Taylor Swift/Taylor Swift/Mary's Song (Oh My My My)_spotdown.org.mp3",
-    "duration": "12:47"
+    "duration": "3:33"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Our Song",
     "src": "/Taylor Swift/Taylor Swift/Our Song_spotdown.org.mp3",
-    "duration": "12:17"
+    "duration": "3:21"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Picture To Burn",
     "src": "/Taylor Swift/Taylor Swift/Picture To Burn_spotdown.org.mp3",
-    "duration": "10:16"
+    "duration": "2:53"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Should've Said No",
     "src": "/Taylor Swift/Taylor Swift/Should've Said No_spotdown.org.mp3",
-    "duration": "14:31"
+    "duration": "4:02"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Stay Beautiful",
     "src": "/Taylor Swift/Taylor Swift/Stay Beautiful_spotdown.org.mp3",
-    "duration": "13:54"
+    "duration": "3:56"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Teardrops on My Guitar - Pop Version",
     "src": "/Taylor Swift/Taylor Swift/Teardrops on My Guitar - Pop Version_spotdown.org.mp3",
-    "duration": "10:27"
+    "duration": "2:59"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Teardrops On My Guitar - Radio Single Remix",
     "src": "/Taylor Swift/Taylor Swift/Teardrops On My Guitar - Radio Single Remix_spotdown.org.mp3",
-    "duration": "12:02"
+    "duration": "3:23"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "The Outside",
     "src": "/Taylor Swift/Taylor Swift/The Outside_spotdown.org.mp3",
-    "duration": "12:31"
+    "duration": "3:27"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Tied Together with a Smile",
     "src": "/Taylor Swift/Taylor Swift/Tied Together with a Smile_spotdown.org.mp3",
-    "duration": "14:12"
+    "duration": "4:08"
   },
   {
     "artist": "Taylor Swift",
     "album": "Taylor Swift",
     "title": "Tim McGraw",
     "src": "/Taylor Swift/Taylor Swift/Tim McGraw_spotdown.org.mp3",
-    "duration": "13:50"
+    "duration": "3:52"
   },
   {
     "artist": "Taylor Swift",
@@ -1427,63 +1427,63 @@ const taylorSwiftTracks = [
     "album": "The Tortured Poets Department-The Anthology",
     "title": "But Daddy I Love Him",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/But Daddy I Love Him_spotdown.org.mp3",
-    "duration": "20:15"
+    "duration": "5:40"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Chloe or Sam or Sophia or Marcus",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Chloe or Sam or Sophia or Marcus_spotdown.org.mp3",
-    "duration": "12:25"
+    "duration": "3:33"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Clara Bow",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Clara Bow_spotdown.org.mp3",
-    "duration": "12:49"
+    "duration": "3:36"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Down Bad",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Down Bad_spotdown.org.mp3",
-    "duration": "15:12"
+    "duration": "4:21"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Florida!!! (feat. Florence + The Machine)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Florida!!! (feat. Florence + The Machine)_spotdown.org.mp3",
-    "duration": "12:46"
+    "duration": "3:35"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Fortnight (feat. Post Malone)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Fortnight (feat. Post Malone)_spotdown.org.mp3",
-    "duration": "13:32"
+    "duration": "3:49"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Fresh Out The Slammer",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Fresh Out The Slammer_spotdown.org.mp3",
-    "duration": "12:31"
+    "duration": "3:30"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Guilty as Sin",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Guilty as Sin__spotdown.org.mp3",
-    "duration": "15:03"
+    "duration": "4:14"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "How Did It End",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/How Did It End__spotdown.org.mp3",
-    "duration": "14:11"
+    "duration": "3:58"
   },
   {
     "artist": "Taylor Swift",
@@ -1497,49 +1497,49 @@ const taylorSwiftTracks = [
     "album": "The Tortured Poets Department-The Anthology",
     "title": "I Can Fix Him (No Really I Can)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/I Can Fix Him (No Really I Can)_spotdown.org.mp3",
-    "duration": "9:23"
+    "duration": "2:36"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "I Hate It Here",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/I Hate It Here_spotdown.org.mp3",
-    "duration": "14:15"
+    "duration": "4:03"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "imgonnagetyouback",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/imgonnagetyouback_spotdown.org.mp3",
-    "duration": "13:11"
+    "duration": "3:42"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "loml",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/loml_spotdown.org.mp3",
-    "duration": "16:00"
+    "duration": "4:37"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "My Boy Only Breaks His Favorite Toys",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/My Boy Only Breaks His Favorite Toys_spotdown.org.mp3",
-    "duration": "12:16"
+    "duration": "3:23"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "So High School",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/So High School_spotdown.org.mp3",
-    "duration": "13:29"
+    "duration": "3:48"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "So Long, London",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/So Long, London_spotdown.org.mp3",
-    "duration": "15:12"
+    "duration": "4:23"
   },
   {
     "artist": "Taylor Swift",
@@ -1553,70 +1553,70 @@ const taylorSwiftTracks = [
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Taylor Swift - Peter  Friends Arena, Stockholm - building55 (youtube)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Taylor Swift - Peter  Friends Arena, Stockholm - building55 (youtube).mp3",
-    "duration": "4:39"
+    "duration": "4:38"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Taylor Swift - Robin (Official Lyric Video) - Taylor Swift (youtube)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Taylor Swift - Robin (Official Lyric Video) - Taylor Swift (youtube).mp3",
-    "duration": "4:06"
+    "duration": "4:05"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Taylor Swift - The Bolter (Official Lyric Video) - Taylor Swift (youtube)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Taylor Swift - The Bolter (Official Lyric Video) - Taylor Swift (youtube).mp3",
-    "duration": "4:03"
+    "duration": "4:02"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Taylor Swift - The Manuscript (Official Lyric Video) - Taylor Swift (youtube)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Taylor Swift - The Manuscript (Official Lyric Video) - Taylor Swift (youtube).mp3",
-    "duration": "3:49"
+    "duration": "3:48"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "Taylor Swift - The Prophecy (Major Vibes remix) - Chill with Claus (youtube)",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/Taylor Swift - The Prophecy (Major Vibes remix) - Chill with Claus (youtube).mp3",
-    "duration": "3:21"
+    "duration": "3:20"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "The Albatross",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/The Albatross_spotdown.org.mp3",
-    "duration": "10:38"
+    "duration": "3:03"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "The Alchemy",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/The Alchemy_spotdown.org.mp3",
-    "duration": "11:45"
+    "duration": "3:16"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "The Black Dog",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/The Black Dog_spotdown.org.mp3",
-    "duration": "13:39"
+    "duration": "3:58"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "The Smallest Man Who Ever Lived",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/The Smallest Man Who Ever Lived_spotdown.org.mp3",
-    "duration": "14:14"
+    "duration": "4:05"
   },
   {
     "artist": "Taylor Swift",
     "album": "The Tortured Poets Department-The Anthology",
     "title": "The Tortured Poets Department",
     "src": "/Taylor Swift/The Tortured Poets Department-The Anthology/The Tortured Poets Department_spotdown.org.mp3",
-    "duration": "17:25"
+    "duration": "4:53"
   },
   {
     "artist": "Taylor Swift",

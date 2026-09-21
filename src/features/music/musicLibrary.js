@@ -1,4 +1,6 @@
-import { artistLibraryTracks } from './artistLibrary.js'
+import { brunoMarsLibraryTracks } from './brunoMarsLibrary.js'
+import { gotyeLibraryTracks } from './gotyeLibrary.js'
+import { jasonMrazLibraryTracks } from './jasonMrazLibrary.js'
 import { jojiLibraryTracks } from './jojiLibrary.js'
 import { lanyLibraryTracks } from './lanyLibrary.js'
 import { nikiLibraryTracks } from './nikiLibrary.js'
@@ -10,7 +12,9 @@ import { arthurNeryLibraryTracks } from './arthurNeryLibrary.js'
 
 // Catalog index: every entry below comes from an artist folder in public/.
 export const musicLibrary = [
-  ...artistLibraryTracks,
+  ...brunoMarsLibraryTracks,
+  ...gotyeLibraryTracks,
+  ...jasonMrazLibraryTracks,
   ...jojiLibraryTracks,
   ...lanyLibraryTracks,
   ...taylorSwiftLibraryTracks,
