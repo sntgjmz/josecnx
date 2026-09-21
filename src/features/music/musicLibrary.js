@@ -9,6 +9,7 @@ import { taylorSwiftLibraryTracks } from './taylorSwiftLibrary.js'
 import { paramoreLibraryTracks } from './paramoreLibrary.js'
 import { cupOfJoeLibraryTracks } from './cupOfJoeLibrary.js'
 import { arthurNeryLibraryTracks } from './arthurNeryLibrary.js'
+import { arianaGrandeLibraryTracks } from './arianaGrandeLibrary.js'
 
 // Catalog index: every entry below comes from an artist folder in public/.
 export const musicLibrary = [
@@ -22,7 +23,8 @@ export const musicLibrary = [
   ...nikiLibraryTracks,
   ...paramoreLibraryTracks,
   ...cupOfJoeLibraryTracks,
-  ...arthurNeryLibraryTracks
+  ...arthurNeryLibraryTracks,
+  ...arianaGrandeLibraryTracks,
 ]
 
 export const featuredCollections = []

@@ -24,6 +24,7 @@ const ARTIST_PROFILE_IMAGES = {
   'Paramore': '/covers/profilepicture-paramore.jpg',
   'Cup of Joe': '/covers/profilepicture-cupofjoe.jpg',
   'Arthur Nery': '/covers/profilepicture-arthurnery.jpg',
+  'Ariana Grande': '/covers/profilepicture-arianagrande.jpg',
 }
 
 function Icon({ name, className = 'h-5 w-5' }) {
