@@ -25,6 +25,7 @@ const ARTIST_PROFILE_IMAGES = {
   'Cup of Joe': '/covers/profilepicture-cupofjoe.jpg',
   'Arthur Nery': '/covers/profilepicture-arthurnery.jpg',
   'Ariana Grande': '/covers/profilepicture-arianagrande.jpg',
+  'Wilbert Ross': '/covers/profilepicture-wilbertross.jpg',
 }
 
 function Icon({ name, className = 'h-5 w-5' }) {
